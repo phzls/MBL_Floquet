@@ -15,7 +15,7 @@ class EvolMatrix
 		const int size_; // Size of the system
 		const int dim_; // Dimension of the space given size
 		const int local_dim_; // Local dimension of the Hilber space
-		virtual void Matrix_Init() = 0; // Initial corresponding matrices/vectors
+
 	public:
 		// When local dimension is not given
 		EvolMatrix(int size): 
@@ -24,5 +24,15 @@ class EvolMatrix
 		// When local dimension is explicitly given
 		EvolMatrix(int size, int local_dim):
 			size_(size), local_dim_(local_dim), dim_(int(pow(double(local_dim), double(size)))){}
+
+		virtual void Evol_Construct() = 0; // Constructing time evolution matrix
+		
+		// Diagnolize time evolution matrix with eigenvectors kept
+		virtual void Evol_Diag() = 0;
+
+		// Diagnolize time evolution matrix, user can determine whether eigenvectors are kept
+		// False is not kept; True is kept
+		virtual void Evol_Diag(bool keep) = 0;
+
 		virtual ~EvolMatrix();
 };
