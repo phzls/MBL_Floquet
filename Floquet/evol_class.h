@@ -1,4 +1,3 @@
-#include <Eigen/Core>
 #include <cmath>
 
 using namespace std;
@@ -18,8 +17,11 @@ class EvolMatrix
 		const int local_dim_; // Local dimension of the Hilber space
 		virtual void Matrix_Init() = 0; // Initial corresponding matrices/vectors
 	public:
+		// When local dimension is not given
 		EvolMatrix(int size): 
 			size_(size), local_dim_(2), dim_(1 << size){}
+
+		// When local dimension is explicitly given
 		EvolMatrix(int size, int local_dim):
 			size_(size), local_dim_(local_dim), dim_(int(pow(double(local_dim), double(size)))){}
 		virtual ~EvolMatrix();
