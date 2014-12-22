@@ -15,7 +15,7 @@ The evolution operator for Floquet system with no apparent symmetry to reduce
 time evolution operator.
 */
 
-class FloEvolVanilla : public EvolMatrix
+class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 {		
 	protected:
 		MatrixXcd evol_op_; // Time evolution operator
