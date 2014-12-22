@@ -26,7 +26,14 @@ void FloEvolRandom::Evol_Para_Init(){
 	for (int i=0; i<size_; i++){
 		su2_angle_[i][0] = 2*Pi*u1rand(); // Angle psi
 		su2_angle_[i][1] = 2*Pi*u1rand(); // Angle xi
-		su2_angle_[i][1] = u2rand(); // (sin(phi))^2
+		su2_angle_[i][2] = u2rand(); // (sin(phi))^2
+	}
+
+	cout<<"All random numbers:"<<endl;
+	for (int i=0; i<size_; i++){
+		cout<<i<<"  ";
+		for (int j=0; j<su2_angle_[i].size(); j++) cout<<su2_angle_[i][j]<<"  ";
+		cout<<endl;
 	}
 }
 
@@ -44,7 +51,7 @@ void FloEvolRandom::Evol_Construct(){
 	// In the debug mode, print out all matrices
 	if (debug_){
 		cout<<"All random numbers:"<<endl;
-		for (int i=0; i<dim_; i++){
+		for (int i=0; i<size_; i++){
 			cout<<i<<"  ";
 			for (int j=0; j<su2_angle_[i].size(); j++) cout<<su2_angle_[i][j]<<"  ";
 			cout<<endl;
@@ -52,15 +59,30 @@ void FloEvolRandom::Evol_Construct(){
 		cout<<endl;
 
 		cout<<"Ux:"<<endl;
-		cout<<Ux<<endl;
+		for (int i=0; i< Ux.rows();i++){
+			for (int j=0; j< Ux.cols();j++){
+				cout<<"("<<real(Ux(i,j))<<","<<imag(Ux(i,j))<<")  ";
+			}
+			cout<<endl;
+		}
 		cout<<endl;
 
 		cout<<"Uz:"<<endl;
-		cout<<Uz<<endl;
+		for (int i=0; i< Uz.rows();i++){
+			for (int j=0; j< Uz.cols();j++){
+				cout<<"("<<real(Uz(i,j))<<","<<imag(Uz(i,j))<<")  ";
+			}
+			cout<<endl;
+		}
 		cout<<endl;
 
 		cout<<"Final matrix:"<<endl;
-		cout<<evol_op_<<endl;
+		for (int i=0; i< evol_op_.rows();i++){
+			for (int j=0; j< evol_op_.cols();j++){
+				cout<<"("<<real(evol_op_(i,j))<<","<<imag(evol_op_(i,j))<<")  ";
+			}
+			cout<<endl;
+		}
 		cout<<endl;
 	}
 }
@@ -76,23 +98,35 @@ void FloEvolRandom::Evol_Site_Construct_(MatrixXcd& Ux){
 	for (int site = 0; site < size_; site++){
 
 		// Construct U matrix at each site
-		U(0,0) = exp(Complex_I * su2_angle_[site][0]);
-		U(0,1) = exp(Complex_I * su2_angle_[site][1]) * 
+		U(0,0) = exp(Complex_I * complex<double>(su2_angle_[site][0],0)) *
+				 complex<double>(sqrt(1-su2_angle_[site][2]),0);
+		U(0,1) = exp(Complex_I * complex<double>(su2_angle_[site][1],0)) * 
 				 complex<double>(sqrt(su2_angle_[site][2]),0);
 		U(1,0) = -conj(U(0,1));
-		U(1,1) = exp(-Complex_I * su2_angle_[site][0]) * 
+		U(1,1) = exp(-Complex_I * complex<double>(su2_angle_[site][0],0)) * 
 				 complex<double>(sqrt(1-su2_angle_[site][2]),0);
+
+		if (debug_){
+			cout<<"At site: "<<site<<" U:"<<endl;
+			for (int i=0; i< U.rows();i++){
+				for (int j=0; j< U.cols();j++){
+					cout<<"("<<real(U(i,j))<<","<<imag(U(i,j))<<")  ";
+				}
+				cout<<endl;
+			}
+			cout<<endl;
+		}
 
 		// Doing Kroneker Product operation with U at left
 		for (int i=0; i<current_dim;i++){ // The second block in the row
 			for (int j=0; j<current_dim; j++){
-				Ux(i+current_dim, j) = Ux(i,j) * U(0,1);
+				Ux(i, j+current_dim) = Ux(i,j) * U(0,1);
 			}
 		}
 
 		for (int i=0; i<current_dim; i++){ // The second block in the column
 			for (int j=0; j<current_dim; j++){
-				Ux(i, j+current_dim) = Ux(i,j) * U(1,0); 
+				Ux(i+current_dim, j) = Ux(i,j) * U(1,0); 
 			}
 		}
 
@@ -128,19 +162,21 @@ void FloEvolRandom::Evol_Z_Construct_(MatrixXcd& Uz){
 
 	for (int i=0; i<dim_; i++){
 		int spin = i;
-		int current_spin = 2 * spin % 2 - 1;
+		int current_spin = 2 * (spin % 2) - 1;
 		spin /=  2;
 		int next_spin;
 		double H = 0; // The logarithm of the matrix element
 
-		for (int j=0; j<dim_ - 1; j++){
-			next_spin = 2 * spin % 2 - 1;
+		for (int j=0; j<size_ - 1; j++){
+			next_spin = 2 * (spin % 2) - 1;
 			spin /= 2;
 
 			H += param_.J * next_spin * current_spin;
 
 			current_spin = next_spin;
 		}
+
+		cout<<i<<"  "<<H<<endl;
 
 		Uz(i,i) = exp(-Complex_I * complex<double>(H,0) );
 	}
