@@ -1,6 +1,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Core>
 #include <Eigen/Eigenvalues>
+#include <iostream>
 #include "evol_class.h"
 
 using namespace std;
@@ -12,7 +13,8 @@ This file contains base classes for Floquet time evolution operators
 
 /*
 The evolution operator for Floquet system with no apparent symmetry to reduce
-time evolution operator.
+time evolution operator. It uses ComplexEigenSolver<MatrixXcd> for the public
+member eigen inherited from EvolMatrix.
 */
 
 class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
@@ -21,8 +23,6 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		MatrixXcd evol_op_; // Time evolution operator
 
 	public:
-		ComplexEigenSolver<MatrixXcd> eigen; // Eigenvalues and Eigenvectors
-
 		// When local dimension is not given
 		FloEvolVanilla(int size): EvolMatrix(size){
 			evol_op_ = MatrixXcd::Zero(dim_, dim_);
