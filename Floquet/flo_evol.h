@@ -1,6 +1,6 @@
 #include <Eigen/Dense>
 #include <Eigen/Core>
-#include <Eigen/Eigenvalues> 
+#include <Eigen/Eigenvalues>
 #include "evol_class.h"
 
 using namespace std;
