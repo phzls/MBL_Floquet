@@ -37,9 +37,14 @@ class FloEvolRandom : public FloEvolVanilla
 		// Construct Uz part in time evolution operator
 		void Evol_Z_Construct_(MatrixXcd&);
 
+		const bool debug_; // Used for debug output
+
 	public:
 		FloEvolRandom(int size, double tau, double J):
-			FloEvolVanilla(size), param_(tau, J) { Repr_Init_(); }
+			FloEvolVanilla(size), param_(tau, J), debug_(false) { Repr_Init_(); }
+
+		FloEvolRandom(int size, double tau, double J, bool debug):
+			FloEvolVanilla(size), param_(tau, J), debug_(debug) { Repr_Init_(); }
 
 		// Initialize four random angles
 		void Evol_Para_Init();
