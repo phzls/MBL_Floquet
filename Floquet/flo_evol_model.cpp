@@ -175,9 +175,6 @@ void FloEvolRandom::Evol_Z_Construct_(MatrixXcd& Uz){
 
 			current_spin = next_spin;
 		}
-
-		cout<<i<<"  "<<H<<endl;
-
 		Uz(i,i) = exp(-Complex_I * complex<double>(H,0) );
 	}
 }
