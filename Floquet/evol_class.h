@@ -43,5 +43,5 @@ class EvolMatrix
 		// Return the string format of representation string stream 
 		virtual string Repr() const = 0; 
 
-		virtual ~EvolMatrix();
+		virtual ~EvolMatrix(){};
 };
