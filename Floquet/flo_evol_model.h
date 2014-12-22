@@ -24,6 +24,10 @@ class FloEvolRandom : public FloEvolVanilla
 
 	private:
 		const Param param_;
+
+		// The four random angles used in sampling random SU(2) matrices
+		vector<vector<double> > su2_angle_; 
+
 		stringstream repr_; // Representation string stream of the model
 		void Repr_Init_(); // Initialize the representation string stream
 
@@ -31,19 +35,14 @@ class FloEvolRandom : public FloEvolVanilla
 		FloEvolRandom(int size, double tau, double J):
 			FloEvolVanilla(size), param_(tau, J) { Repr_Init_(); }
 
+		// Initialize four random angles
+		void Evol_Para_Init();
+
 		// Construct evolutionary operator
-		void Evol_Construct(const ModelConstructData<class T>&); 
+		void Evol_Construct(); 
 
 		// Return the string format of representation string stream 
 		string Repr() const {return repr_.str();} 
 
 		virtual ~FloEvolRandom() {};
-};
-
-/*
-The data structure that is used for this model. 
-*/
-struct RandomFloData : public ModelConstructData< vector<double> >
-{
-	void Initialize(); // Generate four random numbers
 };
