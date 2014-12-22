@@ -24,8 +24,8 @@ void FloEvolRandom::Evol_Para_Init(){
 	// We generate psi and xi randomly in [0, 2*pi), and (sin(phi))^2 randomly from 
 	// [0, 1] where phi belongs to [0, pi/2]
 	for (int i=0; i<size_; i++){
-		su2_angle_[i][0] = u1rand(); // Angle psi
-		su2_angle_[i][1] = u1rand(); // Angle xi
+		su2_angle_[i][0] = 2*Pi*u1rand(); // Angle psi
+		su2_angle_[i][1] = 2*Pi*u1rand(); // Angle xi
 		su2_angle_[i][1] = u2rand(); // (sin(phi))^2
 	}
 
