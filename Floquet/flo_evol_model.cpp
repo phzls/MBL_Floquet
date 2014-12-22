@@ -10,7 +10,7 @@ extern MTRand_closed u2rand; // points in [0,1]
 using namespace std;
 
 void FloEvolRandom::Repr_Init_(){
-	repr_ << "Random_Floquet_L=" << size_ << ",J=" << param_.J <<",tau_"
+	repr_ << "Random_Floquet_L=" << size_ << ",J=" << param_.J <<",tau="
 		  << param_.tau;
 }
 
@@ -28,7 +28,6 @@ void FloEvolRandom::Evol_Para_Init(){
 		su2_angle_[i][1] = 2*Pi*u1rand(); // Angle xi
 		su2_angle_[i][1] = u2rand(); // (sin(phi))^2
 	}
-
 }
 
 void FloEvolRandom::Evol_Construct(){
@@ -41,6 +40,29 @@ void FloEvolRandom::Evol_Construct(){
 	Evol_Z_Construct_(Uz);
 
 	evol_op_ = Ux * Uz;
+
+	// In the debug mode, print out all matrices
+	if (debug_){
+		cout<<"All random numbers:"<<endl;
+		for (int i=0; i<dim_; i++){
+			cout<<i<<"  ";
+			for (int j=0; j<su2_angle_[i].size(); j++) cout<<su2_angle_[i][j]<<"  ";
+			cout<<endl;
+		}
+		cout<<endl;
+
+		cout<<"Ux:"<<endl;
+		cout<<Ux<<endl;
+		cout<<endl;
+
+		cout<<"Uz:"<<endl;
+		cout<<Uz<<endl;
+		cout<<endl;
+
+		cout<<"Final matrix:"<<endl;
+		cout<<evol_op_<<endl;
+		cout<<endl;
+	}
 }
 
 void FloEvolRandom::Evol_Site_Construct_(MatrixXcd& Ux){
