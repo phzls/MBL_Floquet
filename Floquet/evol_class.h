@@ -10,6 +10,7 @@ total dimension is calculated. The local dimension can also be specified when co
 the class.
 */
 
+template <class T>
 class EvolMatrix
 {
 	protected:
@@ -25,6 +26,8 @@ class EvolMatrix
 		// When local dimension is explicitly given
 		EvolMatrix(int size, int local_dim):
 			size_(size), local_dim_(local_dim), dim_(int(pow(double(local_dim), double(size)))){}
+
+		T eigen; // Eigenvalues and Eigenvectors
 
 		// Initialize parameters which will be used in constructing time evolution operator.
 		// These parameters will only exist for concrete model classes.
