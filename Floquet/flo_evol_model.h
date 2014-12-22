@@ -31,6 +31,12 @@ class FloEvolRandom : public FloEvolVanilla
 		stringstream repr_; // Representation string stream of the model
 		void Repr_Init_(); // Initialize the representation string stream
 
+		// Construct Ux part in time evolution operator
+		void Evol_Site_Construct_(MatrixXcd&);
+
+		// Construct Uz part in time evolution operator
+		void Evol_Z_Construct_(MatrixXcd&);
+
 	public:
 		FloEvolRandom(int size, double tau, double J):
 			FloEvolVanilla(size), param_(tau, J) { Repr_Init_(); }
