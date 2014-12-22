@@ -7,7 +7,8 @@ using namespace std;
 A base class defines the evolution of a quantum system. The size of the system needs to
 be passed in. In this case the local dimension at each site is assumed to be 2, and the 
 total dimension is calculated. The local dimension can also be specified when constructing
-the class.
+the class. The template type of the class determines the type of public member eigen used for
+eigenvalues and eigenvectors.
 */
 
 template <class T>
