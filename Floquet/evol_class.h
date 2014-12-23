@@ -53,7 +53,7 @@ class EvolMatrix
 		// Return the size of the system
 		int GetSize() const {return size_;}
 
-		// Return the dimension of each local Hilbert space
+		// Return the dimension of total Hilbert space
 		int GetDim() const {return dim_;} 
 
 		virtual ~EvolMatrix(){};
