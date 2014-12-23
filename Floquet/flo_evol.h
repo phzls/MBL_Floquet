@@ -1,5 +1,7 @@
+#ifndef FLO_EVOL_H
+#define FLO_EVOL_H
+
 #include <Eigen/Dense>
-#include <Eigen/Core>
 #include <Eigen/Eigenvalues>
 #include <iostream>
 #include "evol_class.h"
@@ -43,3 +45,4 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		virtual ~FloEvolVanilla() {};
 };
 
+#endif
