@@ -1,3 +1,6 @@
+#ifndef FLO_EVOL_MODEL_H
+#define FLO_EVOL_MODEL_H
+
 #include <sstream>
 #include <vector>
 #include "flo_evol.h"
@@ -57,3 +60,5 @@ class FloEvolRandom : public FloEvolVanilla
 
 		virtual ~FloEvolRandom() {};
 };
+
+#endif
