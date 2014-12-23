@@ -1,3 +1,6 @@
+#ifndef EVOL_CLASS_H
+#define EVOL_CLASS_H
+
 #include <cmath>
 #include <string>
 
@@ -45,7 +48,15 @@ class EvolMatrix
 		virtual void Evol_Diag(bool keep) = 0;
 
 		// Return the string format of representation string stream 
-		virtual string Repr() const = 0; 
+		virtual string Repr() const = 0;
+
+		// Return the size of the system
+		int GetSize() const {return size_;}
+
+		// Return the dimension of each local Hilbert space
+		int GetDim() const {return dim_;} 
 
 		virtual ~EvolMatrix(){};
 };
+
+#endif
