@@ -17,7 +17,7 @@ time evolution operator
 **/
 
 /*
-This class outputs 
+This class outputs level statistics for vanilla Floquet time evolution operators
 */
 class VanillaFloLevel: public ResultsOutput< EvolMatrix< ComplexEigenSolver<MatrixXcd> > >
 {
