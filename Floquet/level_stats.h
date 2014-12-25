@@ -57,7 +57,7 @@ pair<vector<double>, vector<double> > >
 			mean_(0), mean_sd_(0), square_mean_(0), square_mean_sd_(0), init_(false) {};
 			
 		void Data_Process(const vector< EvolMatrix< ComplexEigenSolver<MatrixXcd> >* >& );
-		void Data_Output(bool output) const;
+		void Data_Output(bool, int) const;
 
 		/*
 		Redirect data to a pair. The first vector takes the level spacings. The second takes mean,
