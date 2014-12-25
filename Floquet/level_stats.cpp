@@ -4,17 +4,18 @@
 #include <cmath>
 #include "level_stats.h"
 #include "sort.h"
+#include "parameter.h"
 
 using namespace std;
 
-void VanillaFloLevel::Single_Data_Process_(const 
+pair<double, double> VanillaFloLevel::Single_Data_Process_(const 
 EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U){
 
 	// The total dimension of Hilbert space
 	const int dim = U -> GetDim();
 
 	// The average level spacing of phases of eigenvalues
-	const double ave_spacing = 2*pi / dim;
+	const double ave_spacing = 2*Pi / dim;
 
 	if (dim != U -> eigen.eigenvalues().rows()){
 		cout << "The dimension of eigenvalues of time evolution operator is not correct."<<endl;
@@ -33,7 +34,7 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U){
 	vector<double> phases(dim); // Phases of all eigenvalues in ascending order
 
 	for (int i=0; i<dim; i++){
-		phases[i] = arg(U -> eigen.egenvalues()(i));
+		phases[i] = arg(U -> eigen.eigenvalues()(i));
 	}
 
 	// Sort the phases in ascending order
@@ -41,28 +42,29 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U){
 
 	// Compute level statistics
 	double local_mean = 0;
-	double square_sum = 0;
+	double local_square_mean = 0;
 
 	double spacing;
 
 	for (int i=0; i<dim-1; i++){
 		spacing = ( phases[i+1] - phases[i] ) / ave_spacing;
 		level_[i] += spacing;
-		sum += spacing;
-		square_sum += spacing * spacing;
+		local_mean += spacing;
+		local_square_mean += spacing * spacing;
 	}
-
 	
-	spacing = ( phases[0] + 2*pi - phases[dim-1] ) / ave_spacing;
+	spacing = ( phases[0] + 2*Pi - phases[dim-1] ) / ave_spacing;
 	level_[dim-1] += spacing; 
-	sum += spacing;
-	square_sum += spacing * spacing;
+	local_mean += spacing;
+	local_square_mean += spacing * spacing;
 
-	return pair<double, double>(sum/dim, square_sum/dim);
+	pair<double, double> mean_pair(local_mean/dim, local_square_mean/dim);
+	return mean_pair;
 }
 
-void VanillaFloLevel::Data_Process(const EvolMatrix< ComplexEigenSolver<MatrixXcd> >& U){
-	const int num_realization = U.size():
+void VanillaFloLevel::Data_Process(const vector< EvolMatrix< ComplexEigenSolver<MatrixXcd> >* >& U)
+{
+	const int num_realization = U.size();
 
 	if (init_){
 		cout<< "The object is already holding one set of data." <<endl;
@@ -96,10 +98,10 @@ void VanillaFloLevel::Data_Process(const EvolMatrix< ComplexEigenSolver<MatrixXc
 
 	// Construct base filename stringstream
 	if (num_realization > 0) base_filename_ << U[0] -> Repr();
-	for (int i=1; i< num_realization; ++){
-		if (base_filename.str() != U[i] -> Repr()){
+	for (int i=1; i< num_realization; i++){
+		if (base_filename_.str() != U[i] -> Repr()){
 			cout <<"String Representations of models are not consistent!"<<endl;
-			abort():
+			abort();
 		}
 	}
 	base_filename_ <<",Realizations="<<num_realization;
@@ -107,14 +109,15 @@ void VanillaFloLevel::Data_Process(const EvolMatrix< ComplexEigenSolver<MatrixXc
 	init_ = true;
 }
 
-void VanillaFloLevel::DataOutput(bool output) const{
+void VanillaFloLevel::Data_Output(bool output) const{
 	if (!init_){
 		cout<< "The object has no data." <<endl;
 		abort();
 	}
 
 	if (!redirect_ && level_out_){
-		stringstream level_stream = base_filename.str() << ",level_spacing.txt";
+		stringstream level_stream; 
+		level_stream << base_filename_.str() << ",level_spacing.txt";
 		ofstream level_output(level_stream.str().c_str());
 
 		if (output) cout << level_stream.str().c_str() << endl;
@@ -124,7 +127,8 @@ void VanillaFloLevel::DataOutput(bool output) const{
 		} 
 	}
 	if (!redirect_ && mean_out_){
-		stringstream mean_stream = base_filename.str() << ",level_spacing_mean.txt";
+		stringstream mean_stream;
+		mean_stream << base_filename_.str() <<",level_spacing_mean.txt";
 		ofstream mean_output(mean_stream.str().c_str());
 
 		if (output) cout << mean_stream.str().c_str() << endl;
@@ -132,7 +136,8 @@ void VanillaFloLevel::DataOutput(bool output) const{
 		mean_output << mean_ <<"  "<< mean_sd_ <<endl;
 	}
 	if (!redirect_ && square_mean_out_){
-		stringstream square_mean_stream = base_filename.str() << ",level_spacing_square_mean.txt";
+		stringstream square_mean_stream;
+		square_mean_stream << base_filename_.str() <<",level_spacing_square_mean.txt";
 		ofstream square_mean_output(square_mean_stream.str().c_str());
 
 		if (output) cout << square_mean_stream.str().c_str() << endl;
@@ -141,7 +146,7 @@ void VanillaFloLevel::DataOutput(bool output) const{
 	}
 }
 
-void VanillaFloLevel::DataRedirect(pair< vector<double>, vector<double> >& A) const{
+void VanillaFloLevel::Data_Redirect(pair< vector<double>, vector<double> >& A) const{
 	if (!init_){
 		cout << "The object has no data." <<endl;
 		abort();
@@ -158,7 +163,7 @@ void VanillaFloLevel::DataRedirect(pair< vector<double>, vector<double> >& A) co
 	A.second[0] = mean_;
 	A.second[1] = mean_sd_;
 	A.second[2] = square_mean_;
-	A.second[2] = square_mean_sd_;
+	A.second[3] = square_mean_sd_;
 }
 
 void VanillaFloLevel::Reset(){
