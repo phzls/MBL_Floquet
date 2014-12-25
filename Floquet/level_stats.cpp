@@ -2,9 +2,11 @@
 #include <iostream>
 #include <complex>
 #include <cmath>
+#include <iomanip>
 #include "level_stats.h"
 #include "sort.h"
 #include "parameter.h"
+#include "output_func.h"
 
 using namespace std;
 
@@ -109,40 +111,44 @@ void VanillaFloLevel::Data_Process(const vector< EvolMatrix< ComplexEigenSolver<
 	init_ = true;
 }
 
-void VanillaFloLevel::Data_Output(bool output) const{
+void VanillaFloLevel::Data_Output(bool output, int width) const{
 	if (!init_){
 		cout<< "The object has no data." <<endl;
 		abort();
 	}
 
 	if (!redirect_ && level_out_){
-		stringstream level_stream; 
-		level_stream << base_filename_.str() << ",level_spacing.txt";
-		ofstream level_output(level_stream.str().c_str());
 
-		if (output) cout << level_stream.str().c_str() << endl;
+		string post_string = ",level_spacing.txt";
+		ofstream level_output = Of_Construct(base_filename, post_string, output) ;
 
 		for(int i=0; i<level_.size();i++){
 			level_output << level_[i]<<endl;
 		} 
 	}
+
 	if (!redirect_ && mean_out_){
-		stringstream mean_stream;
-		mean_stream << base_filename_.str() <<",level_spacing_mean.txt";
-		ofstream mean_output(mean_stream.str().c_str());
 
-		if (output) cout << mean_stream.str().c_str() << endl;
+		string post_string = ",level_spacing_mean.txt";
+		ofstream mean_output = Of_Construct(base_filename, post_string, output) ;
 
-		mean_output << mean_ <<"  "<< mean_sd_ <<endl;
+		vector<double> temp(2);
+		temp[0] = mean_;
+		temp[1] = mean_sd_;
+
+		Write_File(mean_output, temp, width);
 	}
+
 	if (!redirect_ && square_mean_out_){
-		stringstream square_mean_stream;
-		square_mean_stream << base_filename_.str() <<",level_spacing_square_mean.txt";
-		ofstream square_mean_output(square_mean_stream.str().c_str());
 
-		if (output) cout << square_mean_stream.str().c_str() << endl;
+		string post_string = ",level_spacing_square_mean.txt";
+		ofstream square_mean_output = Of_Construct(base_filename, post_string, output) ;
 
-		square_mean_output << square_mean_ <<"  "<< square_mean_sd_ <<endl;
+		vector<double> temp(2);
+		temp[0] = square_mean_;
+		temp[1] = square_mean_sd_;
+
+		Write_File(square_mean_output, temp, width);
 	}
 }
 
