@@ -22,8 +22,9 @@ class ResultsOutput
 		excution of calculations. */
 		virtual void Data_Process(const vector<T1>& ) = 0;
 
-		// Output data to a file. The bool decides whether filenames are outputed
-		virtual void Data_Output(bool) const = 0; 
+		// Output data to a file. The bool decides whether filenames are outputed. The
+		// integer determines the width
+		virtual void Data_Output(bool, int) const = 0; 
 		virtual void Data_Redirect(T2&) const = 0; // Redirect data
 
 		// Reset the object so that it can be used to process another set of data
