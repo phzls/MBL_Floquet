@@ -29,11 +29,13 @@ void FloEvolRandom::Evol_Para_Init(){
 		su2_angle_[i][2] = u2rand(); // (sin(phi))^2
 	}
 
-	cout<<"All random numbers:"<<endl;
-	for (int i=0; i<size_; i++){
-		cout<<i<<"  ";
-		for (int j=0; j<su2_angle_[i].size(); j++) cout<<su2_angle_[i][j]<<"  ";
-		cout<<endl;
+	if (debug_){
+		cout<<"All random numbers:"<<endl;
+		for (int i=0; i<size_; i++){
+			cout<<i<<"  ";
+			for (int j=0; j<su2_angle_[i].size(); j++) cout<<su2_angle_[i][j]<<"  ";
+			cout<<endl;
+		}
 	}
 }
 
