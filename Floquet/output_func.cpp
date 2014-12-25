@@ -4,29 +4,25 @@
 
 using namespace std;
 
-ofstream Of_Construct(const stringstream& base, const string& post_string, bool output){
+void Of_Construct(ofstream& fout, const stringstream& base, const string& post_string, bool output){
 	stringstream filename;
-	filename << base.str() <<"post_string";
+	filename << base.str() <<post_string;
 
 	if (output) cout << filename.str() <<endl;
 
-	ofstream fout(filename.str().c_str());
-
-	return fout;
+	fout.open( filename.str().c_str() );
 }
 
-ofstream Of_Construct(const string& pre_string, const stringstream& base, bool output){
+void Of_Construct(ofstream& fout, const string& pre_string, const stringstream& base, bool output){
 	stringstream filename;
 	filename << pre_string << base.str();
 
 	if (output) cout << filename.str() <<endl;
 
-	ofstream fout(filename.str().c_str());
-
-	return fout;
+	fout.open( filename.str().c_str() );
 }
 
-ofstream Of_Construct(const string& pre_string, const stringstream& base, 
+void Of_Construct(ofstream& fout, const string& pre_string, const stringstream& base, 
 const string& post_string, bool output){
 
 	stringstream filename;
@@ -34,9 +30,7 @@ const string& post_string, bool output){
 
 	if (output) cout << filename.str() <<endl;
 
-	ofstream fout(filename.str().c_str());
-
-	return fout;
+	fout.open( filename.str().c_str() );
 }
 
 void Write_File(ofstream& fout, const vector<double>& data, int width){

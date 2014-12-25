@@ -27,13 +27,16 @@ int main(){
 	base_filename << "Random_Floquet_L=" << size << ",tau=" << tau;
 
 	string post_string =  ",level_spacing.txt";
-	ofstream level_out = Of_Construct(base_filename, post_string, true) ;
+	ofstream level_out;
+	Of_Construct(level_out, base_filename, post_string, true) ;
 
 	post_string ",level_spacing_mean.txt";
-	ofstream mean_out = Of_Construct(base_filename, post_string, true) ;
+	ofstream mean_out;
+	Of_Construct(mean_out, base_filename, post_string, true) ;
 
 	post_string ",level_spacing_square_mean.txt";
-	ofstream square_mean_out = Of_Construct(base_filename, post_string, true) ;
+	ofstream square_mean_out;
+	Of_Construct(square_mean_out, base_filename, post_string, true) ;
 
 	ResultsOutput< EvolMatrix< ComplexEigenSolver<MatrixXcd> >*, 
 				  pair<vector<double>, vector<double> > >* 

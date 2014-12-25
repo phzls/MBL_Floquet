@@ -120,7 +120,8 @@ void VanillaFloLevel::Data_Output(bool output, int width) const{
 	if (!redirect_ && level_out_){
 
 		string post_string = ",level_spacing.txt";
-		ofstream level_output = Of_Construct(base_filename, post_string, output) ;
+		ofstream level_output; 
+		Of_Construct(level_output, base_filename_, post_string, output) ;
 
 		for(int i=0; i<level_.size();i++){
 			level_output << level_[i]<<endl;
@@ -130,7 +131,8 @@ void VanillaFloLevel::Data_Output(bool output, int width) const{
 	if (!redirect_ && mean_out_){
 
 		string post_string = ",level_spacing_mean.txt";
-		ofstream mean_output = Of_Construct(base_filename, post_string, output) ;
+		ofstream mean_output; 
+		Of_Construct(mean_output, base_filename_, post_string, output) ;
 
 		vector<double> temp(2);
 		temp[0] = mean_;
@@ -142,7 +144,8 @@ void VanillaFloLevel::Data_Output(bool output, int width) const{
 	if (!redirect_ && square_mean_out_){
 
 		string post_string = ",level_spacing_square_mean.txt";
-		ofstream square_mean_output = Of_Construct(base_filename, post_string, output) ;
+		ofstream square_mean_output;
+		Of_Construct(square_mean_output, base_filename_, post_string, output) ;
 
 		vector<double> temp(2);
 		temp[0] = square_mean_;
