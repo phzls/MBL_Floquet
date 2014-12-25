@@ -23,14 +23,14 @@ class ResultsOutput
 		virtual void Data_Process(const vector<T1>& ) = 0;
 
 		// Output data to a file. The bool decides whether filenames are outputed
-		virtual void Data_Output(bool) = 0; 
-		virtual void Data_Redirect(T2&) = 0; // Redirect data to a vector
+		virtual void Data_Output(bool) const = 0; 
+		virtual void Data_Redirect(T2&) const = 0; // Redirect data
 
 		// Reset the object so that it can be used to process another set of data
 		virtual void Reset() = 0;
 
 		// Check whether it has processed one set of data, so that it cannot process another set
-		virtual bool Empty() = 0; 
+		virtual bool Empty() const = 0; 
 
 		virtual ~ResultsOutput() {};
 };
