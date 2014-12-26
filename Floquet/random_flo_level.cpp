@@ -4,7 +4,7 @@
 #include <omp.h>
 #include <Eigen/Core>
 #include <utility>
-#include <stringstream>
+#include <sstream>
 #include "mtrand.h"
 #include "flo_evol_model.h"
 #include "level_stats.h"
@@ -20,7 +20,7 @@ int main(){
 	const double tau = 0.8; // Time step, which seems not used here
 	const int threads_N = 4; // Number of threads
 	const int num_realization = 400; // Number of realizations.
-	const J_N = 10; // Number of points for J, with min=0, max=1.
+	const int J_N = 10; // Number of points for J, with min=0, max=1.
 
 	stringstream base_filename; // Filename
 
@@ -30,11 +30,11 @@ int main(){
 	ofstream level_out;
 	Of_Construct(level_out, base_filename, post_string, true) ;
 
-	post_string ",level_spacing_mean.txt";
+	post_string = ",level_spacing_mean.txt";
 	ofstream mean_out;
 	Of_Construct(mean_out, base_filename, post_string, true) ;
 
-	post_string ",level_spacing_square_mean.txt";
+	post_string = ",level_spacing_square_mean.txt";
 	ofstream square_mean_out;
 	Of_Construct(square_mean_out, base_filename, post_string, true) ;
 
@@ -51,31 +51,41 @@ int main(){
 	vector<double> temp(2); // Used to hold data for output
 
 	for (int i=0; i<J_N; i++){
-		int J = i * 1.0/J_N;
+		double J = (i+1) * (1.0/J_N);
+
+		cout << J << endl;
 
 		vector<EvolMatrix<ComplexEigenSolver<MatrixXcd> >* > floquet(num_realization);
 
-		for (int i=0; i<threads_N; i++){
-			floquet[i] = new FloEvolRandom(size, tau, J);
+		cout << "Initialize Evolution Operators." <<endl;
+		for (int k=0; k<num_realization; k++){
+			floquet[k] = new FloEvolRandom(size, tau, J);
 		}
 
-		for (int i=0; i<threads_N; i++){
-			floquet[i] -> Evol_Para_Init();
+		for (int k=0; k<num_realization; k++){
+			floquet[k] -> Evol_Para_Init();
 		}
+
+		cout << "Diagonolize Evolution Operators." <<endl;
 
 		#pragma omp parallel num_threads(threads_N)
 		{
 			#pragma omp for
-			for (int i=0; i<threads_N;i++){
-				floquet[i] -> Evol_Construct();
-				floquet[i] -> Evol_Diag(false);
+			for (int k=0; k<num_realization;k++){
+				floquet[k] -> Evol_Construct();
+				floquet[k] -> Evol_Diag(false);
 			}
 		}
 
+		cout << "Process Eigenvalues." <<endl;
+
 		if (!result -> Empty()) result -> Reset();
+
 		result -> Data_Process(floquet); 
 
 		result -> Data_Redirect(data[i]);
+
+		cout << "Output Eigenvalues." <<endl;
 
 		Write_File(level_out, J, data[i].first, 15);
 
