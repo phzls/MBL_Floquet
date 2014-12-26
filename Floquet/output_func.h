@@ -23,6 +23,6 @@ void Of_Construct(ofstream&, const string&, const stringstream&, const string&, 
 // Write out the vector in a line to a file. The integer gives the space between two numbers
 void Write_File(ofstream&, const vector<double>&, int);
 
-// Write out the vector in a line to a file. The first integer is some parameter, and the
-// last integer gives the space between two numbers
-void Write_File(ofstream&, int, const vector<double>&, int);
+// Write out the vector in a line to a file. The double is some parameter, and the
+// integer gives the space between two numbers
+void Write_File(ofstream&, double, const vector<double>&, int);

@@ -40,7 +40,7 @@ void Write_File(ofstream& fout, const vector<double>& data, int width){
 	fout<<endl;
 }
 
-void Write_File(ofstream& fout, int para, const vector<double>& data, int width){
+void Write_File(ofstream& fout, double para, const vector<double>& data, int width){
 	fout << setw(width) << para;
 	for (int i=0; i<data.size(); i++){
 		fout << setw(width) << data[i];
