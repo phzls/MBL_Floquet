@@ -12,8 +12,7 @@
 
 using namespace std;
 
-MTRand u1rand(time(NULL));
-MTRand_closed u2rand(time(NULL));
+
 
 int main(){
 	const int size = 2; // System Size
@@ -24,19 +23,7 @@ int main(){
 
 	stringstream base_filename; // Filename
 
-	base_filename << "Random_Floquet_L=" << size << ",tau=" << tau;
-
-	string post_string =  ",level_spacing.txt";
-	ofstream level_out;
-	Of_Construct(level_out, base_filename, post_string, true) ;
-
-	post_string = ",level_spacing_mean.txt";
-	ofstream mean_out;
-	Of_Construct(mean_out, base_filename, post_string, true) ;
-
-	post_string = ",level_spacing_square_mean.txt";
-	ofstream square_mean_out;
-	Of_Construct(square_mean_out, base_filename, post_string, true) ;
+	bool output_init = false; // Whether output objects have been constructed
 
 	ResultsOutput< EvolMatrix< ComplexEigenSolver<MatrixXcd> >*, 
 				  pair<vector<double>, vector<double> > >* 
@@ -48,7 +35,7 @@ int main(){
 
 	Eigen::initParallel();
 
-	vector<double> temp(2); // Used to hold data for output
+//	vector<double> temp(2); // Used to hold data for output
 
 	for (int i=0; i<J_N; i++){
 		double J = (i+1) * (1.0/J_N);
@@ -62,7 +49,25 @@ int main(){
 			floquet[k] = new FloEvolRandom(size, tau, J);
 		}
 
-		for (int k=0; k<num_realization; k++){
+		if (!output_init){
+			base_filename << floquet[0] -> Type()<<"_L=" << size << ",tau=" << tau;
+
+			string post_string =  ",level_spacing.txt";
+			ofstream level_out;
+			Of_Construct(level_out, base_filename, post_string, true) ;
+
+			post_string = ",level_spacing_mean.txt";
+			ofstream mean_out;
+			Of_Construct(mean_out, base_filename, post_string, true) ;
+
+			post_string = ",level_spacing_square_mean.txt";
+			ofstream square_mean_out;
+			Of_Construct(square_mean_out, base_filename, post_string, true) ;
+
+			output_init = true;
+		}
+
+/*		for (int k=0; k<num_realization; k++){
 			floquet[k] -> Evol_Para_Init();
 		}
 
@@ -83,7 +88,7 @@ int main(){
 
 		result -> Data_Process(floquet); 
 
-		result -> Data_Redirect(data[i]);
+		result -> Data_Redirect(data[i]);*/
 
 		cout << "Output Eigenvalues." <<endl;
 
