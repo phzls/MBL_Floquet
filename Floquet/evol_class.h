@@ -6,13 +6,13 @@
 
 using namespace std;
 
-/*
-A base class defines the evolution of a quantum system. The size of the system needs to
-be passed in. In this case the local dimension at each site is assumed to be 2, and the 
-total dimension is calculated. The local dimension can also be specified when constructing
-the class. The template type of the class determines the type of public member eigen used for
-eigenvalues and eigenvectors.
-*/
+/**
+ ** A base class defines the evolution of a quantum system. The size of the system needs to
+ ** be passed in. In this case the local dimension at each site is assumed to be 2, and the 
+ ** total dimension is calculated. The local dimension can also be specified when 
+ ** constructing the class. The template type of the class determines the type of public
+ ** member eigen used for eigenvalues and eigenvectors.
+ **/
 
 template <class T>
 class EvolMatrix
@@ -47,8 +47,15 @@ class EvolMatrix
 		// False is not kept; True is kept
 		virtual void Evol_Diag(bool keep) = 0;
 
+		// Erase the matrix to free some memroy
+		virtual void Evol_Erase() = 0;
+
 		// Return the string format of representation string stream 
 		virtual string Repr() const = 0;
+
+		// Return the type of the model as a string, i.e., representation without
+		// concerete parameters
+		virtual string Type() const = 0;
 
 		// Return the size of the system
 		int GetSize() const {return size_;}

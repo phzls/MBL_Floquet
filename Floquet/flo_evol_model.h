@@ -6,15 +6,16 @@
 #include "flo_evol.h"
 
 /**
-This file contains particular models of Floquet time evolution operators
-**/
+ ** This file contains particular models of Floquet time evolution operators
+ **/
 
 
 /*
-The random floquet operator. The dimension at each site is 2. Its time evolutionary operator 
-is Ux * Uz, where Ux has uniformly random 2*2 unitary matrix at each site, and Uz is 
-constructed from Ising nearest neighbor interactions with interaction strength J.
-*/
+ * The random floquet operator. The dimension at each site is 2. Its time 
+ * evolutionary operator is Ux * Uz, where Ux has uniformly random 2*2 unitary matrix 
+ * at each site, and Uz is constructed from Ising nearest neighbor interactions with
+ * interaction strength J.
+ */
 class FloEvolRandom : public FloEvolVanilla
 {
 	struct Param // The parameters used in the model
@@ -32,7 +33,8 @@ class FloEvolRandom : public FloEvolVanilla
 		vector<vector<double> > su2_angle_; 
 
 		stringstream repr_; // Representation string stream of the model
-		void Repr_Init_(); // Initialize the representation string stream
+		string type_; // Type string of the model
+		void Repr_Init_(); // Initialize the representation string stream as well as type
 
 		// Construct Ux part in time evolution operator
 		void Evol_Site_Construct_(MatrixXcd&);
@@ -55,8 +57,14 @@ class FloEvolRandom : public FloEvolVanilla
 		// Construct evolutionary operator
 		void Evol_Construct(); 
 
+		// Erase the evolutionary operator
+		void Evol_Erase();
+
 		// Return the string format of representation string stream 
 		string Repr() const {return repr_.str();} 
+
+		// Return the type of the model
+		string Type() const {return type_;}
 
 		virtual ~FloEvolRandom() {};
 };

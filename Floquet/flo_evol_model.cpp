@@ -1,6 +1,6 @@
 #include <complex>
 #include <iostream>
-#include "parameter.h"
+#include "constants.h"
 #include "flo_evol_model.h"
 #include "mtrand.h"
 
@@ -9,11 +9,18 @@ extern MTRand_closed u2rand; // points in [0,1]
 
 using namespace std;
 
+/*
+ * Construct the representation string and abstract type of the class.
+ */
 void FloEvolRandom::Repr_Init_(){
 	repr_ << "Random_Floquet_L=" << size_ << ",J=" << param_.J <<",tau="
 		  << param_.tau;
+	type_ = "Random_Floquet";
 }
 
+/*
+ * Initialize parameters of the model.
+ */
 void FloEvolRandom::Evol_Para_Init(){
 	su2_angle_.resize(size_);
 
@@ -39,7 +46,16 @@ void FloEvolRandom::Evol_Para_Init(){
 	}
 }
 
+/*
+ * Construct time evolution operator. 
+ */
 void FloEvolRandom::Evol_Construct(){
+	// If the matrix has not been constructed
+	if (!constructed_){
+		evol_op_ = MatrixXcd::Zero(dim_, dim_);
+		constructed_ = true;
+	}
+
 	// Ux part of time evolution operator
 	MatrixXcd Ux = MatrixXcd::Zero(dim_, dim_);
 	Evol_Site_Construct_(Ux);
@@ -89,6 +105,9 @@ void FloEvolRandom::Evol_Construct(){
 	}
 }
 
+/*
+ * Construct random Ux part.
+ */
 void FloEvolRandom::Evol_Site_Construct_(MatrixXcd& Ux){
 	int current_dim = 1; // The current dimension of the matrix in the Kroneker product
 
@@ -153,14 +172,17 @@ void FloEvolRandom::Evol_Site_Construct_(MatrixXcd& Ux){
 	}
 }
 
+/*
+ * Construct Uz part.
+ */
 void FloEvolRandom::Evol_Z_Construct_(MatrixXcd& Uz){
 	/*
-	We are working in S_z basis, and 0 means down while 1 means up when each state is 
-	encoded in a number. The total state will be encoded by a single number between 0
-	and dim_, whose binary representation, from left to right, gives each spin orientation
-	at each site, from left to right. When computing the matrix element, -1 is for down
-	spin and 1 is for up spin.
-	*/
+	 * We are working in S_z basis, and 0 means down while 1 means up when each state is 
+	 * encoded in a number. The total state will be encoded by a single number between 0
+	 * and dim_, whose binary representation, from left to right, gives each spin
+	 * orientation at each site, from left to right. When computing the matrix element, 
+	 * -1 is for down spin and 1 is for up spin.
+	 */
 
 	for (int i=0; i<dim_; i++){
 		int spin = i;
@@ -179,4 +201,9 @@ void FloEvolRandom::Evol_Z_Construct_(MatrixXcd& Uz){
 		}
 		Uz(i,i) = exp(-Complex_I * complex<double>(H,0) );
 	}
+}
+
+void FloEvolRandom::Evol_Erase(){
+	evol_op_.resize(0,0);
+	constructed_ = false;
 }
