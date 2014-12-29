@@ -1,16 +1,16 @@
-evolutions = flo_evol_model.o mtrand.o
+evolutions = flo_evol_model.o mtrand.o flo_level.o
 results = level_stats.o
 outputs = output_func.o
 
-main_objects = random_flo_level.o $(evolutions) $(results) $(outputs)
+main_objects = main.o $(evolutions) $(results) $(outputs)
 test_objects = test.o $(evolutions) $(results) $(outputs)
 
 CXXFLAGS = -fopenmp
 CXX = g++
 
-all: main
+all: mbl
 
-main: $(main_objects)
+mbl: $(main_objects)
 	$(CXX) -o $@ $(CXXFLAGS) $^
 
 test: $(test_objects)
