@@ -13,13 +13,13 @@ using namespace std;
 using namespace Eigen;
 
 /**
-This file includes output classes which output level statistics from Hamiltonian/unitary
-time evolution operator
-**/
+ ** This file includes output classes which output level statistics from Hamiltonian/unitary
+ ** time evolution operator
+ **/
 
 /*
-This class outputs level statistics for vanilla Floquet time evolution operators
-*/
+ * This class outputs level statistics for vanilla Floquet time evolution operators
+ */
 class VanillaFloLevel: public ResultsOutput< EvolMatrix< ComplexEigenSolver<MatrixXcd> >*, 
 pair<vector<double>, vector<double> > >
 {
@@ -56,14 +56,18 @@ pair<vector<double>, vector<double> > >
 			level_out_(false), mean_out_(false), square_mean_out_(false), redirect_(true), 
 			mean_(0), mean_sd_(0), square_mean_(0), square_mean_sd_(0), init_(false) {};
 			
+		// Calculate average level spacing, mean and its sd, square mean and its sd
 		void Data_Process(const vector< EvolMatrix< ComplexEigenSolver<MatrixXcd> >* >& );
+
+		// Output results to files. The bool determines whether filenames are written to
+		// the screen.
 		void Data_Output(bool, int) const;
 
 		/*
-		Redirect data to a pair. The first vector takes the level spacings. The second takes mean,
-		square mean and their standard deviations. The order is: mean, mean sd, square mean, square
-		mean sd.
-		*/
+		 * Redirect data to a pair. The first vector takes the level spacings. The second
+		 * takes mean, square mean and their standard deviations. The order is: mean, 
+		 * mean sd, square mean, square mean sd.
+		 */
 		void Data_Redirect(pair< vector<double>, vector<double> >&) const;
 
 		bool Empty() const;

@@ -5,7 +5,7 @@
 #include <iomanip>
 #include "level_stats.h"
 #include "sort.h"
-#include "parameter.h"
+#include "constants.h"
 #include "output_func.h"
 
 using namespace std;
@@ -24,6 +24,7 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U){
 		abort();
 	}
 
+	// Initialize or check the size of level_
 	if (level_.size() == 0){
 		level_.resize(dim);
 		for (int i=0; i<dim; i++) level_[i] = 0;
@@ -85,6 +86,7 @@ void VanillaFloLevel::Data_Process(const vector< EvolMatrix< ComplexEigenSolver<
 		square_mean_sd_ += mean_square_mean.second * mean_square_mean.second;
 	}
 
+	// if level_ has not been initialized
 	if (num_realization != 0 && level_.size() == 0){
 		cout <<"Level spacing calculation fails." << endl;
 		abort();
@@ -108,6 +110,7 @@ void VanillaFloLevel::Data_Process(const vector< EvolMatrix< ComplexEigenSolver<
 	}
 	base_filename_ <<",Realizations="<<num_realization;
 
+	// The object now holds the data
 	init_ = true;
 }
 
