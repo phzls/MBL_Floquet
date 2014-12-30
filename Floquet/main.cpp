@@ -15,7 +15,7 @@ int main(){
 	const bool Level = true;
 
 	parameters.generic.size = 4; // System size
-	parameters.generic.num_realizations = 400; // Number of realizations
+	parameters.generic.num_realizations = 100; // Number of realizations
 	parameters.generic.threads_N = 4; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors
 	parameters.generic.erase = true; // Whether erase matrix after diagonization
