@@ -11,26 +11,20 @@
 using namespace std;
 
 pair<double, double> VanillaFloLevel::Single_Data_Process_(const 
-EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U){
+EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U, const int position, const int dim){
 
 	// The total dimension of Hilbert space
-	const int dim = U -> GetDim();
+	const int local_dim = U -> Get_Dim();
+	if (local_dim != dim){
+		cout << "The dimensions are not consistent." << endl;
+		abort();
+	}
 
 	// The average level spacing of phases of eigenvalues
 	const double ave_spacing = 2*Pi / dim;
 
 	if (dim != U -> eigen.eigenvalues().rows()){
 		cout << "The dimension of eigenvalues of time evolution operator is not correct."<<endl;
-		abort();
-	}
-
-	// Initialize or check the size of level_
-	if (level_.size() == 0){
-		level_.resize(dim);
-		for (int i=0; i<dim; i++) level_[i] = 0;
-	}
-	else if (level_.size() != dim){
-		cout << "The dimension of different realizations of eigenvalues do not match."<<endl;
 		abort();
 	}
 
@@ -47,17 +41,17 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U){
 	double local_mean = 0;
 	double local_square_mean = 0;
 
-	double spacing;
+	double spacing; // level spacing
 
 	for (int i=0; i<dim-1; i++){
 		spacing = ( phases[i+1] - phases[i] ) / ave_spacing;
-		level_[i] += spacing;
+		all_spacing_[position + i] = spacing;
 		local_mean += spacing;
 		local_square_mean += spacing * spacing;
 	}
 	
-	spacing = ( phases[0] + 2*Pi - phases[dim-1] ) / ave_spacing;
-	level_[dim-1] += spacing; 
+	spacing = ( phases[0] + 2*Pi - phases[dim-1] ) / ave_spacing; 
+	all_spacing_[position + dim - 1] = spacing;
 	local_mean += spacing;
 	local_square_mean += spacing * spacing;
 
@@ -68,16 +62,20 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U){
 void VanillaFloLevel::Data_Process(const vector< EvolMatrix< ComplexEigenSolver<MatrixXcd> >* >& U)
 {
 	const int num_realization = U.size();
+	const int dim = U[0] -> Get_Dim();
 
 	if (init_){
 		cout<< "The object is already holding one set of data." <<endl;
 		abort();
 	}
 
+	level_.resize(dim);
+	all_spacing_.resize(dim * num_realization);
+
 	for (int i=0; i<num_realization; i++){
 
 		pair<double, double> mean_square_mean;
-		mean_square_mean = Single_Data_Process_(U[i]);
+		mean_square_mean = Single_Data_Process_(U[i], i*dim, dim);
 
 		mean_ += mean_square_mean.first;
 		mean_sd_ += mean_square_mean.first * mean_square_mean.first;
@@ -92,7 +90,18 @@ void VanillaFloLevel::Data_Process(const vector< EvolMatrix< ComplexEigenSolver<
 		abort();
 	}
 
-	for (int i=0; i<level_.size();i++) level_[i] /= num_realization;
+	// Sort the spacings in ascending order
+	sort(all_spacing_.begin(), all_spacing_.end(), Vec_Double_Sort);
+
+	// Bin spacings together
+	for (int i=0; i<level_.size();i++){
+		level_[i] = 0;
+		for (int j=0; j<num_realization; j++){
+			level_[i] += all_spacing_[i*num_realization + j];
+		};
+
+		level_[i] /= num_realization;
+	}
 
 	mean_ /= num_realization;
 	mean_sd_ = sqrt( mean_sd_ / num_realization - mean_ * mean_ );

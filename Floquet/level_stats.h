@@ -24,7 +24,9 @@ class VanillaFloLevel: public ResultsOutput< EvolMatrix< ComplexEigenSolver<Matr
 pair<vector<double>, vector<double> > >
 {
 	private:
-		vector<double> level_; // The vector that holds all the level spacings
+		vector<double> level_; // The vector that holds all the binned level spacings
+							   // The number of bins equal to the total dimension
+		vector<double> all_spacing_; // The vector that holds all spacings
 		
 		double mean_; // The mean of level spacing
 		double mean_sd_; // Standard deviation of the mean
@@ -40,9 +42,10 @@ pair<vector<double>, vector<double> > >
 		const bool redirect_; // If true, redirect the output of mean and square mean
 
 		// Process data from single realization. Return a pair of doubles. The first is the
-		// mean, and the second is the square mean
+		// mean, and the second is the square mean. The first integer gives position
+		// in the bunch of process, then second gives dimension.
 		pair<double, double> Single_Data_Process_
-		(const EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const);
+		(const EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const, const int, const int);
 
 		bool init_; // Check whether the object has processed one set of data
 
