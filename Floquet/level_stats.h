@@ -24,9 +24,7 @@ class VanillaFloLevel: public ResultsOutput< EvolMatrix< ComplexEigenSolver<Matr
 pair<vector<double>, vector<double> > >
 {
 	private:
-		vector<double> level_; // The vector that holds all the binned level spacings
-							   // The number of bins equal to the total dimension
-		vector<double> all_spacing_; // The vector that holds all spacings
+		vector<double> level_; // The vector that holds all the level spacings	
 		
 		double mean_; // The mean of level spacing
 		double mean_sd_; // Standard deviation of the mean
