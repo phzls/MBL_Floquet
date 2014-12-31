@@ -26,6 +26,9 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		MatrixXcd evol_op_; // Time evolution operator
 		bool constructed_; // Whether the matrix has been constructed and not erased
 
+		stringstream repr_; // Representation string stream of the model
+		string type_; // Type string of the model
+
 	public:
 		// When local dimension is not given
 		FloEvolVanilla(int size): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
@@ -53,7 +56,16 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 				cout << "The matrix for diagonalization does not exist." <<endl;
 				abort();
 			}
-		} 
+		}
+
+		// Return the string format of representation string stream 
+		string Repr() const {return repr_.str();} 
+
+		// Return the type of the model
+		string Type() const {return type_;} 
+
+		// Erase the evolutionary operator
+		void Evol_Erase() {evol_op_.resize(0,0); constructed_ = false;}
 
 		virtual ~FloEvolVanilla() {};
 };
