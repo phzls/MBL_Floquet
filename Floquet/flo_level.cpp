@@ -51,7 +51,9 @@ void flo_level(const AllPara& parameters){
 	Eigen::initParallel();
 
 	for (int i=0; i<J_N; i++){
-		double J = J_min + i * (J_max - J_min)/(J_N-1);
+		double J;
+		if (J_N > 1) J = J_min + i * (J_max - J_min)/(J_N-1);
+		else J = J_min;
 
 		cout << J << endl;
 
@@ -59,7 +61,8 @@ void flo_level(const AllPara& parameters){
 
 		cout << "Initialize Evolution Operators." <<endl;
 		for (int k=0; k<num_realization; k++){
-			floquet[k] = new FloEvolRandom(size, tau, J);
+			//floquet[k] = new FloEvolRandom(size, tau, J);
+			floquet[k] = new FloEvolRandomRotation(size, tau, J);
 		}
 
 		if (!output_init){
