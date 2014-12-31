@@ -14,7 +14,7 @@ int main(){
 	const bool Flo = true;
 	const bool Level = true;
 
-	parameters.generic.size = 4; // System size
+	parameters.generic.size = 6; // System size
 	parameters.generic.num_realizations = 100; // Number of realizations
 	parameters.generic.threads_N = 4; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors
