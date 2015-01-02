@@ -28,6 +28,9 @@ void flo_level(const AllPara& parameters){
 	const double J_max = parameters.floquet.J_max; // Maximum J
 	const double J_min = parameters.floquet.J_min; // Minimum J
 
+	const double angle_min = parameters.floquet_random.angle_min; // Minimum angle
+	const double angle_sup = parameters.floquet_random.angle_sup; // Supreme angle	
+
 	const int width = parameters.output.width; // Output spacing
 
 	stringstream base_filename; // Filename
@@ -62,7 +65,7 @@ void flo_level(const AllPara& parameters){
 		cout << "Initialize Evolution Operators." <<endl;
 		for (int k=0; k<num_realization; k++){
 			//floquet[k] = new FloEvolRandom(size, tau, J);
-			floquet[k] = new FloEvolRandomRotation(size, tau, J);
+			floquet[k] = new FloEvolRandomRotation(size, tau, J, angle_min, angle_sup);
 		}
 
 		if (!output_init){
