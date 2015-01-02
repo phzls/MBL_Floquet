@@ -42,6 +42,16 @@ struct FloPara
 };
 
 /*
+ * Parameters that are related to Random Rotation Floquet models.
+ */
+struct FloRrotationPara
+{
+	double angle_min; // Minimum angle in rotation. Should be between [0, 2*pi)
+	double angle_sup; // Supreme angle in rotation. Should be between [0, 2*pi), and no
+					  // less than angle_min
+};
+
+/*
  * All parameters.
  */
 struct AllPara
@@ -54,6 +64,9 @@ struct AllPara
 
 	// Floquet parameters
 	FloPara floquet;
+
+	// Random Rotation Floquet parameters
+	FloRrotationPara floquet_random;
 };
 
 #endif
