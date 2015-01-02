@@ -1,4 +1,5 @@
 #include <ctime>
+#include <string>
 #include <cstdlib>
 #include <iostream>
 #include <Eigen/Core>
@@ -72,6 +73,12 @@ void flo_level(const AllPara& parameters){
 			base_filename << floquet[0] -> Type()<<"_L=" << size << ",tau=" << tau
 						  << ",Realizations=" << num_realization << ",J_min="
 						  << J_min << ",J_max=" << J_max << ",J_N=" << J_N;
+
+			int found = floquet[0] -> Type().find("Rotation");
+			if (found != string::npos){
+				// It is the random rotation floquet
+				base_filename << ",angle_min=" << angle_min <<",angle_sup=" << angle_sup;
+			}
 
 			string post_string =  ",level_spacing.txt";
 			Of_Construct(level_out, base_filename, post_string, true) ;
