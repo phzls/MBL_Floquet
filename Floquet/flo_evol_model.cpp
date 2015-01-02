@@ -217,8 +217,9 @@ void FloEvolRandom::Evol_Z_Construct_(MatrixXcd& Uz){
  * Construct the representation string and abstract type of the class.
  */
 void FloEvolRandomRotation::Repr_Init_(){
-	repr_ << "Random_Rotation_Floquet_L=" << size_ << ",J=" << param_.J <<",tau="
-		  << param_.tau;
+	repr_ << "Random_Rotation_Floquet_L=" << size_ << ",J=" << param_.J 
+		  << ",angle_min=" << param_.angle_min << ",angle_sup=" << param_.angle_sup
+		  <<",tau="<< param_.tau;
 	type_ = "Random_Rotation_Floquet";
 }
 
@@ -236,9 +237,9 @@ void FloEvolRandomRotation::Evol_Para_Init(){
 	// We generate angle uniformly random on [0,2*pi) and a random unit vector on 3D
 	// sphere, where z uniformly on [0,1] and phi uniformly on [0,2*pi). It rotates a
 	// density matrix on block sphere w.r.t the axis of unit vector by amount of angle
-	const double angle_range = angle_sup_ - angle_min_;
+	const double angle_range = param_.angle_sup - param_.angle_min;
 	for (int i=0; i<size_; i++){
-		angle_[i] = angle_min_ + angle_range* u1rand();
+		angle_[i] = param_.angle_min + angle_range* u1rand();
 
 		double z = 2 * u2rand() - 1;
 		double phi = 2 * Pi * u1rand();
@@ -412,11 +413,11 @@ void FloEvolRandomRotation::Evol_Z_Construct_(MatrixXcd& Uz){
  * Check input parameters
  */
 void FloEvolRandomRotation::Para_Check_(){
-	if (angle_sup_ < angle_min_){
+	if (param_.angle_sup < param_.angle_min){
 		cout << "Rotation angle_sup should be no less than angle_min." << endl;
 		abort();
 	}
-	if (angle_min_ < 0 || angle_sup_ > 2*Pi){
+	if (param_.angle_min < 0 || param_.angle_sup > 2*Pi){
 		cout << "Rotation angle should be between 0 and 2*pi." << endl;
 		abort();
 	}
