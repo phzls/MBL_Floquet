@@ -1,8 +1,10 @@
+
 #ifndef FLO_EVOL_MODEL_H
 #define FLO_EVOL_MODEL_H
 
 #include <sstream>
 #include <vector>
+#include "constants.h"
 #include "flo_evol.h"
 
 /**
@@ -95,14 +97,31 @@ class FloEvolRandomRotation : public FloEvolVanilla
 
 		void Repr_Init_(); // Initialize the representation string stream as well as type
 
+		void Para_Check_(); // Check input parameters for the model
+
 		const bool debug_; // Used for debug output
+		const double angle_min_; // Minimum angle for rotation on bloch sphere
+		const double angle_sup_; // Supreme angle for rotation on bloch sphere
 
 	public:
 		FloEvolRandomRotation(int size, double tau, double J):
-			FloEvolVanilla(size), param_(tau, J), debug_(false) { Repr_Init_(); }
+			FloEvolVanilla(size), param_(tau, J), debug_(false), angle_min_(0),
+			angle_sup_(2*Pi) { Para_Check_(); Repr_Init_(); }
 
 		FloEvolRandomRotation(int size, double tau, double J, bool debug):
-			FloEvolVanilla(size), param_(tau, J), debug_(debug) { Repr_Init_(); }
+			FloEvolVanilla(size), param_(tau, J), debug_(debug), angle_min_(0), 
+			angle_sup_(2*Pi) { Para_Check_(); Repr_Init_(); }
+
+		// angle_min gives the minimum angle of the rotation angle. angle_sup gives the
+		// supreme angle of rotation.
+		FloEvolRandomRotation(int size, double tau, double J, double angle_min, double angle_sup):
+			FloEvolVanilla(size), param_(tau, J), angle_min_(angle_min), angle_sup_(angle_sup),
+			debug_(false) { Para_Check_(); Repr_Init_(); }
+
+		FloEvolRandomRotation(int size, double tau, double J, double angle_min, double angle_sup,
+		bool debug):
+			FloEvolVanilla(size), param_(tau, J), angle_min_(angle_min),
+			angle_sup_(angle_sup), debug_(debug) { Para_Check_(); Repr_Init_(); }
 
 		// Initialize a random angle and a random 3D unit vector
 		void Evol_Para_Init();

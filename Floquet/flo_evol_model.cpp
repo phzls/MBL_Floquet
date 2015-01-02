@@ -233,10 +233,12 @@ void FloEvolRandomRotation::Evol_Para_Init(){
 		axis_[i].resize(3);
 	}
 
-	// We generate psi and xi randomly in [0, 2*pi), and (sin(phi))^2 randomly from 
-	// [0, 1] where phi belongs to [0, pi/2]
+	// We generate angle uniformly random on [0,2*pi) and a random unit vector on 3D
+	// sphere, where z uniformly on [0,1] and phi uniformly on [0,2*pi). It rotates a
+	// density matrix on block sphere w.r.t the axis of unit vector by amount of angle
+	const double angle_range = angle_sup_ - angle_min_;
 	for (int i=0; i<size_; i++){
-		angle_[i] = 2*Pi * u1rand();
+		angle_[i] = angle_min_ + angle_range* u1rand();
 
 		double z = 2 * u2rand() - 1;
 		double phi = 2 * Pi * u1rand();
@@ -324,9 +326,9 @@ void FloEvolRandomRotation::Evol_Site_Construct_(MatrixXcd& Ux){
 	for (int site = 0; site < size_; site++){
 
 		// Construct U matrix at each site
-		U(0,0) = complex<double>(cos(angle_[site]), axis_[site][2]*sin(angle_[site]));
-		U(0,1) = complex<double>(sin(angle_[site])*axis_[site][1], 
-								 sin(angle_[site])*axis_[site][0]);
+		U(0,0) = complex<double>(cos(angle_[site]/2), -axis_[site][2]*sin(angle_[site]/2));
+		U(0,1) = complex<double>(-sin(angle_[site]/2)*axis_[site][1], 
+								 -sin(angle_[site]/2)*axis_[site][0]);
 		U(1,0) = -conj(U(0,1));
 		U(1,1) = conj(U(0,0));	
 
@@ -403,5 +405,19 @@ void FloEvolRandomRotation::Evol_Z_Construct_(MatrixXcd& Uz){
 			current_spin = next_spin;
 		}
 		Uz(i,i) = exp(-Complex_I * complex<double>(H,0) );
+	}
+}
+
+/*
+ * Check input parameters
+ */
+void FloEvolRandomRotation::Para_Check_(){
+	if (angle_sup_ < angle_min_){
+		cout << "Rotation angle_sup should be no less than angle_min." << endl;
+		abort();
+	}
+	if (angle_min_ < 0 || angle_sup_ > 2*Pi){
+		cout << "Rotation angle should be between 0 and 2*pi." << endl;
+		abort();
 	}
 }
