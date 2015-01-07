@@ -23,7 +23,7 @@ int generic_conj(int);
  * Generic norm function which also handles double and integer
  */
 template<class T>
-complex<T> generic_norm(complex<T> val){ return norm(val);}
+T generic_norm(complex<T> val){ return norm(val);}
 
 double generic_norm(double);
 int generic_norm(int);
