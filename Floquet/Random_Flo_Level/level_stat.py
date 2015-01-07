@@ -73,17 +73,36 @@ type_string = "level"
 Label.string_extract(filename, cal_type, desired_string = type_string)
 Label.label_change(cal_type)
 
-Label.label_build(label, '', general, end = True, concat = '')
-Label.label_build(label, '', cal_type, end = True)
-Label.label_build(label, length_label, length, end = True)
-print label
-
 # Realizations
 realization = [[] for n in filename]
 realization_string = "Realizations="
 
 Label.string_extract(filename, realization, start_string = realization_string, end_string = ',')
 print realization
+
+# minimum angle for rotation if exists
+angle_min = [[] for n in filename]
+angle_min_start = "angle_min="
+angle_min_label = "angle min="
+
+Label.string_extract(filename, angle_min, start_string = angle_min_start, end_string = ',')
+print angle_min
+
+# Supreme angle for rotation if exists
+angle_sup = [[] for n in filename]
+angle_sup_start = "angle_sup="
+angle_sup_label = "angle sup="
+
+Label.string_extract(filename, angle_sup, start_string = angle_sup_start, end_string = ',')
+print angle_sup
+
+Label.label_build(label, '', general, end = True, concat = '')
+Label.label_build(label, '', cal_type, end = True)
+Label.label_build(label, length_label, length, end = True)
+Label.label_build(label, angle_min_label, angle_min, end = True)
+Label.label_build(label, angle_sup_label, angle_sup, end = True)
+print label
+
 
 data = [[],[],[]]
 
@@ -105,26 +124,36 @@ for n in filename:
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init()
+draw1.figure_init(ymax = 3, ymin = 1)
 draw1.figure_set()
 
-in_range = ["square"]
+in_range = ["3.14", "1.04", "1.57", "2.09", "2.61"] # Angles
+must_in_range = ["square"]
+
+extra_index= [] # The original two scenarios
+
+for n in xrange(len(label)):
+    if label[n].find("square") > -1 and label[n].find("angle") == -1:
+        extra_index.append(n)
 
 plot_label = ['' for n in filename]
 print general
 Label.label_build(plot_label, '', general, end = True, concat = '')
 Label.label_build(plot_label, length_label, length, end = True)
+Label.label_build(plot_label, "angle=", angle_min, end = True)
+
 print plot_label
 
-draw1.plot_range(label, in_range = in_range)
+draw1.plot_range(label, in_range = in_range, must_in_range = must_in_range,
+                 index = extra_index, printout = True)
 
 draw1.errorbar(data[0], data[1], yerr = data[2], label = plot_label)
 
-pylab.legend(loc='upper right', ncol=1, prop={'size':15} )
+pylab.legend(loc='upper right', ncol=1, prop={'size':15}, bbox_to_anchor=(1.15, 0.8))
 pylab.ylabel(r"$\langle(\Delta\phi)^2\rangle$")
 pylab.xlabel(r"$j$")
 
-#pylab.savefig("Floquet_10_level_spacing_mean_square_compare.pdf",box_inches='tight')
+#pylab.savefig("Floquet_10_level_spacing_mean_square_compare_v2.pdf",box_inches='tight')
 
 
 draw2 = Draw.Draw()
@@ -134,7 +163,7 @@ draw2.figure_set()
 
 index = 0
 for n in filename:
-    if n.find("mean") == -1 and n.find("Rotation") > -1:
+    if n.find("mean") == -1 and n.find("Rotation") > -1 and n.find("2.61") > -1:
         break
     else:
         index += 1
@@ -146,21 +175,23 @@ print min(data[1][index][9]), max(data[1][index][9])
 
 bin_width = 0.05
 
-instance = 1
+instance = 10
 
-label = general[index] + " L=" + length[index]+" "+"J="+str(data[0][index][instance])
+label = ( general[index] + " L=" + length[index]+" "+"J="+str(data[0][index][instance])
+          +" angle=" + str(angle_min[index]) )
 print label
 
 draw2.hist(data[1][index][instance], bin_width, label = label)
 pylab.legend(loc='upper right', ncol=1, prop={'size':15} )
 
 J_s = str(data[0][index][instance]).replace('.','_')
+angle_s = angle_min[index].replace('.','_')
 pylab.xlabel(r"$\langle\Delta \phi_i \rangle$")
 
 pylab.subplots_adjust(bottom=0.12)
 
-pylab.savefig("Random_Rotation_Floquet_10_level_spacing_J_"+J_s+"_v2.pdf",
-              box_inches='tight')
+#pylab.savefig("Random_Rotation_Floquet_10_level_spacing_J_"+J_s+"_angle_"+angle_s+".pdf",
+#              box_inches='tight')
 
 pylab.show()
 
