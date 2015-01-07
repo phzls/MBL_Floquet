@@ -16,8 +16,8 @@ using namespace std;
 template<class T>
 complex<T> generic_conj(complex<T> val){ return conj(val);}
 
-double generic_conj(double val){return val;}
-int generic_conj(int val){return val;}
+double generic_conj(double);
+int generic_conj(int);
 
 /*
  * Generic norm function which also handles double and integer
@@ -25,7 +25,6 @@ int generic_conj(int val){return val;}
 template<class T>
 complex<T> generic_norm(complex<T> val){ return norm(val);}
 
-double generic_norm(double val){return val*val;}
-int generic_norm(int val){return val*val;}
-
+double generic_norm(double);
+int generic_norm(int);
 #endif
