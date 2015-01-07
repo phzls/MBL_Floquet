@@ -2,12 +2,33 @@
 #include <vector>
 #include <iostream>
 #include <complex>
+#include <Eigen/Core>
 #include "generic_func.h"
 
 using namespace std;
+using namespace Eigen;
+
+/*
+ * For documentation of this function, see update.cpp.
+ */
+template <class T1, class T2>
+void update(T1& val1, T2 val2) {val1 = val2;}
+
+template <>
+void update(double&, complex<double>);
+
+template <>
+void update(double&, complex<int>);
+
+template <>
+void update(int&, complex<double>);
+
+template <>
+void update(int&, complex<int>);
 
 template <class T1, class T2>
-void rightmost_sigma_z_sum(T1& m, const vector< vector<T2> >& basis, const string& type){
+void rightmost_sigma_z_sum(Matrix<T1, Dynamic, Dynamic>& m, const vector< vector<T2> >& basis, 
+const string& type){
 	// dimension of space defined by the bases
 	const int dim = basis.size();
 
@@ -50,8 +71,11 @@ void rightmost_sigma_z_sum(T1& m, const vector< vector<T2> >& basis, const strin
 				}
 			}
 
+			T1 element;
+
 			if (type == "entry" || type == "Entry"){
-				m(i,j) += sum;
+				update(element, sum);
+				m(i,j) += element;
 			}
 			else if (type == "norm" || type == "Norm"){
 				m(i,j) += generic_norm(sum);
