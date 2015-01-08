@@ -15,15 +15,16 @@ using namespace Eigen;
 
 class ModelFunc
 {
+ 	private:
+ 		const string type_;
  	public:
- 		virtual void operator() (const string&, const AllPara&, 
+ 		virtual void operator() (const AllPara&, 
  			EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&) = 0;
 
- 		virtual void operator() (const string&, const AllPara&, 
- 			EvolMatrix< EigenSolver<MatrixXd> >*&) = 0; 
+ 		virtual void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&) = 0; 
 
  		// Get the type of the model: Floquet, Hamiltonian or All
- 		virtual string Get_Type() const = 0; 
+ 		string Get_Type() const {return type_;}
 };
 
 // For random floquet operator
@@ -34,10 +35,7 @@ class FloEvolRandomFunc: public ModelFunc
 	public:
 		FloEvolRandomFunc(): type_("Floquet") {};
 
-		void operator() (const string&, const AllPara&, 
- 			EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
-
-		string Get_Type() const;
+		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
 };
 
 
@@ -49,8 +47,5 @@ class FloEvolRandomRotationFunc: public ModelFunc
 	public:
 		FloEvolRandomRotationFunc(): type_("Floquet") {};
 
-		void operator() (const string&, const AllPara&, 
- 			EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
-
-		string Get_Type() const;
+		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
 };
