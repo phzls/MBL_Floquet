@@ -29,7 +29,7 @@ using namespace std;
 
  		// The model type that may be induced by the method. It can be "Floquet", 
  		// "Hamiltonian" or "All"
- 		string method_type_();
+ 		string task_type_;
 
  		// Insert task pair in map
  		void Task_Map_Insert(const string&, const task_func&);
@@ -49,7 +49,7 @@ using namespace std;
 
 
  		// According to the name of the task, return the task function pointer
- 		task_func Task(const string&) const; 
+ 		task_func Task(const string&); 
 
  		// According to the name of the model, return one model pointer
  		template<class T>
