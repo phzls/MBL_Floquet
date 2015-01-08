@@ -1,7 +1,7 @@
 #include <map>
-#include <vector>
 #include "parameters.h"
 #include "evol_class.h"
+#include "model_func.h"
 
 using namespace std;
 
@@ -16,14 +16,20 @@ using namespace std;
  class TasksModels
  {	
  	private:
- 		// Map for task names. The key is its name, and the value is its description
- 		map<string, string> tasks_;
+ 		// Map for task names. The key is its name, and the value is the corresponding 
+ 		// function call
+ 		map<string, task_func> tasks_;
 
- 		// Map for model names. The key is its name, and the value is its description
- 		map<string, string> models_;
+ 		// Map for model names. The key is its name, and the value is the corresponding
+ 		// function call
+ 		map<string, ModelFunc*> models_;
 
  		// Construct the two maps
  		void Map_Construct_();
+
+ 		// The model type that may be induced by the method. It can be "Floquet", 
+ 		// "Hamiltonian" or "All"
+ 		string method_type_();
 
  	public:
  		TasksModels() {Map_Construct_();}
@@ -40,10 +46,10 @@ using namespace std;
  		template<class T>
  		void Model(const string&, const AllPara&, EvolMatrix<T>*&);
 
- 		// Print all tasks and their descriptions
+ 		// Print all tasks names
  		void Print_Task() const;
 
- 		// Print all models and their descriptions
+ 		// Print all models names
  		void Print_Model() const;
  };
 
