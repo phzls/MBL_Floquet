@@ -17,6 +17,7 @@ struct GenericPara
 	int local_dimension; // Local dimension at each site
 	bool evec; // Whether eigenvectors are computed during diagonization
 	bool erase; // Whether erase the Hamiltonian/Evolution Operator after diagonization
+	bool debug; // Whether show debug information
 };
 
 /*
