@@ -33,7 +33,7 @@ using namespace std;
 
  	public:
  		TasksModels() {Map_Construct_();}
- 		~TasksModels(){}; 
+ 		~TasksModels(); 
 
  		// Look up a name. If it exists, the description is returned; otherwise return
  		// "Not Found"
