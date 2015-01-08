@@ -1,5 +1,5 @@
-#ifndef TASKS_H
-#define TASKS_H
+#ifndef TASK_FUNC_H
+#define TASKS_FUNC_H
 
 #include "parameters.h"
 
