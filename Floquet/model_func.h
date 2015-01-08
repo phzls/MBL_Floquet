@@ -39,6 +39,8 @@ class FloEvolRandomFunc: public ModelFunc
 		FloEvolRandomFunc(): type_("Floquet") {};
 
 		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+
+		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 };
 
 
@@ -51,6 +53,7 @@ class FloEvolRandomRotationFunc: public ModelFunc
 		FloEvolRandomRotationFunc(): type_("Floquet") {};
 
 		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 };
 
 #endif

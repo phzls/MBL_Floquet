@@ -1,3 +1,4 @@
+#include <iostream>
 #include "model_func.h"
 #include "flo_evol_model.h"
 
@@ -12,6 +13,11 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	model = new FloEvolRandom(size, tau, J);
 }
 
+void FloEvolRandomFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&){
+	cout << "Wrong pointers for model." << endl;
+	abort();
+}
+
 void FloEvolRandomRotationFunc::operator() (const AllPara& parameters, 
 EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const int size = parameters.generic.size; // System Size
@@ -22,4 +28,10 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const double angle_sup = parameters.floquet_random.angle_sup; // Supreme angle
 
 	model = new FloEvolRandomRotation(size, tau, J, angle_min, angle_sup);
+}
+
+void FloEvolRandomRotationFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
+{
+	cout << "Wrong pointers for model." << endl;
+	abort();
 }
