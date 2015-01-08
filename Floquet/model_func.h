@@ -27,7 +27,7 @@ class ModelFunc
  		virtual void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&) = 0; 
 
  		// Get the type of the model: Floquet, Hamiltonian or All
- 		string Get_Type() const {return type_;}
+ 		string Type() const {return type_;}
 };
 
 // For random floquet operator
