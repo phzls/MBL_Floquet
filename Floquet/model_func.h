@@ -18,8 +18,8 @@ using namespace Eigen;
 
 class ModelFunc
 {
- 	private:
- 		const string type_;
+ 	protected:
+ 		string type_;
  	public:
  		virtual void operator() (const AllPara&, 
  			EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&) = 0;
@@ -33,11 +33,7 @@ class ModelFunc
 // For random floquet operator
 class FloEvolRandomFunc: public ModelFunc
 {
-	private:
-		const string type_;
 	public:
-		FloEvolRandomFunc(): type_("Floquet") {};
-
 		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
 
 		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
@@ -47,11 +43,7 @@ class FloEvolRandomFunc: public ModelFunc
 // For random rotation floquet operator
 class FloEvolRandomRotationFunc: public ModelFunc
 {
-	private:
-		const string type_;
 	public:
-		FloEvolRandomRotationFunc(): type_("Floquet") {};
-
 		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
 		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 };

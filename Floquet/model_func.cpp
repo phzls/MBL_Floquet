@@ -1,4 +1,6 @@
 #include <iostream>
+#include <algorithm>
+#include <string>
 #include "model_func.h"
 #include "flo_evol_model.h"
 
@@ -11,6 +13,9 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const int J = parameters.floquet.J; // Coupling strength
 
 	model = new FloEvolRandom(size, tau, J);
+
+	type_ = model -> Type();
+	replace(type_.begin(), type_.end(), '_', ' ');
 }
 
 void FloEvolRandomFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&){
@@ -28,6 +33,9 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const double angle_sup = parameters.floquet_random.angle_sup; // Supreme angle
 
 	model = new FloEvolRandomRotation(size, tau, J, angle_min, angle_sup);
+	
+	type_ = model -> Type();
+	replace(type_.begin(), type_.end(), '_', ' ');
 }
 
 void FloEvolRandomRotationFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
