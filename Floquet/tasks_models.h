@@ -70,9 +70,10 @@ void TasksModels::Model(const string& model_name, const AllPara& parameters,
 EvolMatrix<T>*& model) const {
 	map<string, pair<string, ModelFunc*> >::const_iterator it;
 	it = models_.find(model_name);
-	
+
 	if (it == models_.end()){
 		cout << "The model desired is not found." << endl;
+		Print_Model();
 		abort();
 	}
 	else{

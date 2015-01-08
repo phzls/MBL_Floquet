@@ -85,10 +85,31 @@ task_func TasksModels::Task(const string& task_name) {
 	it = tasks_.find(task_name);
 	if (it == tasks_.end()){
 		cout << "The task desired is not found." << endl;
+		Print_Task();
 		abort();
 	}
 	else{
 		task_type_ = it -> second.first;
 		return it -> second.second;
 	}
+}
+
+void TasksModels::Print_Task() const {
+	cout << "The tasks are: " << endl;
+	map<string, pair<string, task_func> >::const_iterator it;
+
+	for (it = tasks_.begin(); it != tasks_.end(); it++){
+		cout << "Name: " << it -> first <<"  Type: " << it -> second.first << endl;
+	}
+	cout << endl;
+}
+
+void TasksModels::Print_Model() const {
+	cout << "The models are: " << endl;
+	map<string, pair<string, ModelFunc*> >::const_iterator it;
+
+	for (it = models_.begin(); it != models_.end(); it++){
+		cout << "Name: " << it -> first <<"  Type: " << it -> second.first << endl;
+	}
+	cout << endl;
 }
