@@ -35,9 +35,8 @@ using namespace std;
  		TasksModels() {Map_Construct_();}
  		~TasksModels(); 
 
- 		// Look up a name. If it exists, the description is returned; otherwise return
- 		// "Not Found"
- 		string Look_Up(const string&) const;
+ 		// Look up a name. If it exists, return true, otherwise false
+ 		bool Look_Up(const string&) const;
 
  		// According to the name of the task, return the task function pointer
  		task_func Task(const string&) const; 
