@@ -35,7 +35,7 @@ using namespace std;
  		void Task_Map_Insert(const string&, const task_func&);
 
  		// Insert model pair in map
- 		void Model_Map_Insert(const string&, const ModelFunc* &);
+ 		void Model_Map_Insert(const string&, ModelFunc* const &);
 
  	public:
  		TasksModels() {Map_Construct_();}
