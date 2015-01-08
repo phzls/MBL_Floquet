@@ -16,7 +16,6 @@ void TasksModels::Map_Construct_(){
 	Task_Map_Insert(task_name1, task_function1);
 
 	// Random Floquet Operator
-	pair<string, ModelFunc*> model_name_op1;
 	string model_name1;
 	ModelFunc* model_function1;
 
@@ -25,14 +24,12 @@ void TasksModels::Map_Construct_(){
 	Model_Map_Insert(model_name1, model_function1);
 
 	// Random Rotation Floquet Operator
-	pair<string, ModelFunc*> model_name_op2;
 	string model_name2;
 	ModelFunc* model_function2;
 
 	model_name2 = "Random Flo Rotation";
 	model_function2 = new FloEvolRandomRotationFunc();
-	model_name_op2 = make_pair(model_name2, model_function2);
-	models_.insert(model_name_op2);
+	Model_Map_Insert(model_name2, model_function2);
 }
 
 void TasksModels::Task_Map_Insert(const string& task_name, const task_func& task_function){
