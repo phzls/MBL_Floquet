@@ -1,6 +1,10 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
+#include <string>
+
+using namespace std;
+
 /**
  ** This file constains structs that give all necessary parameters to pass to various 
  ** functions. They may contain more parameters than needed for generality.
@@ -18,6 +22,8 @@ struct GenericPara
 	bool evec; // Whether eigenvectors are computed during diagonization
 	bool erase; // Whether erase the Hamiltonian/Evolution Operator after diagonization
 	bool debug; // Whether show debug information
+	string task; // String for the computation task
+	string model; // String for the model
 };
 
 /*
