@@ -31,6 +31,12 @@ using namespace std;
  		// "Hamiltonian" or "All"
  		string method_type_();
 
+ 		// Insert task pair in map
+ 		void Task_Map_Insert(const string&, const task_func&);
+
+ 		// Insert model pair in map
+ 		void Model_Map_Insert(const string&, const ModelFunc* &);
+
  	public:
  		TasksModels() {Map_Construct_();}
  		~TasksModels(); 
