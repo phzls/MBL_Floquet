@@ -1,3 +1,6 @@
+#ifndef MODEL_FUNC_H
+#define MODEL_FUNC_H
+
 #include <Eigen/Eigenvalues>
 #include <Eigen/Dense>
 #include "evol_class.h"
@@ -49,3 +52,5 @@ class FloEvolRandomRotationFunc: public ModelFunc
 
 		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
 };
+
+#endif
