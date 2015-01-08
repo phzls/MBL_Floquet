@@ -1,4 +1,5 @@
 #include <map>
+#include <utility>
 #include "parameters.h"
 #include "evol_class.h"
 #include "model_func.h"
@@ -16,26 +17,23 @@ using namespace std;
  class TasksModels
  {	
  	private:
- 		// Map for task names. The key is its name, and the value is the corresponding 
- 		// function call
- 		map<string, task_func> tasks_;
+ 		// Map for task names. The key is its name, and the value is the task type and 
+ 		// corresponding function call
+ 		map<string, pair<string, task_func> > tasks_;
 
- 		// Map for model names. The key is its name, and the value is the corresponding
+ 		// Map for model names. The key is its name, and the value is the model type, which
+ 		// should be the same as the type obtained from the model class, and the corresponding 
  		// function call
- 		map<string, ModelFunc*> models_;
+ 		map<string, pair<string, ModelFunc*> > models_;
 
  		// Construct the two maps
  		void Map_Construct_();
 
- 		// The model type that may be induced by the method. It can be "Floquet", 
- 		// "Hamiltonian" or "All"
- 		string task_type_;
-
  		// Insert task pair in map
- 		void Task_Map_Insert(const string&, const task_func&);
+ 		void Task_Map_Insert(const string&, const string&, const task_func&);
 
  		// Insert model pair in map
- 		void Model_Map_Insert(const string&, ModelFunc* const &);
+ 		void Model_Map_Insert(const string&, const string&, ModelFunc* const &);
 
  	public:
  		TasksModels() {Map_Construct_();}
@@ -49,7 +47,7 @@ using namespace std;
 
 
  		// According to the name of the task, return the task function pointer
- 		task_func Task(const string&); 
+ 		task_func Task(const string&) const; 
 
  		// According to the name of the model, return one model pointer
  		template<class T>
