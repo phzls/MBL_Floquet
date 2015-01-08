@@ -28,6 +28,8 @@ class ModelFunc
 
  		// Get the type of the model: Floquet, Hamiltonian or All
  		string Type() const {return type_;}
+
+ 		virtual ~ModelFunc(){};
 };
 
 // For random floquet operator
@@ -37,6 +39,8 @@ class FloEvolRandomFunc: public ModelFunc
 		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
 
 		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+
+		virtual ~FloEvolRandomFunc(){};
 };
 
 
@@ -46,6 +50,8 @@ class FloEvolRandomRotationFunc: public ModelFunc
 	public:
 		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
 		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+
+		virtual ~FloEvolRandomRotationFunc(){};
 };
 
 #endif
