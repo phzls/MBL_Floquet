@@ -1,3 +1,6 @@
+#ifndef TASKSMODELS_H
+#define TASKSMODELS_H
+
 #include <map>
 #include <utility>
 #include <iostream>
@@ -90,4 +93,6 @@ EvolMatrix<T>*& model) const {
 		*(it -> second.second)(parameters, model);
 	}
 }
+
+#endif
 
