@@ -113,3 +113,14 @@ void TasksModels::Print_Model() const {
 	}
 	cout << endl;
 }
+
+TasksModels::~TasksModels(){
+	map<string, pair<string, ModelFunc*> >::iterator it;
+
+	for (it = models_.begin(); it != models_.end(); it++){
+		if (it -> second.second != NULL){
+			delete it -> second.second;
+			it -> second.second = NULL;
+		}
+	}
+}
