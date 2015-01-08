@@ -1,5 +1,7 @@
 #include <map>
 #include <utility>
+#include <iostream>
+#include <string>
 #include "parameters.h"
 #include "evol_class.h"
 #include "model_func.h"
@@ -26,6 +28,9 @@ using namespace std;
  		// function call
  		map<string, pair<string, ModelFunc*> > models_;
 
+ 		// The recorded task type
+ 		string task_type_;
+
  		// Construct the two maps
  		void Map_Construct_();
 
@@ -47,11 +52,11 @@ using namespace std;
 
 
  		// According to the name of the task, return the task function pointer
- 		task_func Task(const string&) const; 
+ 		task_func Task(const string&); 
 
  		// According to the name of the model, return one model pointer
  		template<class T>
- 		void Model(const string&, const AllPara&, EvolMatrix<T>*&);
+ 		void Model(const string&, const AllPara&, EvolMatrix<T>*&) const;
 
  		// Print all tasks names
  		void Print_Task() const;
@@ -59,4 +64,29 @@ using namespace std;
  		// Print all models names
  		void Print_Model() const;
  };
+
+template <class T>
+void TasksModels::Model(const string& model_name, const AllPara& parameters, 
+EvolMatrix<T>*& model) const {
+	map<string, pair<string, ModelFunc*> >::const_iterator it;
+	it = models_.find(model_name);
+	
+	if (it == models_.end()){
+		cout << "The model desired is not found." << endl;
+		abort();
+	}
+	else{
+		if (it -> second.first != it -> second.second -> Type()){
+			cout << "Model type is not consistent." << endl;
+			abort();
+		}
+
+		if (it -> second.first.find(task_type_) == string::npos){
+			cout << "Model type and task type are not consistent." << endl;
+			abort();
+		}
+
+		*(it -> second.second)(parameters, model);
+	}
+}
 

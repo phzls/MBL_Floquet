@@ -80,12 +80,15 @@ bool TasksModels::Model_Look_Up(const string& model_name) const {
 	else return true;
 }
 
-task_func TasksModels::Task(const string& task_name) const {
+task_func TasksModels::Task(const string& task_name) {
 	map<string, pair<string, task_func> >::const_iterator it;
 	it = tasks_.find(task_name);
 	if (it == tasks_.end()){
 		cout << "The task desired is not found." << endl;
 		abort();
 	}
-	else return it -> second.second;
+	else{
+		task_type_ = it -> second.first;
+		return it -> second.second;
+	}
 }
