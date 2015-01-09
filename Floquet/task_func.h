@@ -12,4 +12,10 @@
  */
 void flo_level(const AllPara&);
 
+/*
+ * Compute entry and norm representations of the right most sigma matrix at the end of chain
+ * for floquet systems.
+ */
+void flo_right_most_sigma_z(const AllPara& parameters);
+
 #endif
