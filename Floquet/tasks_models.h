@@ -85,7 +85,8 @@ EvolMatrix<T>*& model) const {
 			abort();
 		}
 
-		if (it -> second.first.find(task_type_) == string::npos){
+		// Assume the task_type_ belongs to the task which calls this model
+		if (task_type_ != "All" && it -> second.first.find(task_type_) == string::npos){
 			cout << "Model type and task type are not consistent." << endl;
 			abort();
 		}
