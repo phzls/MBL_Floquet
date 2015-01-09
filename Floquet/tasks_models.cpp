@@ -17,6 +17,16 @@ void TasksModels::Map_Construct_(){
 	task_function1 = flo_level;
 	Task_Map_Insert(task_name1, task_type1, task_function1);
 
+	// Compute level statistics for Floquet system
+	string task_name2;
+	string task_type2;
+	task_func task_function2;
+
+	task_name2 = "Flo Rightmost Sigma_z";
+	task_type2 = "Floquet";
+	task_function2 = flo_rightmost_sigma_z;
+	Task_Map_Insert(task_name2, task_type2, task_function2);
+
 	// Random Floquet Operator
 	string model_name1;
 	string model_type1;
