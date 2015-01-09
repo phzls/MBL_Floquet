@@ -47,3 +47,34 @@ void Write_File(ofstream& fout, double para, const vector<double>& data, int wid
 	}
 	fout<<endl;
 }
+
+void Write_File(ofstream& fout, const vector<complex<double> >& data, int width){
+	for (int i=0; i<data.size(); i++){
+		double re = real(data[i]);
+		double im = imag(data[i]);
+
+		fout << setw(width) << re;
+
+		if (im < 0) fout << "-";
+		else fout << "+";
+
+		fout << im << "j";
+	}
+	fout<<endl;
+}
+
+void Write_File(ofstream& fout, double para, const vector<complex<double> >& data, int width){
+	fout << setw(width) << para;
+	for (int i=0; i<data.size(); i++){
+		double re = real(data[i]);
+		double im = imag(data[i]);
+
+		fout << setw(width) << re;
+
+		if (im < 0) fout << "-";
+		else fout << "+";
+
+		fout << im << "j";
+	}
+	fout<<endl;
+}

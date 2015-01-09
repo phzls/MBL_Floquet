@@ -1,6 +1,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <complex>
 
 using namespace std;
 
@@ -37,3 +38,15 @@ void Write_File(ofstream&, const vector<double>&, int);
  * integer gives the space between two numbers in the output files.
  */
 void Write_File(ofstream&, double, const vector<double>&, int);
+
+/* 
+ * Write out the vector in a line to a file. the integer gives the space between two numbers
+ * in the output files.
+ */
+void Write_File(ofstream&, const vector<complex<double> >&, int);
+
+/* 
+ * Write out the vector in a line to a file. The double is some parameter, and the
+ * integer gives the space between two numbers in the output files.
+ */
+void Write_File(ofstream&, double, const vector<complex<double> >&, int);
