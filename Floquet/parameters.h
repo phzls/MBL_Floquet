@@ -58,6 +58,11 @@ struct FloRrotationPara
 					  // less than angle_min
 };
 
+struct MatrixPara
+{
+	string type; // Determine the representation type of the matrix
+};
+
 /*
  * All parameters.
  */
@@ -74,6 +79,9 @@ struct AllPara
 
 	// Random Rotation Floquet parameters
 	FloRrotationPara floquet_random;
+
+	// Matrix relevant parameters
+	MatrixPara matrix_para;
 };
 
 #endif
