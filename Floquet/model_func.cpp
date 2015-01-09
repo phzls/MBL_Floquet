@@ -12,7 +12,9 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const double tau = parameters.floquet.tau; // Time step, which seems not used here
 	const int J = parameters.floquet.J; // Coupling strength
 
-	model = new FloEvolRandom(size, tau, J);
+	const bool debug = parameters.generic.debug;
+
+	model = new FloEvolRandom(size, tau, J, debug);
 
 	type_ = model -> Type();
 	replace(type_.begin(), type_.end(), '_', ' ');
@@ -32,8 +34,10 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const double angle_min = parameters.floquet_random.angle_min; // Minimum angle
 	const double angle_sup = parameters.floquet_random.angle_sup; // Supreme angle
 
-	model = new FloEvolRandomRotation(size, tau, J, angle_min, angle_sup);
-	
+	const bool debug = parameters.generic.debug;
+
+	model = new FloEvolRandomRotation(size, tau, J, angle_min, angle_sup, debug);
+
 	type_ = model -> Type();
 	replace(type_.begin(), type_.end(), '_', ' ');
 }
