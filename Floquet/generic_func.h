@@ -2,6 +2,7 @@
 #define GENERIC_H
 
 #include <complex>
+#include <cmath>
 
 using namespace std;
 
@@ -20,10 +21,11 @@ double generic_conj(double);
 int generic_conj(int);
 
 /*
- * Generic norm function which also handles double and integer
+ * Generic norm function which also handles double and integer. Note the norm in c++
+ * is the square of the unsual definition of norm, so here abs is used.
  */
 template<class T>
-T generic_norm(complex<T> val){ return norm(val);}
+T generic_norm(complex<T> val){ return abs(val);}
 
 double generic_norm(double);
 int generic_norm(int);

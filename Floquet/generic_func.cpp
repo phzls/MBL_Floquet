@@ -16,5 +16,5 @@ int generic_conj(int val){return val;}
 /*
  * Generic norm function
  */
-double generic_norm(double val){return val*val;}
-int generic_norm(int val){return val*val;}
+double generic_norm(double val){return abs(val);}
+int generic_norm(int val){return abs(val);}
