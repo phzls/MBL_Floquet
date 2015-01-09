@@ -5,11 +5,9 @@
 using namespace std;
 
 /**
-This is the header file for a variaty of comparison functions used in sorting functions
-**/
+ ** This is the header file for a variaty of comparison functions used in sorting functions
+ **/
 
-bool Vec_Double_Sort(double i, double j) {return (i<j);}
+bool Vec_Double_Sort(double, double); 
 
-bool Vec_Pair_Double_Int_First_Sort(pair<double, int> i, pair<double, int> j){
-	return (i.first < j.first);
-}
+bool Vec_Pair_Double_Int_First_Sort(pair<double, int>, pair<double, int>);
