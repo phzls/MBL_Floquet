@@ -26,6 +26,7 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 	const int num_realization = parameters.generic.num_realizations;
 	const string model = parameters.generic.model;
 	const bool erase = parameters.generic.erase; // Whether erase the evolution matrix
+	const bool debug = parameters.generic.debug; // Whether print debug information
 
 	const double tau = parameters.floquet.tau; // Time step, which seems not used here
 	const double J = parameters.floquet.J; // Coupling strength
@@ -56,6 +57,8 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 
 	for (int i=0; i< num_realization; i++){
 
+		cout << i << "th run:" << endl;
+
 		cout << "Initialize Model." << endl;
 		tasks_models.Model(model, parameters, floquet);
 
@@ -81,6 +84,7 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 		}
 
 		cout << "Diagonalize Evolution Operator." << endl;
+		floquet -> Evol_Para_Init();
 		floquet -> Evol_Construct();
 		floquet -> Evol_Diag();
 		if (erase) floquet -> Evol_Erase();
@@ -93,7 +97,7 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 			abort();
 		}
 
-		for (int j=0; j< floquet -> eigen.eigenvalues().rows(); i++){
+		for (int j=0; j< floquet -> eigen.eigenvalues().rows(); j++){
 			eval_pos[j].first = arg(floquet -> eigen.eigenvalues()(j));
 			eval_pos[j].second = j;
 		}
@@ -119,8 +123,34 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 		cout << "Construct rightmost sigma z matrix in entry." << endl;
 		rightmost_sigma_z_sum(sigma_z_entry, evec_basis, "entry");
 
+		if (debug){
+			cout << "Entry:" << endl;
+			for (int j=0; j< sigma_z_entry.rows(); j++){
+				for (int k=0; k<sigma_z_entry.cols(); k++){
+					cout << real(sigma_z_entry(j,k));
+					if (imag(sigma_z_entry(j,k))<0){
+						cout << imag(sigma_z_entry(j,k)) <<"j  ";
+					}
+					else cout << "+" << imag(sigma_z_entry(j,k)) << "j  ";
+				}
+				cout << endl;
+			}
+		}
+
 		cout << "Construct rightmost sigma z matrix in norm." << endl;
 		rightmost_sigma_z_sum(sigma_z_norm, evec_basis, "norm");
+
+		if (debug){
+			cout << "Norm:" << endl;
+			for (int j=0; j< sigma_z_norm.rows(); j++){
+				for (int k=0; k<sigma_z_norm.cols(); k++){
+					cout << sigma_z_norm(j,k) << "  ";
+				}
+				cout << endl;
+			}
+		}
+
+		cout << endl;
 
 		delete floquet;
 		floquet = NULL;
