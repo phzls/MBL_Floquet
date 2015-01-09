@@ -91,7 +91,7 @@ EvolMatrix<T>*& model) const {
 			abort();
 		}
 
-		*(it -> second.second)(parameters, model);
+		it -> second.second -> operator()(parameters, model);
 	}
 }
 
