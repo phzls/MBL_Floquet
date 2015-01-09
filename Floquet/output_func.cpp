@@ -1,4 +1,5 @@
 #include <iomanip>
+#include <sstream>
 #include <iostream>
 #include "output_func.h"
 
@@ -53,12 +54,19 @@ void Write_File(ofstream& fout, const vector<complex<double> >& data, int width)
 		double re = real(data[i]);
 		double im = imag(data[i]);
 
-		fout << setw(width) << re;
+		stringstream num;
 
-		if (im < 0) fout << "-";
-		else fout << "+";
+		num << re;
 
-		fout << im << "j";
+		if (im < 0){
+			num << "-";
+			im = -im;
+		}
+		else num << "+";
+
+		num << im << "j";
+
+		fout << setw(width) << num.str();
 	}
 	fout<<endl;
 }
@@ -69,12 +77,19 @@ void Write_File(ofstream& fout, double para, const vector<complex<double> >& dat
 		double re = real(data[i]);
 		double im = imag(data[i]);
 
-		fout << setw(width) << re;
+		stringstream num;
 
-		if (im < 0) fout << "-";
-		else fout << "+";
+		num << re;
 
-		fout << im << "j";
+		if (im < 0){
+			num << "-";
+			im = -im;
+		}
+		else num << "+";
+
+		num << im << "j";
+
+		fout << setw(width) << num.str();
 	}
 	fout<<endl;
 }
