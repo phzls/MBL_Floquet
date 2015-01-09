@@ -80,6 +80,9 @@ EvolMatrix<T>*& model) const {
 		abort();
 	}
 	else{
+		// Intrinsic type is constructed here
+		it -> second.second -> operator()(parameters, model);
+
 		if (it -> second.first != it -> second.second -> Type()){
 			cout << "Model type is not consistent." << endl;
 			cout << "Desired model type: " << it -> second.first << endl;
@@ -94,8 +97,6 @@ EvolMatrix<T>*& model) const {
 			cout << "Task type: " << task_type_ << endl;
 			abort();
 		}
-
-		it -> second.second -> operator()(parameters, model);
 	}
 }
 
