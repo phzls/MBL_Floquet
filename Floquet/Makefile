@@ -1,5 +1,5 @@
-evolutions = flo_evol_model.o mtrand.o flo_level.o
-functions = generic_func.o update.o tasks_models.o model_func.o
+evolutions = flo_evol_model.o mtrand.o flo_level.o flo_rightmost_sigma_z.o
+functions = generic_func.o update.o tasks_models.o model_func.o sort.o
 results = level_stats.o
 outputs = output_func.o
 
