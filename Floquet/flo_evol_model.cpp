@@ -83,7 +83,9 @@ void FloEvolRandom::Evol_Construct(){
 		cout<<"Ux:"<<endl;
 		for (int i=0; i< Ux.rows();i++){
 			for (int j=0; j< Ux.cols();j++){
-				cout<<"("<<real(Ux(i,j))<<","<<imag(Ux(i,j))<<")  ";
+				cout<<real(Ux(i,j));
+				if (imag(Ux(i,j))<0) cout << imag(Ux(i,j)) << "j  "; 
+				else cout << "+" << imag(Ux(i,j)) << "j  ";
 			}
 			cout<<endl;
 		}
@@ -92,7 +94,9 @@ void FloEvolRandom::Evol_Construct(){
 		cout<<"Uz:"<<endl;
 		for (int i=0; i< Uz.rows();i++){
 			for (int j=0; j< Uz.cols();j++){
-				cout<<"("<<real(Uz(i,j))<<","<<imag(Uz(i,j))<<")  ";
+				cout<<real(Uz(i,j));
+				if (imag(Uz(i,j))<0) cout << imag(Uz(i,j)) << "j  "; 
+				else cout << "+" << imag(Uz(i,j)) << "j  ";
 			}
 			cout<<endl;
 		}
@@ -101,7 +105,9 @@ void FloEvolRandom::Evol_Construct(){
 		cout<<"Final matrix:"<<endl;
 		for (int i=0; i< evol_op_.rows();i++){
 			for (int j=0; j< evol_op_.cols();j++){
-				cout<<"("<<real(evol_op_(i,j))<<","<<imag(evol_op_(i,j))<<")  ";
+				cout<<real(evol_op_(i,j));
+				if (imag(evol_op_(i,j))<0) cout << imag(evol_op_(i,j)) << "j  "; 
+				else cout << "+" << imag(evol_op_(i,j)) << "j  ";
 			}
 			cout<<endl;
 		}
@@ -135,7 +141,9 @@ void FloEvolRandom::Evol_Site_Construct_(MatrixXcd& Ux){
 			cout<<"At site: "<<site<<" U:"<<endl;
 			for (int i=0; i< U.rows();i++){
 				for (int j=0; j< U.cols();j++){
-					cout<<"("<<real(U(i,j))<<","<<imag(U(i,j))<<")  ";
+					cout<<real(U(i,j));
+					if (imag(U(i,j))<0) cout << imag(U(i,j)) << "j  "; 
+					else cout << "+" << imag(U(i,j)) << "j  ";
 				}
 				cout<<endl;
 			}
@@ -287,7 +295,9 @@ void FloEvolRandomRotation::Evol_Construct(){
 		cout<<"Ux:"<<endl;
 		for (int i=0; i< Ux.rows();i++){
 			for (int j=0; j< Ux.cols();j++){
-				cout<<"("<<real(Ux(i,j))<<","<<imag(Ux(i,j))<<")  ";
+				cout<<real(Ux(i,j));
+				if (imag(Ux(i,j))<0) cout << imag(Ux(i,j)) << "j  "; 
+				else cout << "+" << imag(Ux(i,j)) << "j  ";
 			}
 			cout<<endl;
 		}
@@ -296,7 +306,9 @@ void FloEvolRandomRotation::Evol_Construct(){
 		cout<<"Uz:"<<endl;
 		for (int i=0; i< Uz.rows();i++){
 			for (int j=0; j< Uz.cols();j++){
-				cout<<"("<<real(Uz(i,j))<<","<<imag(Uz(i,j))<<")  ";
+				cout<<real(Uz(i,j));
+				if (imag(Uz(i,j))<0) cout << imag(Uz(i,j)) << "j  "; 
+				else cout << "+" << imag(Uz(i,j)) << "j  ";
 			}
 			cout<<endl;
 		}
@@ -305,7 +317,9 @@ void FloEvolRandomRotation::Evol_Construct(){
 		cout<<"Final matrix:"<<endl;
 		for (int i=0; i< evol_op_.rows();i++){
 			for (int j=0; j< evol_op_.cols();j++){
-				cout<<"("<<real(evol_op_(i,j))<<","<<imag(evol_op_(i,j))<<")  ";
+				cout<<real(evol_op_(i,j));
+				if (imag(evol_op_(i,j))<0) cout << imag(evol_op_(i,j)) << "j  "; 
+				else cout << "+" << imag(evol_op_(i,j)) << "j  ";
 			}
 			cout<<endl;
 		}
@@ -337,7 +351,9 @@ void FloEvolRandomRotation::Evol_Site_Construct_(MatrixXcd& Ux){
 			cout<<"At site: "<<site<<" U:"<<endl;
 			for (int i=0; i< U.rows();i++){
 				for (int j=0; j< U.cols();j++){
-					cout<<"("<<real(U(i,j))<<","<<imag(U(i,j))<<")  ";
+					cout<<real(U(i,j));
+					if (imag(U(i,j))<0) cout << imag(U(i,j)) << "j  "; 
+					else cout << "+" << imag(U(i,j)) << "j  ";
 				}
 				cout<<endl;
 			}
