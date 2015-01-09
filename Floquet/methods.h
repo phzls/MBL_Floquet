@@ -3,11 +3,13 @@
 
 #include <utility>
 #include <vector>
+#include <Eigen/Core>
 #include "evol_class.h"
 #include "results.h"
 #include "parameters.h"
 
 using namespace std;
+using namespace Eigen;
 
 /**
  ** This file contains methods which are used in evolution/level statistics.
@@ -40,7 +42,8 @@ void level_cal(const AllPara&, vector<EvolMatrix<T1>*>&,
  */
 
 template <class T1, class T2>
-void rightmost_sigma_z_sum(T1&, const vector< vector<T2> >&, const string&);
+void rightmost_sigma_z_sum(Matrix<T1, Dynamic, Dynamic>&, const vector< vector<T2> >&, 
+	const string&);
 
 #include "level_cal.tpp"
 #include "rightmost_sigma_z_sum.tpp"
