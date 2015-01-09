@@ -18,7 +18,7 @@ using namespace std;
 
 extern TasksModels tasks_models; // Record all the tasks and methods. Defined in main.
 
-void flo_right_most_sigma_z(const AllPara& parameters){
+void flo_rightmost_sigma_z(const AllPara& parameters){
 
 	// System Size
 	const int size = parameters.generic.size; 
