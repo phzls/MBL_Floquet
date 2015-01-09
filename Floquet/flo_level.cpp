@@ -10,6 +10,7 @@
 #include "output_func.h"
 #include "methods.h"
 #include "parameters.h"
+#include "tasks_models.h"
 
 using namespace std;
 
@@ -17,12 +18,15 @@ using namespace std;
  * Compute level spacing for a Floquet operator.
  */
 
+extern TasksModels tasks_models; // Record all the tasks and methods. Defined in main.
+
 void flo_level(const AllPara& parameters){
 
 	// System Size
 	const int size = parameters.generic.size; 
 	// Number of realizations.
 	const int num_realization = parameters.generic.num_realizations;
+	const string model = parameters.generic.model;
 
 	const double tau = parameters.floquet.tau; // Time step, which seems not used here
 	const int J_N = parameters.floquet.J_N; // Number of points for J
@@ -33,6 +37,8 @@ void flo_level(const AllPara& parameters){
 	const double angle_sup = parameters.floquet_random.angle_sup; // Supreme angle	
 
 	const int width = parameters.output.width; // Output spacing
+
+	AllPara local_parameters(parameters); // Local parameters which can be changed
 
 	stringstream base_filename; // Filename
 
@@ -59,14 +65,17 @@ void flo_level(const AllPara& parameters){
 		if (J_N > 1) J = J_min + i * (J_max - J_min)/(J_N-1);
 		else J = J_min;
 
-		cout << J << endl;
+		local_parameters.floquet.J = J;
+
+		cout << local_parameters.floquet.J << endl;
 
 		vector<EvolMatrix<ComplexEigenSolver<MatrixXcd> >* > floquet(num_realization);
 
 		cout << "Initialize Evolution Operators." <<endl;
 		for (int k=0; k<num_realization; k++){
 			//floquet[k] = new FloEvolRandom(size, tau, J);
-			floquet[k] = new FloEvolRandomRotation(size, tau, J, angle_min, angle_sup);
+			//floquet[k] = new FloEvolRandomRotation(size, tau, J, angle_min, angle_sup);
+			tasks_models.Model(model, local_parameters, floquet[k]);
 		}
 
 		if (!output_init){
