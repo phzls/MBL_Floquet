@@ -10,4 +10,7 @@ using namespace std;
 
 bool Vec_Double_Sort(double, double); 
 
-bool Vec_Pair_Double_Int_First_Sort(pair<double, int>, pair<double, int>);
+template <class T>
+bool Vec_Pair_Double_First_Sort(pair<double, T> i, pair<double, T> j){
+	return (i.first < j.first);
+}
