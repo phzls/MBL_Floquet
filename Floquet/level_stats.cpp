@@ -23,15 +23,26 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U, const int position, const 
 	// The average level spacing of phases of eigenvalues
 	const double ave_spacing = 2*Pi / dim;
 
-	if (dim != U -> eigen.eigenvalues().rows()){
+	// The dimension computed from eigenvalues
+	int eigen_dim = 0;
+
+	for (int i=0; i< U -> eigen.size();i++){
+		eigen_dim += U -> eigen[i].eigenvalues().rows();
+	}
+
+	if (dim != eigen_dim){
 		cout << "The dimension of eigenvalues of time evolution operator is not correct."<<endl;
 		abort();
 	}
 
 	vector<double> phases(dim); // Phases of all eigenvalues in ascending order
 
-	for (int i=0; i<dim; i++){
-		phases[i] = arg(U -> eigen.eigenvalues()(i));
+	int index = 0;
+	for (int i=0; i< U -> eigen.size(); i++){
+		for (int j=0; j< U -> eigen[i].eigenvalues.rows(); j++){
+			phase[index] = arg( U -> eigen[i].eigenvalues()(j) );
+			index ++; 
+		}
 	}
 
 	// Sort the phases in ascending order

@@ -47,8 +47,10 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 	ofstream norm_out; // Output norm of each entry representation
 	stringstream base_name;
 
-	// The first entry is phases of eigenvalues, and the second is its position
-	vector<pair<double, int> > eval_pos(1 << size);
+	// The first entry is phases of eigenvalues, and for the second pair,
+	// the first is its position in sector; the second is its position in 
+	// that sector
+	vector<pair<double, pair<int, int> > > eval_pos(1 << size);
 
 	// Eigenvectors ordered in terms of phases of eigenvalues
 	vector<vector<complex<double> > > evec_basis(1 << size);
@@ -90,33 +92,48 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 		if (erase) floquet -> Evol_Erase();
 
 		cout << "Prepare eigenvector basis." << endl;
-		if (eval_pos.size() != floquet -> eigen.eigenvalues().rows()){
+		int eigen_dim = 0; // Number of eigenvalues
+		for (int j=0; j< floquet -> eigen.size(); j++){
+			eigen_dim += floquet -> eigen[j].eigenvalues().rows();
+		}
+
+		if (eval_pos.size() != eigen_dim){
 			cout << "Vector size does not match number of eigenvalues." << endl;
 			cout << "Vector size: " << eval_pos.size() << endl;
-			cout << "Number of eigenvalues: " << floquet -> eigen.eigenvalues().rows() << endl;
+			cout << "Number of eigenvalues: " << eigen_dim << endl;
 			abort();
 		}
 
-		for (int j=0; j< floquet -> eigen.eigenvalues().rows(); j++){
-			eval_pos[j].first = arg(floquet -> eigen.eigenvalues()(j));
-			eval_pos[j].second = j;
+		int index = 0;
+		for (int j=0; j < floquet -> eigen.size(); j++){
+			for (int k=0; k<floquet -> eigen[j].eigenvalues.rows(); k++){
+				eval_pos[index].first = arg(floquet -> eigen[j].eigenvalues()(k));
+				eval_pos[index].second.first = j;
+				eval_pos[index].second.second = k;
+			}
 		}
 
 		// Sort according to the phase magnitude
 		sort(eval_pos.begin(), eval_pos.end(), Vec_Pair_Double_Int_First_Sort);
 
-		if (evec_basis.size() != floquet -> eigen.eigenvectors().cols()){
+		eigen_dim = 0; // Compute number of eigenvectors
+		for (int j=0; j< floquet -> eigen.size(); j++){
+			eigen_dim += floquet -> eigen[j].eigenvectors().cols();
+		}
+
+		if (evec_basis.size() != eigen_dim){
 			cout << "Vector size does not match number of eigenvectors." << endl;
 			cout << "Vector size: " << evec_basis.size() << endl;
-			cout << "Number of eigenvectors: " << floquet -> eigen.eigenvectors().cols() << endl;
+			cout << "Number of eigenvectors: " << eigen_dim << endl;
 			abort();
 		}
 
 		for (int j=0; j<evec_basis.size();j++){
-			int pos = eval_pos[j].second;
+			int sector = eval_pos[j].second.first;
+			int sec_pos = eval_pos[j].second.second
 
 			for (int k=0; k < evec_basis[j].size(); k++){
-				evec_basis[j][k] = floquet -> eigen.eigenvectors()(k, pos);
+				evec_basis[j][k] = floquet -> eigen[sector].eigenvectors()(k, sec_pos);
 			}
 		}
 

@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -31,7 +32,10 @@ class EvolMatrix
 		EvolMatrix(int size, int local_dim):
 			size_(size), local_dim_(local_dim), dim_(int(pow(double(local_dim), double(size)))){}
 
-		T eigen; // Eigenvalues and Eigenvectors
+		//T eigen; // Eigenvalues and Eigenvectors
+
+		vector<T> eigen; // Eigenvalues and Eigenvectors for possible different sectors if 
+						 // there is some symmetry to simplity the operator
 
 		// Initialize parameters which will be used in constructing time evolution operator.
 		// These parameters will only exist for concrete model classes.
