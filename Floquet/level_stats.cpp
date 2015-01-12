@@ -39,8 +39,8 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >* const U, const int position, const 
 
 	int index = 0;
 	for (int i=0; i< U -> eigen.size(); i++){
-		for (int j=0; j< U -> eigen[i].eigenvalues.rows(); j++){
-			phase[index] = arg( U -> eigen[i].eigenvalues()(j) );
+		for (int j=0; j< U -> eigen[i].eigenvalues().rows(); j++){
+			phases[index] = arg( U -> eigen[i].eigenvalues()(j) );
 			index ++; 
 		}
 	}

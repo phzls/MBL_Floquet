@@ -40,7 +40,7 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 
 		// Diagnolize time evolution matrix with eigenvectors kept
 		void Evol_Diag() {
-			if (constructed_) eigen.compute(evol_op_);
+			if (constructed_) eigen[0].compute(evol_op_);
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
 				abort();
@@ -88,32 +88,40 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 
 	public:
 		// When local dimension is not given
-		FloEvolVanilla(int size): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
-			constructed_(false){}
+		FloEvolParity(int size): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
+			constructed_(false){eigen.resize(2);}
 
 		// When local dimension is given
-		FloEvolVanilla(int size, int local_dim): 
+		FloEvolParity(int size, int local_dim): 
 			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, local_dim), 
-			constructed_(false){}
+			constructed_(false){eigen.resize(2);}
 
 		// Diagnolize time evolution matrix with eigenvectors kept
-		void Evol_Diag() {
-			if (constructed_) eigen.compute(evol_op_);
+		void Evol_Diag(){
+			if (constructed_){
+				eigen[0].compute(evol_op_even_);
+				// In case there is no odd sector for small chain
+				if (evol_op_odd_.rows()>0) eigen[1].compute(evel_op_odd_);
+			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
 				abort();
 			}
-		} 
+		}; 
 
 		// Diagnolize time evolution matrix, user can determine whether eigenvectors are kept
 		// False is not kept; True is kept
-		void Evol_Diag(bool keep) {
-			if (constructed_) eigen.compute(evol_op_, keep);
+		void Evol_Diag(bool keep){
+			if (constructed_){
+				eigen[0].compute(evol_op_even_, keep);
+				// In case there is no odd sector for small chain
+				if (evol_op_odd_.rows()>0) eigen[1].compute(evel_op_odd_, keep);
+			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
 				abort();
 			}
-		}
+		};
 
 		// Return the string format of representation string stream 
 		string Repr() const {return repr_.str();} 
@@ -122,9 +130,10 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		string Type() const {return type_;} 
 
 		// Erase the evolutionary operator
-		void Evol_Erase() {evol_op_.resize(0,0); constructed_ = false;}
+		void Evol_Erase() {evol_op_even_.resize(0,0); evol_op_odd_.resize(0,0); 
+					       constructed_ = false;}
 
-		virtual ~FloEvolVanilla() {};
+		virtual ~FloEvolParity() {};
 };
 
 #endif

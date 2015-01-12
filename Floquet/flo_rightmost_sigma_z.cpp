@@ -106,7 +106,7 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 
 		int index = 0;
 		for (int j=0; j < floquet -> eigen.size(); j++){
-			for (int k=0; k<floquet -> eigen[j].eigenvalues.rows(); k++){
+			for (int k=0; k<floquet -> eigen[j].eigenvalues().rows(); k++){
 				eval_pos[index].first = arg(floquet -> eigen[j].eigenvalues()(k));
 				eval_pos[index].second.first = j;
 				eval_pos[index].second.second = k;
@@ -114,7 +114,7 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 		}
 
 		// Sort according to the phase magnitude
-		sort(eval_pos.begin(), eval_pos.end(), Vec_Pair_Double_Int_First_Sort);
+		sort(eval_pos.begin(), eval_pos.end(), Vec_Pair_Double_First_Sort<pair<int,int> >);
 
 		eigen_dim = 0; // Compute number of eigenvectors
 		for (int j=0; j< floquet -> eigen.size(); j++){
@@ -130,7 +130,7 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 
 		for (int j=0; j<evec_basis.size();j++){
 			int sector = eval_pos[j].second.first;
-			int sec_pos = eval_pos[j].second.second
+			int sec_pos = eval_pos[j].second.second;
 
 			for (int k=0; k < evec_basis[j].size(); k++){
 				evec_basis[j][k] = floquet -> eigen[sector].eigenvectors()(k, sec_pos);
