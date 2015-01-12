@@ -57,6 +57,12 @@ class FloEvolRandom : public FloEvolVanilla
 		// Construct evolutionary operator
 		void Evol_Construct(); 
 
+		// Compute various transition matrix.
+		void Transition_Compute(TransitionMatrix&, const string&) const{
+			cout << "Transition Matrix Computation Not Implemented Yet." << endl;
+			abort();
+		};
+
 		virtual ~FloEvolRandom() {};
 };
 
@@ -128,9 +134,82 @@ class FloEvolRandomRotation : public FloEvolVanilla
 		void Evol_Para_Init();
 
 		// Construct evolutionary operator
-		void Evol_Construct(); 
+		void Evol_Construct();
+
+		// Compute various transition matrix. 
+		void Transition_Compute(TransitionMatrix&, const string&) const{
+			cout << "Transition Matrix Computation Not Implemented Yet." << endl;
+			abort();
+		}; 
 
 		virtual ~FloEvolRandomRotation() {};
+};
+
+//===============================================================================================
+/*
+ * xxz floquet operator. The dimension at each site is 2. Its time evolutionary operator is 
+ * Ux * Uz, where Ux is the exponential of the transverse external field in x direction, and 
+ * Uz is constructed from Ising nearest neighbor interactions with interaction strength 1 and
+ * longitude field in z direction. This model takes parameters tau, g and h, where g is field
+ * strength in x direction and h is the field strength in z direction.
+ */
+
+ class FloXXZ : public FloEvolVanilla
+{
+	struct Param // The parameters used in the model
+	{
+		const double tau; // Time step size
+		const double g; // Transverse field strength
+		const double h; // Longitude field strength
+		const int threads_num; // Number of threads used for evolution operator computation
+
+		Param(double tau, double g, double h, int N = 1): 
+			tau(tau), g(g), h(h), threads_num(N) {};
+	};
+
+	private:
+		const Param param_;
+
+		// Record the two binary states used for even parity states
+		vector<vector<int> > even_parity_;
+
+		// Record the two binary states used for odd parity states
+		vector<vector<int> > odd_parity_;
+
+		const int even_dim_; // Dimension of even sector
+		const int odd_dim_; // Dimension of odd sector
+
+		// Construct even sector of time evolution operator. Even and odd
+		// parity vectors are also constructed in it.
+		void Evol_x_Even_Construct_(MatrixXcd&, MatrixXcd&);
+
+		// Construct odd sector of time evolution operator
+		void Evol_x_Odd_Construct_(MatrixXcd&, MatrixXcd&);
+
+		void Repr_Init_(); // Initialize the representation string stream as well as type
+
+		const bool debug_; // Used for debug outputs
+
+	public:
+		FloXXZ(int size, double tau, double g, double h, bool debug = false, int N = 1):
+			FloEvolVanilla(size), param_(tau, g, h, N), debug_(false),
+			even_dim_( (dim_>>1) + (1<<( (size+1)/2-1) ) ), 
+  			odd_dim_ ( (dim_>>1) - (1<<( (size+1)/2-1) ) )  { Repr_Init_();}
+
+		// Construct evolutionary operator
+		void Evol_Construct(); 
+
+		// Compute various transition matrix. 
+		void Transition_Compute(TransitionMatrix&, const string&) const;
+
+		// Return dimension of the even and odd sectors, with even first.
+		vector<int> Get_Sector_Dim() const{
+			vector<int> dim(2);
+			dim[0] = even_dim_; dim[1] = odd_dim_;
+			return dim;
+		}
+
+		virtual ~FloXXZ() {};
 };
 
 #endif
