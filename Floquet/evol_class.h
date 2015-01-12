@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include "transition.h"
 
 using namespace std;
 
@@ -51,6 +52,9 @@ class EvolMatrix
 		// False is not kept; True is kept
 		virtual void Evol_Diag(bool keep) = 0;
 
+		// Compute various transition matrix. The string specifies what transition to compute
+		virtual void Transition_Compute(TransitionMatrix&, const string&) const = 0;
+
 		// Erase the matrix to free some memroy
 		virtual void Evol_Erase() = 0;
 
@@ -66,6 +70,9 @@ class EvolMatrix
 
 		// Return the dimension of total Hilbert space
 		int Get_Dim() const {return dim_;} 
+
+		// Return the dimension of each sector of symmetry
+		virtual vector<int> Get_Sector_Dim() const = 0;
 
 		virtual ~EvolMatrix(){};
 };

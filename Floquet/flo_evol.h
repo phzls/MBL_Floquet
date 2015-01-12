@@ -63,6 +63,14 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		// Return the type of the model
 		string Type() const {return type_;} 
 
+		// Return dimension of each sector. Here only 1 sector exists, so total dimension
+		// is returned.
+		vector<int> Get_Sector_Dim() const{
+			vector<int> dim(1);
+			dim[0] = dim_;
+			return dim;
+		}
+
 		// Erase the evolutionary operator
 		void Evol_Erase() {evol_op_.resize(0,0); constructed_ = false;}
 
@@ -115,7 +123,7 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 			if (constructed_){
 				eigen[0].compute(evol_op_even_, keep);
 				// In case there is no odd sector for small chain
-				if (evol_op_odd_.rows()>0) eigen[1].compute(evel_op_odd_, keep);
+			if (evol_op_odd_.rows()>0) eigen[1].compute(evel_op_odd_, keep);
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
