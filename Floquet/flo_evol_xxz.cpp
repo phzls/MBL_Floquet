@@ -40,10 +40,10 @@ void FloXXZ::Evol_Construct(){
 		abort();
 	}
 
-	Evol_General_Construct_(evol_op_even_, even_dim_, Evol_Even_Construct);
+	Evol_General_Construct_(evol_op_even_, even_dim_);
 
 	if (odd_dim_ > 0){
-		Evol_General_Construct_(evol_op_odd_, odd_dim_, Evol_Odd_Construct);
+		Evol_General_Construct_(evol_op_odd_, odd_dim_);
 	}
 	
 }
@@ -51,7 +51,7 @@ void FloXXZ::Evol_Construct(){
 /*
  * A general construction function which can be used for both even and odd part
  */
-void FloXXZ::Evol_General_Construct_(MatrixXcd& evol_op, int dim, evol_build Evol_Build){
+void FloXXZ::Evol_General_Construct_(MatrixXcd& evol_op, int dim){
 	
 	if (evol_op.rows() != dim){
 		cout << "evol_op size is not consistent with dim in general construction." << endl;
@@ -62,17 +62,21 @@ void FloXXZ::Evol_General_Construct_(MatrixXcd& evol_op, int dim, evol_build Evo
 	MatrixXcd evol_x = MatrixXcd::Zero(dim, dim);
 	ComplexEigenSolver<MatrixXcd> x_eigen;
 
-	Evol_Build(evol_x, evol_z);
-	x_eigen -> compute(evol_x);
+	// Having some trouble passing function pointers, so use dim to check
+	if (dim == even_dim_) Evol_Even_Construct_(evol_x, evol_z);
+	else Evol_Odd_Construct_(evol_x, evol_z);
 
-	#pragma omp parallel num_threads(param_.threads_num){
+	x_eigen.compute(evol_x);
+
+	#pragma omp parallel num_threads(param_.threads_num)
+	{	
 		#pragma omp for 
 		for (int i=0; i<dim; i++){
 			for (int j=0; j< dim; j++){
 				if (i==j){
-					evol_x(i,j) = exp(-complex_I * complex<double>(param_.tau,0)
-						* x_eigen -> eigenvalues()(i));
-					evol_z(i,j) = exp(-complex_I * complex<double>(param_.tau,0)
+					evol_x(i,j) = exp(-Complex_I * complex<double>(param_.tau,0)
+						* x_eigen.eigenvalues()(i));
+					evol_z(i,j) = exp(-Complex_I * complex<double>(param_.tau,0)
 						* evol_z(i,j));
 				}
 				else{
@@ -232,10 +236,10 @@ void FloXXZ::Evol_Odd_Construct_(MatrixXcd& evol_x_odd, MatrixXcd& evol_z_odd){
     }
 
     // Compute off-diagonal element
-    for(int i=0; i<odd_rank; i++)
+    for(int i=0; i<odd_dim_; i++)
     {
         int counter = 0;
-        for(int j=i+1; j<odd_rank; j++)
+        for(int j=i+1; j<odd_dim_; j++)
         {
             counter = __builtin_popcount(odd_parity_[i][0] ^ odd_parity_[j][0]);
             if(counter == 1)

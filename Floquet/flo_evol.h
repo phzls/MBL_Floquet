@@ -109,7 +109,7 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 			if (constructed_){
 				eigen[0].compute(evol_op_even_);
 				// In case there is no odd sector for small chain
-				if (evol_op_odd_.rows()>0) eigen[1].compute(evel_op_odd_);
+				if (evol_op_odd_.rows()>0) eigen[1].compute(evol_op_odd_);
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -123,7 +123,7 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 			if (constructed_){
 				eigen[0].compute(evol_op_even_, keep);
 				// In case there is no odd sector for small chain
-			if (evol_op_odd_.rows()>0) eigen[1].compute(evel_op_odd_, keep);
+			if (evol_op_odd_.rows()>0) eigen[1].compute(evol_op_odd_, keep);
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;

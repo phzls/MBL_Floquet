@@ -154,9 +154,7 @@ class FloEvolRandomRotation : public FloEvolVanilla
  * strength in x direction and h is the field strength in z direction.
  */
 
- typedef void (*evol_build)(MatrixXcd&, MatrixXcd&);
-
- class FloXXZ : public FloEvolVanilla
+ class FloXXZ : public FloEvolParity
 {
 	struct Param // The parameters used in the model
 	{
@@ -189,7 +187,7 @@ class FloEvolRandomRotation : public FloEvolVanilla
 		void Evol_Odd_Construct_(MatrixXcd&, MatrixXcd&);
 
 		// A general construction function
-		void Evol_General_Construct_(MatrixXcd&, int, evol_build);
+		void Evol_General_Construct_(MatrixXcd&, int);
 
 		void Repr_Init_(); // Initialize the representation string stream as well as type
 
@@ -197,7 +195,7 @@ class FloEvolRandomRotation : public FloEvolVanilla
 
 	public:
 		FloXXZ(int size, double tau, double g, double h, bool debug = false, int N = 1):
-			FloEvolVanilla(size), param_(tau, g, h, N), debug_(false),
+			FloEvolParity(size), param_(tau, g, h, N), debug_(false),
 			even_dim_( (dim_>>1) + (1<<( (size+1)/2-1) ) ), 
   			odd_dim_ ( (dim_>>1) - (1<<( (size+1)/2-1) ) )  { Repr_Init_();}
 
