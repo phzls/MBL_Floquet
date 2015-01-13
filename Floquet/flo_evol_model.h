@@ -154,6 +154,8 @@ class FloEvolRandomRotation : public FloEvolVanilla
  * strength in x direction and h is the field strength in z direction.
  */
 
+ typedef void (*evol_build)(MatrixXcd&, MatrixXcd&);
+
  class FloXXZ : public FloEvolVanilla
 {
 	struct Param // The parameters used in the model
@@ -181,10 +183,13 @@ class FloEvolRandomRotation : public FloEvolVanilla
 
 		// Construct even sector of time evolution operator. Even and odd
 		// parity vectors are also constructed in it.
-		void Evol_x_Even_Construct_(MatrixXcd&, MatrixXcd&);
+		void Evol_Even_Construct_(MatrixXcd&, MatrixXcd&);
 
 		// Construct odd sector of time evolution operator
-		void Evol_x_Odd_Construct_(MatrixXcd&, MatrixXcd&);
+		void Evol_Odd_Construct_(MatrixXcd&, MatrixXcd&);
+
+		// A general construction function
+		void Evol_General_Construct_(MatrixXcd&, int, evol_build);
 
 		void Repr_Init_(); // Initialize the representation string stream as well as type
 
