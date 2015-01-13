@@ -63,6 +63,12 @@ class TransitionMatrix
 
 		// Erase all matrix content
 		void Erase_All();
+
+		// Print out specific matrix
+		void Print(const string&) const;
+
+		// Print out all matrices
+		void Print_All() const;
 }
 
 #endif
