@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <Eigen/Dense>
+#include <vector>
 #include <map>
 
 using namespace std;
@@ -18,22 +19,22 @@ class TransitionMatrix
 	private:
 		// Transform an even vector written in even parity states to  binary basis. 
 		// The inverse transform for an even vector is given by its adjoint
-		MatrixXcd basic_even_(0,0);
+		MatrixXcd basic_even_;
 		// Transform an even vector written in odd parity states to  binary basis. 
 		// The inverse transform for an odd vector is given by its adjoint
-		MatrixXcd basic_odd_(0,0);
+		MatrixXcd basic_odd_;
 
 		// Transform an even vector written in even full chain eigenstates to even parity states
-		MatrixXcd even_full_(0,0);
+		MatrixXcd even_full_;
 		// Transform an odd vector written in odd full chain eigenstates to odd parity states
-		MatrixXcd odd_full_(0,0);
+		MatrixXcd odd_full_;
 
 		// Transform the even part of a vector written in half chain eigenstates basis to 
 		// even parity states
-		MatrixXcd even_half_(0,0);
+		MatrixXcd even_half_;
 		// Transform the odd part of a vector written in half chain eigenstates basis to 
 		// odd parity states
-		MatrixXcd odd_half_(0,0);
+		MatrixXcd odd_half_;
 
 		/*
 		 * Currently the above two matrices cannot be initialized.
@@ -41,15 +42,15 @@ class TransitionMatrix
 
 
 		// Transform the full chain eigenstates directly to binary basis states
-		MatrixXcd basic_full_(0,0);
+		MatrixXcd basic_full_;
 
 		// Transform an even vector written in even full chain eigenstates to binary basis
-		MatrixXcd basic_even_full_(0,0);
+		MatrixXcd basic_even_full_;
 		// Transform an even vector written in even full chain eigenstates to binary basis
-		MatrixXcd basic_odd_full_(0,0);
+		MatrixXcd basic_odd_full_;
 
 		// Store constructed matrices by its names
-		map<string, MatrixXcd&> constructed_type_;
+		map<string, MatrixXcd*> constructed_type_;
 
 	public:
 		// Return constant reference to corresponding matrix. If not constructed, abort
@@ -88,6 +89,6 @@ class TransitionMatrix
 		// no parity
 		void Basic_Full(const MatrixXd& evec);
 		void Basic_Full(const MatrixXcd& evec);
-}
+};
 
 #endif

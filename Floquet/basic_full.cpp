@@ -51,8 +51,8 @@ void TransitionMatrix::Basic_Parity_Full(){
 	basic_even_full_ = basic_even_ * even_full_;
 	basic_odd_full_ = basic_odd_ * odd_full_;
 
-	constructed_map_["Basic_Even_Full"] = basic_even_full_;
-	constructed_map_["Basic_Odd_Full"] = basic_odd_full_;
+	constructed_type_["Basic_Even_Full"] = &basic_even_full_;
+	constructed_type_["Basic_Odd_Full"] = &basic_odd_full_;
 
 }
 
@@ -60,7 +60,7 @@ void TransitionMatrix::Basic_Parity_Full(){
  * This function directly constructs the transition matrix from full to basic. The full chain
  * eigenstates have no parity, and are stored column-wise.
  */
-void Basic_Full(const MatrixXd& evec){
+void TransitionMatrix::Basic_Full(const MatrixXd& evec){
  	const int total_rank = evec.cols(); // Total dimension
 
  	if (Check_Matrix("Basic_Full")){
@@ -77,10 +77,10 @@ void Basic_Full(const MatrixXd& evec){
 		}
 	}
 
-	constructed_map_["Basic_Full"] = basic_full_;
+	constructed_type_["Basic_Full"] = &basic_full_;
 }
 
-void Basic_Full(const MatrixXcd& evec){
+void TransitionMatrix::Basic_Full(const MatrixXcd& evec){
  	const int total_rank = evec.cols(); // Total dimension
 
  	if (Check_Matrix("Basic_Full")){
@@ -97,5 +97,5 @@ void Basic_Full(const MatrixXcd& evec){
 		}
 	}
 
-	constructed_map_["Basic_Full"] = basic_full_;
+	constructed_type_["Basic_Full"] = &basic_full_;
 }

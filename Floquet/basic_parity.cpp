@@ -52,12 +52,12 @@ const vector<vector<int> >& odd_parity, int threads_N ){
 			int j = odd_parity[i][0];
 			basic_odd_(j,i) = complex<double>(1.0/sqrt(2),0);
 
-			j = full.odd_parity[i][1];
+			j = odd_parity[i][1];
 			basic_odd_(j,i) = complex<double>(-1.0/sqrt(2),0);
 		}
 	}
 
 	// Add the matrices to constructed map
-	constructed_map_["Basic_Even"] = basic_even_;
-	constructed_map_["Basic_Odd"] = basic_odd_;
+	constructed_type_["Basic_Even"] = &basic_even_;
+	constructed_type_["Basic_Odd"] = &basic_odd_;
 }
