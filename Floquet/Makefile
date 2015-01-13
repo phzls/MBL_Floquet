@@ -1,12 +1,13 @@
-evolutions = flo_evol_model.o mtrand.o flo_level.o flo_rightmost_sigma_z.o
+models = flo_evol_random.o flo_evol_random_rotation.o flo_evol_xxz.o
+evolutions = mtrand.o flo_level.o flo_rightmost_sigma_z.o
 functions = generic_func.o update.o tasks_models.o model_func.o sort.o
 results = level_stats.o
 outputs = output_func.o
 
-main_objects = main.o $(evolutions) $(functions) $(results) $(outputs)
-test_objects = test.o $(evolutions) $(functions) $(results) $(outputs)
+main_objects = main.o $(models) $(evolutions) $(functions) $(results) $(outputs)
+test_objects = test.o $(models) $(evolutions) $(functions) $(results) $(outputs)
 
-CXXFLAGS = -O3 -fopenmp
+CXXFLAGS = -O3 -fopenmp 
 CXX = g++
 
 all: mbl
