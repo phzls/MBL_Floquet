@@ -9,7 +9,8 @@ using namespace std;
 using namespace Eigen;
 
 /**
- ** This file defines the class for basis transition matrix among different bases.
+ ** This file defines the class for basis transition matrix among different bases. All 
+ ** eigenvectors used are assumed to be stored column-wise, i.e., each column is an eigenvector.
  **/
 
 class TransitionMatrix
@@ -22,14 +23,10 @@ class TransitionMatrix
 		// The inverse transform for an odd vector is given by its adjoint
 		MatrixXcd basic_odd_(0,0);
 
-		// Construct above two matrices given...
-		void Basic_Parity_();
-
 		// Transform an even vector written in even full chain eigenstates to even parity states
 		MatrixXcd even_full_(0,0);
 		// Transform an odd vector written in odd full chain eigenstates to odd parity states
 		MatrixXcd odd_full_(0,0);
-
 
 		// Transform the even part of a vector written in half chain eigenstates basis to 
 		// even parity states
@@ -38,13 +35,18 @@ class TransitionMatrix
 		// odd parity states
 		MatrixXcd odd_half_(0,0);
 
+		/*
+		 * Currently the above two matrices cannot be initialized.
+		 */
+
+
 		// Transform the full chain eigenstates directly to binary basis states
 		MatrixXcd basic_full_(0,0);
 
 		// Transform an even vector written in even full chain eigenstates to binary basis
-		MatrixXcd basic_full_even_(0,0);
+		MatrixXcd basic_even_full_(0,0);
 		// Transform an even vector written in even full chain eigenstates to binary basis
-		MatrixXcd basic_full_odd_(0,0);
+		MatrixXcd basic_odd_full_(0,0);
 
 		// Store constructed matrices by its names
 		map<string, MatrixXcd&> constructed_type_;
@@ -69,6 +71,23 @@ class TransitionMatrix
 
 		// Print out all matrices
 		void Print_All() const;
+
+		// Construct above basci_parity matrices. The first vector is even_parity; the second 
+		// is odd_parity. The last integer is the number of threads used for parallelization
+		void Basic_Parity(const vector<vector<int> >&, const vector<vector<int> >&, int);
+
+		// Construct above parity_full matrices. The first matrix is even_evec; the second 
+		// is odd_evec. The last integer is the number of threads used for parallelization
+		void Parity_Full(const MatrixXd&, const MatrixXd&, int);
+		void Parity_Full(const MatrixXcd&, const MatrixXcd&, int);
+
+		// Use basic_parity and parity_full to construct basic_parity_full
+		void Basic_Parity_Full();
+
+		// Directly use full chain eigenstates to construct basic_full. The eigenstates have
+		// no parity
+		void Basic_Full(const MatrixXd& evec);
+		void Basic_Full(const MatrixXcd& evec);
 }
 
 #endif
