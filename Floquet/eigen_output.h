@@ -37,7 +37,7 @@ void complex_write(const complex<T>& val){
 	else re_out = false;
 
 	if(abs(im)>delta){
-		if (im>=0) cout << "+";
+		if (im>=0 && re_out) cout << "+";
 		cout << im << "j";
 	}
 	else im_out = false;
