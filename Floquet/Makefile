@@ -3,7 +3,7 @@ evolutions = mtrand.o flo_level.o flo_rightmost_sigma_z.o
 functions = generic_func.o update.o tasks_models.o model_func.o sort.o
 transitions = transition.o basic_full.o basic_parity.o parity_full.o
 results = level_stats.o
-outputs = output_func.o
+outputs = output_func.o eigen_output.o
 
 main_objects = main.o $(models) $(evolutions) $(functions) $(results) $(outputs) $(transitions)
 test_objects = test.o $(models) $(evolutions) $(functions) $(results) $(outputs) $(transitions)
