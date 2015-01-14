@@ -12,6 +12,9 @@ using namespace Eigen;
 /**
  ** This file defines the class for basis transition matrix among different bases. All 
  ** eigenvectors used are assumed to be stored column-wise, i.e., each column is an eigenvector.
+ ** Note for general diagonalization, if the matrix has almost-degenerate eigenvalues, then there
+ ** is no guarantee that the eigenvectors of orthogornal to each other. This will make the inverse
+ ** transition matrix not the hermitian conjugate of the forward transtion matrix.
  **/
 
 class TransitionMatrix

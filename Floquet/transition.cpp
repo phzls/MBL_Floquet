@@ -2,6 +2,7 @@
 #include <cmath>
 #include <complex>
 #include "transition.h"
+#include "eigen_output.h"
 
 using namespace std;
 
@@ -49,7 +50,8 @@ void TransitionMatrix::Print(const string& matrix_name) const {
 		cout << "Requested transition matrix " << matrix_name << " not constructed." <<endl;
 	else{
 		cout << "Transition Matrix: " << it -> first << endl;
-		for (int i=0; i< (*(it -> second)).rows(); i++){
+		complex_matrix_write(*(it -> second));
+/*		for (int i=0; i< (*(it -> second)).rows(); i++){
 			for (int j=0; j< (*(it -> second)).cols(); j++){
 				cout << real((*(it -> second))(i,j));
 				double im = imag((*(it -> second))(i,j));
@@ -60,7 +62,7 @@ void TransitionMatrix::Print(const string& matrix_name) const {
 				cout << "    ";
 			}
 			cout << endl;
-		}
+		}*/
 	}
 }
 
