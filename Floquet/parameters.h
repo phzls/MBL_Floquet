@@ -58,6 +58,15 @@ struct FloRrotationPara
 					  // less than angle_min
 };
 
+/*
+ * Parameters that are related to Random Rotation Floquet models.
+ */
+struct FloXXZPara
+{
+	double g; // Transverse field strength
+	double h; // Longitude field strength
+};
+
 struct MatrixPara
 {
 	string type; // Determine the representation type of the matrix
@@ -79,6 +88,9 @@ struct AllPara
 
 	// Random Rotation Floquet parameters
 	FloRrotationPara floquet_random;
+
+	// XXZ Floquet parameters
+	FloXXZPara floquet_xxz;
 
 	// Matrix relevant parameters
 	MatrixPara matrix_para;
