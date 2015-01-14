@@ -2,6 +2,7 @@
 #define FLO_EVOL_H
 
 #include <iostream>
+#include <vector>
 #include <Eigen/Dense>
 #include <Eigen/Eigenvalues>
 #include "evol_class.h"
@@ -74,6 +75,9 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		// Erase the evolutionary operator
 		void Evol_Erase() {evol_op_.resize(0,0); constructed_ = false;}
 
+		// Construct Transition Matrix
+		void Transition_Compute(TransitionMatrix&, const string&) const;
+
 		virtual ~FloEvolVanilla() {};
 };
 
@@ -90,6 +94,12 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		MatrixXcd evol_op_even_; // Even time evolution operator
 		MatrixXcd evol_op_odd_; // Odd time evolution operator
 		bool constructed_; // Whether the matrix has been constructed and not erased
+
+		// Record the two binary states used for even parity states
+		vector<vector<int> > even_parity_;
+
+		// Record the two binary states used for odd parity states
+		vector<vector<int> > odd_parity_;
 
 		stringstream repr_; // Representation string stream of the model
 		string type_; // Type string of the model
@@ -140,6 +150,9 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		// Erase the evolutionary operator
 		void Evol_Erase() {evol_op_even_.resize(0,0); evol_op_odd_.resize(0,0); 
 					       constructed_ = false;}
+
+		// Construct Transition Matrix
+		void Transition_Compute(TransitionMatrix&, const string&) const;
 
 		virtual ~FloEvolParity() {};
 };

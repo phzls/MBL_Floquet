@@ -170,12 +170,6 @@ class FloEvolRandomRotation : public FloEvolVanilla
 	private:
 		const Param param_;
 
-		// Record the two binary states used for even parity states
-		vector<vector<int> > even_parity_;
-
-		// Record the two binary states used for odd parity states
-		vector<vector<int> > odd_parity_;
-
 		const int even_dim_; // Dimension of even sector
 		const int odd_dim_; // Dimension of odd sector
 
@@ -201,9 +195,6 @@ class FloEvolRandomRotation : public FloEvolVanilla
 
 		// Construct evolutionary operator
 		void Evol_Construct(); 
-
-		// Compute various transition matrix. 
-		void Transition_Compute(TransitionMatrix&, const string&) const;
 
 		// Return dimension of the even and odd sectors, with even first.
 		vector<int> Get_Sector_Dim() const{
