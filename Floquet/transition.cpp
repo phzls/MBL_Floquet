@@ -68,5 +68,6 @@ void TransitionMatrix::Print_All() const {
 	map<string, MatrixXcd*>::const_iterator it;
 	for (it = constructed_type_.begin(); it != constructed_type_.end(); it ++){
 		Print(it -> first);
+		cout << endl;
 	}
 }
