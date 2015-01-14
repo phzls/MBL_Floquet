@@ -27,8 +27,8 @@ int threads_N){
 	}
 
 	// Initialize the two matrices
-	even_full_.resize(even_rank, even_rank);
-	odd_full_.resize(odd_rank, odd_rank);
+	even_full_ = MatrixXcd::Zero(even_rank, even_rank);
+	odd_full_ = MatrixXcd::Zero(odd_rank, odd_rank);
 
 	// Compute the elements of even_full and odd_full
 	#pragma omp parallel num_threads(threads_N)
@@ -73,8 +73,8 @@ int threads_N){
 	}
 
 	// Initialize the two matrices
-	even_full_.resize(even_rank, even_rank);
-	odd_full_.resize(odd_rank, odd_rank);
+	even_full_ = MatrixXcd::Zero(even_rank, even_rank);
+	odd_full_ = MatrixXcd::Zero(odd_rank, odd_rank);
 
 	// Compute the elements of even_full and odd_full
 	#pragma omp parallel num_threads(threads_N)

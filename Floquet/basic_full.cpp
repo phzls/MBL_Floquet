@@ -69,7 +69,7 @@ void TransitionMatrix::Basic_Full(const MatrixXd& evec){
 	}
 
 	// Initialize the matrix
-	basic_full_.resize(total_rank, total_rank);
+	basic_full_ = MatrixXcd::Zero(total_rank, total_rank);
 
 	for (int i=0; i< total_rank; i++){
 		for (int j=0; j<total_rank; j++){

@@ -23,8 +23,8 @@ const vector<vector<int> >& odd_parity, int threads_N ){
 	}
 
 	// Initialize the two matrices
-	basic_even_.resize(total_rank, even_rank);
-	basic_odd_.resize(total_rank, odd_rank);
+	basic_even_ = MatrixXcd::Zero(total_rank, even_rank);
+	basic_odd_= MatrixXcd::Zero(total_rank, odd_rank);
 	
 	// Compute the elements of basic_even and basic_odd
 	#pragma omp parallel num_threads(threads_N)
