@@ -3,9 +3,12 @@
 #define FLO_EVOL_MODEL_H
 
 #include <sstream>
+#include <iostream>
 #include <vector>
 #include "constants.h"
 #include "flo_evol.h"
+
+using namespace std;
 
 /**
  ** This file contains particular models of Floquet time evolution operators
@@ -189,12 +192,15 @@ class FloEvolRandomRotation : public FloEvolVanilla
 
 	public:
 		FloXXZ(int size, double tau, double g, double h, bool debug = false, int N = 1):
-			FloEvolParity(size), param_(tau, g, h, N), debug_(false),
+			FloEvolParity(size), param_(tau, g, h, N), debug_(debug),
 			even_dim_( (dim_>>1) + (1<<( (size+1)/2-1) ) ), 
   			odd_dim_ ( (dim_>>1) - (1<<( (size+1)/2-1) ) )  { Repr_Init_();}
 
 		// Construct evolutionary operator
 		void Evol_Construct(); 
+
+		// No parameter to initialize
+		void Evol_Para_Init() {cout <<"No parameter to initialize." <<endl;}
 
 		// Return dimension of the even and odd sectors, with even first.
 		vector<int> Get_Sector_Dim() const{

@@ -44,7 +44,7 @@ const string& matrix_name) const{
 			abort();
 		}
 	}
-	else if (matrix_name == "Basic Full"){
+	else if (matrix_name == "Basic_Parity_Full"){
 		if (transition.Check_Matrix("Even_Full") != transition.Check_Matrix("Odd_Full")){
 			cout << "Parity_Full construction is not consistent." << endl;
 			abort();
