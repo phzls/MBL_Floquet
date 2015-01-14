@@ -157,7 +157,7 @@ class FloEvolRandomRotation : public FloEvolVanilla
  * strength in x direction and h is the field strength in z direction.
  */
 
- class FloXXZ : public FloEvolParity
+ class FloEvolXXZ : public FloEvolParity
 {
 	struct Param // The parameters used in the model
 	{
@@ -191,7 +191,7 @@ class FloEvolRandomRotation : public FloEvolVanilla
 		const bool debug_; // Used for debug outputs
 
 	public:
-		FloXXZ(int size, double tau, double g, double h, bool debug = false, int N = 1):
+		FloEvolXXZ(int size, double tau, double g, double h, bool debug = false, int N = 1):
 			FloEvolParity(size), param_(tau, g, h, N), debug_(debug),
 			even_dim_( (dim_>>1) + (1<<( (size+1)/2-1) ) ), 
   			odd_dim_ ( (dim_>>1) - (1<<( (size+1)/2-1) ) )  { Repr_Init_();}
@@ -209,7 +209,7 @@ class FloEvolRandomRotation : public FloEvolVanilla
 			return dim;
 		}
 
-		virtual ~FloXXZ() {};
+		virtual ~FloEvolXXZ() {};
 };
 
 #endif

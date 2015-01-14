@@ -16,13 +16,13 @@ using namespace std;
  /*
  * Construct the representation string and abstract type of the class.
  */
-void FloXXZ::Repr_Init_(){
+void FloEvolXXZ::Repr_Init_(){
 	repr_ << "XXZ_Floquet_L=" << size_ << ",g=" << param_.g << ",h=" << param_.h 
 		  <<",tau="<< param_.tau;
 	type_ = "XXZ_Floquet";
 }
 
-void FloXXZ::Evol_Construct(){
+void FloEvolXXZ::Evol_Construct(){
 	// If the matrix has not been constructed
 	if (!constructed_){
 		evol_op_even_ = MatrixXcd::Zero(even_dim_, even_dim_);
@@ -64,7 +64,7 @@ void FloXXZ::Evol_Construct(){
 /*
  * A general construction function which can be used for both even and odd part
  */
-void FloXXZ::Evol_General_Construct_(MatrixXcd& evol_op, int dim){
+void FloEvolXXZ::Evol_General_Construct_(MatrixXcd& evol_op, int dim){
 	
 	if (evol_op.rows() != dim){
 		cout << "evol_op size is not consistent with dim in general construction." << endl;
@@ -131,7 +131,7 @@ void FloXXZ::Evol_General_Construct_(MatrixXcd& evol_op, int dim){
 /*
  * Construct some even parts of evolution operator
  */
-void FloXXZ::Evol_Even_Construct_(MatrixXcd& evol_x_even, MatrixXcd& evol_z_even){
+void FloEvolXXZ::Evol_Even_Construct_(MatrixXcd& evol_x_even, MatrixXcd& evol_z_even){
 	int even_counter = 0; //cannot grow more than even_dim_
     int odd_counter =0; 
 
@@ -255,7 +255,7 @@ void FloXXZ::Evol_Even_Construct_(MatrixXcd& evol_x_even, MatrixXcd& evol_z_even
 /*
  * Construct some odd parts of evolution operator
  */
-void FloXXZ::Evol_Odd_Construct_(MatrixXcd& evol_x_odd, MatrixXcd& evol_z_odd){
+void FloEvolXXZ::Evol_Odd_Construct_(MatrixXcd& evol_x_odd, MatrixXcd& evol_z_odd){
 	// Compute pairs and diagonal elements of hamiltonian
     for(int i = 0; i<odd_dim_; i++)
     {
