@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "flo_evol_model.h"
 #include "mtrand.h"
+#include "eigen_output.h"
 
 using namespace std;
 
@@ -42,8 +43,20 @@ void FloXXZ::Evol_Construct(){
 
 	Evol_General_Construct_(evol_op_even_, even_dim_);
 
+	if (debug_){
+		cout << "Even part of evolution matrix:" << endl;
+		complex_matrix_write(evol_op_even_);
+		cout << endl;
+	}
+
 	if (odd_dim_ > 0){
 		Evol_General_Construct_(evol_op_odd_, odd_dim_);
+
+		if (debug_){
+			cout << "Odd part of evolution matrix:" << endl;
+			complex_matrix_write(evol_op_odd_);
+			cout << endl;
+		}
 	}
 	
 }
@@ -60,7 +73,7 @@ void FloXXZ::Evol_General_Construct_(MatrixXcd& evol_op, int dim){
 
 	MatrixXcd evol_z = MatrixXcd::Zero(dim, dim);
 	MatrixXcd evol_x = MatrixXcd::Zero(dim, dim);
-	ComplexEigenSolver<MatrixXcd> x_eigen;
+	SelfAdjointEigenSolver<MatrixXcd> x_eigen;
 
 	// Having some trouble passing function pointers, so use dim to check
 	if (dim == even_dim_) Evol_Even_Construct_(evol_x, evol_z);
@@ -85,6 +98,31 @@ void FloXXZ::Evol_General_Construct_(MatrixXcd& evol_op, int dim){
 				}
 			}
 		}
+	}
+
+	if (debug_){
+		cout << "Eigenvalues of x part:" << endl;
+		cout << x_eigen.eigenvalues();
+		cout <<endl;
+
+		cout << "Eigenvectors of x par:" << endl;
+		complex_matrix_write(x_eigen.eigenvectors());
+		cout << endl;
+
+		complex_matrix_write(x_eigen.eigenvectors()*x_eigen.eigenvectors().adjoint());
+		cout << endl;
+
+		cout << "Diagonal x part:" << endl;
+		complex_matrix_write(evol_x);
+		cout << endl;
+
+		cout << "x part:" << endl;
+		complex_matrix_write(x_eigen.eigenvectors() * evol_x * x_eigen.eigenvectors().adjoint());
+		cout << endl;
+
+		cout << "z part:" << endl;
+		complex_matrix_write(evol_z);
+		cout << endl;
 	}
 
 	evol_op = x_eigen.eigenvectors() * evol_x * x_eigen.eigenvectors().adjoint() * evol_z;
@@ -116,6 +154,11 @@ void FloXXZ::Evol_Even_Construct_(MatrixXcd& evol_x_even, MatrixXcd& evol_z_even
         if(checker == 0)
         {
        
+            if (even_counter >= even_dim_){
+            	cout << "Too many even parity states." << endl;
+            	abort();
+            }
+
             int site = i; // The last binary digit indicates the rightmost spin
             int current_spin = (site & 1); // The rightmost spin
             int left_spin;
@@ -162,6 +205,12 @@ void FloXXZ::Evol_Even_Construct_(MatrixXcd& evol_x_even, MatrixXcd& evol_z_even
         }
     }
 
+    if (debug_){
+    	cout << "Even Hz:" << endl;
+    	complex_matrix_write(evol_z_even);
+    	cout << endl;
+    }
+
     // Compute off-diagonal element
     for(int i=0; i<even_dim_; i++)
     {
@@ -194,6 +243,12 @@ void FloXXZ::Evol_Even_Construct_(MatrixXcd& evol_x_even, MatrixXcd& evol_z_even
                 evol_x_even(j,i) = evol_x_even(i,j);
             }
         }
+    }
+
+    if (debug_){
+    	cout << "Even Hx:" << endl;
+    	complex_matrix_write(evol_x_even);
+    	cout << endl;
     }
 }
 
@@ -235,6 +290,12 @@ void FloXXZ::Evol_Odd_Construct_(MatrixXcd& evol_x_odd, MatrixXcd& evol_z_odd){
         evol_z_odd(i,i) = complex<double>((bond + param_.h*(2*spin - size_)),0);
     }
 
+    if (debug_){
+    	cout << "Odd Hz:" << endl;
+    	complex_matrix_write(evol_z_odd);
+    	cout << endl;
+    }
+
     // Compute off-diagonal element
     for(int i=0; i<odd_dim_; i++)
     {
@@ -255,5 +316,11 @@ void FloXXZ::Evol_Odd_Construct_(MatrixXcd& evol_x_odd, MatrixXcd& evol_z_odd){
                 evol_x_odd(j,i) -= complex<double>(param_.g,0);
             }
         }
+    }
+
+    if (debug_){
+    	cout << "Odd Hz:" << endl;
+    	complex_matrix_write(evol_x_odd);
+    	cout << endl;
     }
 }
