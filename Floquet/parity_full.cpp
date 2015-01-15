@@ -35,17 +35,18 @@ int threads_N){
 	{
 		#pragma omp for
 
-		for (int i=0;i<even_rank;i++)
+		// Since the matrix is stored column-wise
+		for (int j=0;j<even_rank;j++)
 		{
-			for (int j=0;j<even_rank;j++)
+			for (int i=0;i<even_rank;i++)
 			{
 				even_full_(i,j) = complex<double>(even_evec(i,j),0);
 			}
 		}
 
-		for (int i=0;i<odd_rank;i++)
+		for (int j=0;j<odd_rank;j++)
 		{
-			for (int j=0;j<odd_rank;j++)
+			for (int i=0;i<odd_rank;i++)
 			{
 				odd_full_(i,j) = complex<double>(odd_evec(i,j),0);
 			}
@@ -81,17 +82,18 @@ int threads_N){
 	{
 		#pragma omp for
 
-		for (int i=0;i<even_rank;i++)
+		// Since it is stored column-wise
+		for (int j=0;j<even_rank;j++)
 		{
-			for (int j=0;j<even_rank;j++)
+			for (int i=0;i<even_rank;i++)
 			{
 				even_full_(i,j) = even_evec(i,j);
 			}
 		}
 
-		for (int i=0;i<odd_rank;i++)
+		for (int j=0;j<odd_rank;j++)
 		{
-			for (int j=0;j<odd_rank;j++)
+			for (int i=0;i<odd_rank;i++)
 			{
 				odd_full_(i,j) = odd_evec(i,j);
 			}
