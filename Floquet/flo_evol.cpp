@@ -74,6 +74,11 @@ const string& matrix_name) const{
 		}
 		transition.Basic_Parity_Full();
 	}
+	else if (matrix_name == "Basic_Full"){
+		if (!transition.Check_Matrix("Basic_Parity_Full")) 
+			Transition_Compute("Basic_Parity_Full");
+		transition.Basic_Full_From_Basic_Parity_Full();
+	}
 	else{
 		cout << "Transition matrix " << matrix_name << " cannot be established for "
 			 << Type() << endl;
