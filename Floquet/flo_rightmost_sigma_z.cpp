@@ -8,6 +8,7 @@
 #include "tasks_models.h"
 #include "parameters.h"
 #include "sort.h"
+#include "eigen_output.h"
 
 /*
  * Compute entry and norm representations of the right most sigma matrix at the end of chain
@@ -26,13 +27,7 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 	const int num_realization = parameters.generic.num_realizations;
 	const string model = parameters.generic.model;
 	const bool erase = parameters.generic.erase; // Whether erase the evolution matrix
-	const bool debug = parameters.generic.debug; // Whether print debug information
-
-	const double tau = parameters.floquet.tau; // Time step, which seems not used here
-	const double J = parameters.floquet.J; // Coupling strength
-
-	const double angle_min = parameters.floquet_random.angle_min; // Minimum angle
-	const double angle_sup = parameters.floquet_random.angle_sup; // Supreme angle	
+	const bool debug = parameters.generic.debug; // Whether print debug information	
 
 	const int width = parameters.output.width; // Width in output file
 
@@ -65,16 +60,9 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 		tasks_models.Model(model, parameters, floquet);
 
 		if (!output_init){
-			base_name << floquet -> Type()<<"_L=" << size << ",tau=" << tau
-						  << ",Realizations=" << num_realization << ",J="<< J;
+			base_name << floquet -> Repr();
 
-			int found = floquet -> Type().find("Rotation");
-			if (found != string::npos){
-				// It is the random rotation floquet
-				base_name << ",angle_min=" << angle_min <<",angle_sup=" << angle_sup;
-			}
-
-			base_name<<",right_most_sigma_z";
+			base_name<<",Realizations="<<num_realization<<",right_most_sigma_z";
 
 			string post_string =  "_entry.txt";
 			Of_Construct(entry_out, base_name, post_string, true) ;
@@ -110,8 +98,11 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 				eval_pos[index].first = arg(floquet -> eigen[j].eigenvalues()(k));
 				eval_pos[index].second.first = j;
 				eval_pos[index].second.second = k;
+				index ++;
 			}
 		}
+
+		cout << "Eval finished." << endl;
 
 		// Sort according to the phase magnitude
 		sort(eval_pos.begin(), eval_pos.end(), Vec_Pair_Double_First_Sort<pair<int,int> >);
@@ -121,6 +112,8 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 			eigen_dim += floquet -> eigen[j].eigenvectors().cols();
 		}
 
+		cout << "Total dimension: " << eigen_dim << endl;
+
 		if (evec_basis.size() != eigen_dim){
 			cout << "Vector size does not match number of eigenvectors." << endl;
 			cout << "Vector size: " << evec_basis.size() << endl;
@@ -128,13 +121,41 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 			abort();
 		}
 
-		for (int j=0; j<evec_basis.size();j++){
+		evec_to_basic(floquet, evec_basis);
+		vector<int> sec_dim = floquet -> Get_Sector_Dim(); // Dimension of each sector
+
+		// Now sec_dim[i] computes the total number of vectors up to sector i
+		for (int j=1; j<sec_dim.size();j++) sec_dim[j] += sec_dim[j-1];
+
+		// This vector records the original position (in the whole space) of the eigenvector
+		// that is currently held at every site
+		vector<int> index_set(evec_basis.size());
+		for (int j=0; j<index_set.size();j++) index_set[j] = j;
+
+		// We assume originally evec_basis[i] holds eigenvector whose position in the whole
+		// space is also i
+		for (int j=0; j<eval_pos.size();j++){
 			int sector = eval_pos[j].second.first;
 			int sec_pos = eval_pos[j].second.second;
 
-			for (int k=0; k < evec_basis[j].size(); k++){
-				evec_basis[j][k] = floquet -> eigen[sector].eigenvectors()(k, sec_pos);
+			int pos; // The position of the vector recorded in eval_pos in the whole space
+			if (sector == 0) pos = 0;
+			else pos = sec_dim[sector-1];
+			pos += sec_pos; 
+
+			if (pos >= index_set.size()){
+				cout << "The global position of eigenvector from eval_pos[" << j << "]"
+					 << " is too large." << endl;
+				abort();
 			}
+
+			int swap_pos = pos; // The position to swap vector
+			while (index_set[swap_pos] != pos ) swap_pos = index_set[swap_pos];
+
+			evec_basis[j].swap(evec_basis[swap_pos]);
+
+			index_set[swap_pos] = index_set[j];
+			index_set[j] = pos;
 		}
 
 		cout << "Construct rightmost sigma z matrix in entry." << endl;
@@ -142,16 +163,7 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 
 		if (debug){
 			cout << "Entry:" << endl;
-			for (int j=0; j< sigma_z_entry.rows(); j++){
-				for (int k=0; k<sigma_z_entry.cols(); k++){
-					cout << real(sigma_z_entry(j,k));
-					if (imag(sigma_z_entry(j,k))<0){
-						cout << imag(sigma_z_entry(j,k)) <<"j  ";
-					}
-					else cout << "+" << imag(sigma_z_entry(j,k)) << "j  ";
-				}
-				cout << endl;
-			}
+			complex_matrix_write(sigma_z_entry);
 		}
 
 		cout << "Construct rightmost sigma z matrix in norm." << endl;
