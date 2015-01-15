@@ -65,6 +65,9 @@ class EvolMatrix
 		// concerete parameters
 		virtual string Type() const = 0;
 
+		// Return the type of basis which eigenstates are written in
+		virtual string Eigen_Type() const = 0;
+
 		// Return the size of the system
 		int Get_Size() const {return size_;}
 
