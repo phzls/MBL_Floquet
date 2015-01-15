@@ -92,6 +92,9 @@ class TransitionMatrix
 		// no parity
 		void Basic_Full(const MatrixXd& evec);
 		void Basic_Full(const MatrixXcd& evec);
+
+		// Compute basic_full from basci_parity_full. Assume basic_parity_full already exists
+		void Basic_Full_From_Basic_Parity_Full();
 };
 
 #endif
