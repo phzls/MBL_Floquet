@@ -73,6 +73,17 @@ struct MatrixPara
 };
 
 /*
+ * Parameters used in time evolutions
+ */
+struct Evolution
+{
+	int time_step; // Number of time steps
+	double step_size; // Size of time step; would be tau for floquet models
+	int model_num; // Number of different models used for time evolution
+	string init_func_name; // Initial state construction function name
+};
+
+/*
  * All parameters.
  */
 struct AllPara
@@ -94,6 +105,9 @@ struct AllPara
 
 	// Matrix relevant parameters
 	MatrixPara matrix_para;
+
+	// Time evolution parameters
+	Evolution evolution;
 };
 
 #endif
