@@ -140,7 +140,7 @@ void TransitionMatrix::Basic_Full_From_Basic_Parity_Full(){
 
 	for (int j=0; j<odd_rank;j++){
 		for (int i=0; i<total_rank;i++){
-			basic_full_(i,j+odd_rank) = basic_odd_full_(i,j); 
+			basic_full_(i,j+odd_rank) = basic_odd_full_(i,j);s 
 		}
 	}
 
