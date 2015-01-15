@@ -1,8 +1,9 @@
 #include <complex>
 #include <Eigen/Dense>
+#include <iostream>
 
 using namespace std;
-using namespace Eigen;s
+using namespace Eigen;
 
 /**
  ** This function checks whether total norm of a complex vector is close 1. delta gives the small
@@ -19,5 +20,5 @@ void norm_check(const VectorXcd& state, double delta, const string& state_type){
 	if (abs(state_norm - 1) > delta){
 		cout << state_type << " norm is not 1." << endl;
 		abort();
-	}s
+	}
 }

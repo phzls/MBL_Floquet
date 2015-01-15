@@ -3,18 +3,19 @@
 #include <complex>
 #include "constants.h"
 #include "initial_obj.h"
+#include "mtrand.h"
 
 using namespace std;
 using namespace Eigen;
 
-MTRand u1rand(time(NULL));
+extern MTRand u1rand;
 
 /**
  ** This function creates an initial state which is the random product state. Specifically,
  ** the 1/2 spin pointing random direction on Bloch sphere at each site.
  **/
 
-void random_product(const InitInfo& init_info, const TransitionMatrix transition,
+void random_product(const InitInfo& init_info, const TransitionMatrix& transition,
 VectorXcd& init_state){
 	const int size = init_info.size; // System size
 	const int total_rank = init_state.size(); // Total dimension of Hilbert space
@@ -27,7 +28,8 @@ VectorXcd& init_state){
 		abort();
 	}
 
-	VectorXcd& init_basic(total_rank); // The initial state written in basic binary basis
+	// The initial state written in basic binary basis
+	VectorXcd init_basic = VectorXcd::Zero(total_rank); 
 
 	// Record the amplitude of up and down spin at each site
 	vector<vector<complex<double> > > spin_amp(size); 
@@ -40,7 +42,7 @@ VectorXcd& init_state){
 		spin_amp.resize(2); // 0 for spin down, 1 for spin up
 
 		spin_amp[i][1] = complex<double>(cos(theta/2),0);
-		spin_amp[i][0] = exp( I*complex<double>(phi,0) ) * complex<double>(sin(theta/2),0);
+		spin_amp[i][0] = exp( Complex_I*complex<double>(phi,0) ) * complex<double>(sin(theta/2),0);
 	}
 
 	// Calculate the amplitude of the state in binary basis

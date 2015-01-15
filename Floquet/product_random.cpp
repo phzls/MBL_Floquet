@@ -3,17 +3,18 @@
 #include <complex>
 #include "constants.h"
 #include "initial_obj.h"
+#include "mtrand.h"
 
 using namespace std;
 using namespace Eigen;
 
-MTRand u1rand(time(NULL));
+extern MTRand u1rand;
 
 /**
  ** Construct a state which is a product of two random pure states of half chains 
  **/
 
-void product_random(const InitInfo& init_info, const TransitionMatrix transition,
+void product_random(const InitInfo& init_info, const TransitionMatrix& transition,
 VectorXcd& init_state){
 	const int size = init_info.size; // System size
 	const int total_rank = init_state.size(); // Total dimension of Hilbert space
@@ -24,6 +25,7 @@ VectorXcd& init_state){
 		cout << "Expected total rank: " << (1<<size) << endl;
 		cout << "Obtained total rank: " << total_rank << endl;
 		abort();
+	}
 	
 
 	if (size%2 != 0){
@@ -43,7 +45,8 @@ VectorXcd& init_state){
 	random_pure_amplitude(amplitude_left);
 	random_pure_amplitude(amplitude_right);
 
-	VectorXcd& init_basic(total_rank); // The initial state written in basic binary basis
+	// The initial state written in basic binary basis
+	VectorXcd init_basic = VectorXcd::Zero(total_rank); 
 
 	for (int n=0;n<half_rank;n++)
 	{

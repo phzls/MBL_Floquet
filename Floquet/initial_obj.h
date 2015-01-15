@@ -22,7 +22,7 @@ struct InitInfo
 	int size; // System size
 	int dim; // Total dimension of Hilbert space
 	double norm_delta; // A small number used to check whether norm is 1
-}
+};
 
 // Pointer to all possible initial state construction function
 typedef void (*init_func)(const InitInfo&, const TransitionMatrix&, VectorXcd&);

@@ -76,7 +76,7 @@ const string& matrix_name) const{
 	}
 	else if (matrix_name == "Basic_Full"){
 		if (!transition.Check_Matrix("Basic_Parity_Full")) 
-			Transition_Compute("Basic_Parity_Full");
+			Transition_Compute(transition, "Basic_Parity_Full");
 		transition.Basic_Full_From_Basic_Parity_Full();
 	}
 	else{

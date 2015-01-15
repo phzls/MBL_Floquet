@@ -1,5 +1,7 @@
 #include <complex>
 #include <vector>
+#include "constants.h"
+#include "mtrand.h"
 
 using namespace std;
 
@@ -17,15 +19,15 @@ void random_pure_amplitude(vector<complex<double> >& amplitude){
 		double U1 = u1rand();
 		double U2 = u1rand();
 
-		double real = sqrt(-2*log(U1))*cos(2*pi*U2);
-		double imag = sqrt(-2*log(U1))*sin(2*pi*U2);
+		double real = sqrt(-2*log(U1))*cos(2*Pi*U2);
+		double imag = sqrt(-2*log(U1))*sin(2*Pi*U2);
 
 		amplitude[i] = complex<double>(real,imag);
 
 		sum += norm(amplitude[i]);
 	}
 
-	for (int i=0;i<length;i++)
+	for (int i=0;i<amplitude.size();i++)
 	{
 		amplitude[i] /= complex<double>(sqrt(sum),0);
 	}

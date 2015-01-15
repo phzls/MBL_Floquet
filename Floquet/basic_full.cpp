@@ -122,7 +122,7 @@ void TransitionMatrix::Basic_Full_From_Basic_Parity_Full(){
 	}
 
 	if (even_rank + odd_rank != total_rank){
-		cout << "Total rank is not consistent." << endl;s
+		cout << "Total rank is not consistent." << endl;
 		cout << "Total rank: " << total_rank << endl;
 		cout << "Even rank: " << even_rank << endl;
 		cout << "Odd rank: " << odd_rank << endl;
@@ -140,7 +140,7 @@ void TransitionMatrix::Basic_Full_From_Basic_Parity_Full(){
 
 	for (int j=0; j<odd_rank;j++){
 		for (int i=0; i<total_rank;i++){
-			basic_full_(i,j+odd_rank) = basic_odd_full_(i,j);s 
+			basic_full_(i,j+odd_rank) = basic_odd_full_(i,j);
 		}
 	}
 
