@@ -64,6 +64,9 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		// Return the type of the model
 		string Type() const {return type_;} 
 
+		// Return the type of the basis that eigenstates are written in
+		string Eigen_Type() const {return "Basic";}
+
 		// Return dimension of each sector. Here only 1 sector exists, so total dimension
 		// is returned.
 		vector<int> Get_Sector_Dim() const{
@@ -104,15 +107,17 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		stringstream repr_; // Representation string stream of the model
 		string type_; // Type string of the model
 
+		bool eigen_info_; // Whether eigenvectors have been computed
+
 	public:
 		// When local dimension is not given
 		FloEvolParity(int size): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
-			constructed_(false){eigen.resize(2);}
+			constructed_(false), eigen_info_(false){eigen.resize(2);}
 
 		// When local dimension is given
 		FloEvolParity(int size, int local_dim): 
 			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, local_dim), 
-			constructed_(false){eigen.resize(2);}
+			constructed_(false), eigen_info_(false){eigen.resize(2);}
 
 		// Diagnolize time evolution matrix with eigenvectors kept
 		void Evol_Diag(){
@@ -120,6 +125,8 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 				eigen[0].compute(evol_op_even_);
 				// In case there is no odd sector for small chain
 				if (evol_op_odd_.rows()>0) eigen[1].compute(evol_op_odd_);
+
+				eigen_info_ = true;
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -134,6 +141,7 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 				eigen[0].compute(evol_op_even_, keep);
 				// In case there is no odd sector for small chain
 			if (evol_op_odd_.rows()>0) eigen[1].compute(evol_op_odd_, keep);
+			eigen_info_ = keep;
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -146,6 +154,9 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 
 		// Return the type of the model
 		string Type() const {return type_;} 
+
+		// Return the type of the basis that eigenstates are written in
+		string Eigen_Type() const {return "Parity";}
 
 		// Erase the evolutionary operator
 		void Evol_Erase() {evol_op_even_.resize(0,0); evol_op_odd_.resize(0,0); 

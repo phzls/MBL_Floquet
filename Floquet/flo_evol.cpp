@@ -27,20 +27,20 @@ const string& matrix_name) const{
 void FloEvolParity::Transition_Compute(TransitionMatrix& transition, 
 const string& matrix_name) const{
 	if (matrix_name == "Parity_Full"){
-		if (constructed_)
+		if (eigen_info_)
 			// Use only one thread now
 			transition.Parity_Full(eigen[0].eigenvectors(), eigen[1].eigenvectors(),1);
 		else{
-			cout << "Evolution Operator " << Repr() <<" has not been constructed." << endl;
+			cout << "Evolution Operator " << Repr() <<" has not been diagonalized." << endl;
 			abort();
 		}
 	}
 	else if (matrix_name == "Basic_Parity"){
-		if (constructed_)
+		if (eigen_info_)
 			// For now use 1 thread for parallelization
 			transition.Basic_Parity(even_parity_, odd_parity_, 1);
 		else{
-			cout << "Evolution Operator " << Repr() <<" has not been constructed." << endl;
+			cout << "Evolution Operator " << Repr() <<" has not been diagonalized." << endl;
 			abort();
 		}
 	}
@@ -50,11 +50,11 @@ const string& matrix_name) const{
 			abort();
 		}
 		if (!transition.Check_Matrix("Even_Full")){
-			if (constructed_)
+			if (eigen_info_)
 				// Use only one thread now
 				transition.Parity_Full(eigen[0].eigenvectors(), eigen[1].eigenvectors(), 1);
 			else{
-				cout << "Evolution Operator " << Repr() <<" has not been constructed." << endl;
+				cout << "Evolution Operator " << Repr() <<" has not been diagonalized." << endl;
 				abort();
 			}
 		}
@@ -64,11 +64,11 @@ const string& matrix_name) const{
 			abort();
 		}
 		if (!transition.Check_Matrix("Basic_Even")){
-			if (constructed_)
+			if (eigen_info_)
 				// For now use 1 thread for parallelization
 				transition.Basic_Parity(even_parity_, odd_parity_, 1);
 			else{
-				cout << "Evolution Operator " << Repr() <<" has not been constructed." << endl;
+				cout << "Evolution Operator " << Repr() <<" has not been diagonalized." << endl;
 				abort();
 			}
 		}
