@@ -45,7 +45,15 @@ template <class T1, class T2>
 void rightmost_sigma_z_sum(Matrix<T1, Dynamic, Dynamic>&, const vector< vector<T2> >&, 
 	const string&);
 
+/*
+ * Write eigenstates of an evolutionary operator in basic binary basis, and output the result
+ * in passed in vectors. 
+ */
+template <class T1, class T2>
+void evec_to_basic(EvolMatrix<T1>* const &, vector<vector<T2> >&);
+
 #include "level_cal.tpp"
 #include "rightmost_sigma_z_sum.tpp"
+#include "evec_to_basic.tpp"
 
 #endif
