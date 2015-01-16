@@ -104,6 +104,7 @@ void flo_evolution(const AllPara& parameters){
 						cout << "Time step:" << t << endl;
 						cout << "State in binary basis:"<<endl;
 						complex_matrix_write(state_basic);
+						cout << endl;
 
 						cout << "State in evec basis:" << endl;
 						complex_matrix_write(state_evec);
