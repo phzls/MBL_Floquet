@@ -39,7 +39,7 @@ void EvolData::Entropy_Per_Model_Init_(const AllPara& parameters){
  */
 void EvolData::Entropy_Per_Model_Cal_(const VectorXcd& state_basic, const StepInfo& info){
 	const int realization = info.realization;
-	const int time_step = info.time_step;
+	const int time = info.time;
 	const int left_size = info.left_size;
 
 	MatrixXcd reduced_density; // Reduced density matrix for the left part
@@ -49,14 +49,14 @@ void EvolData::Entropy_Per_Model_Cal_(const VectorXcd& state_basic, const StepIn
 
 	density_eigen.compute(reduced_density, false); // Eigenvectors not computed
 
-	entropy_per_model_[time_step][realization] = 0;
+	entropy_per_model_[time][realization] = 0;
 
 	for (int i=0; i<density_eigen.eigenvalues().rows();i++){
 		double eval = density_eigen.eigenvalues()(i);
 
 		if (abs(eval)>1.0e-15)
 		{
-			entropy_per_model_[time_step][realization] += -eval*log2(eval);
+			entropy_per_model_[time][realization] += -eval*log2(eval);
 		}
 	}
 }
@@ -64,9 +64,9 @@ void EvolData::Entropy_Per_Model_Cal_(const VectorXcd& state_basic, const StepIn
 /*
  * Output entropy per model. The entroy will be averaged over different realizations, and the
  * sample variance will be computed, where the sample is taken at a fixed time step with different
- * realizations. The time step, average and the standard deviation computed from the sample variance
- * will be computed. Note this standard deviation is not the standard deviation of average yet. 
- * The name taken in will become part of the output file name.
+ * realizations. The time step, average and the standard deviation computed from the sample 
+ * variance will be computed. Note this standard deviation is not the standard deviation of 
+ * average yet. The name taken in will become part of the output file name.
  */
 
 void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& name){
@@ -75,6 +75,7 @@ void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& n
 	const int jump = parameters.evolution.jump;
 	const bool output = parameters.output.filename_output;
 	const int width = parameters.output.width;
+	const double step_size = parameters.evolution.step_size;
 
 	if (entropy_per_model_.size() != time_step){
 		cout << "Not enough time steps are computed for entropy." << endl;
@@ -103,7 +104,7 @@ void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& n
 	ofstream fout( filename.str().c_str() );
 
 	for (int t=0; t<time_step; t++){
-		double time = t * tau * jump;
-		fout << setw(10) << time << setw(width) << mean[i] << setw(width) << sd[i] << endl;
+		double time = t * step_size * jump;
+		fout << setw(10) << time << setw(width) << mean[t] << setw(width) << sd[t] << endl;
 	}
 }
