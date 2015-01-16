@@ -15,17 +15,17 @@ TasksModels tasks_models; // Record all the tasks and methods
 int main(){
 	AllPara parameters;
 	
-	parameters.generic.task = "Flo Rightmost Sigma_z";
-	parameters.generic.model = "Random Rotation Flo";
+	parameters.generic.task = "Flo Evolution";
+	parameters.generic.model = "XXZ Flo";
 
-	parameters.generic.size = 10; // System size
+	parameters.generic.size = 2; // System size
 	parameters.generic.num_realizations = 1; // Number of realizations
 	parameters.generic.threads_N = 1; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors
 	parameters.generic.erase = true; // Whether erase matrix after diagonization
 	parameters.generic.debug = false; // Whether output debug information
 
-	parameters.output.width = 30; // Width for spacing in output files
+	parameters.output.width = 15; // Width for spacing in output files
 	parameters.output.filename_output = true; // Whether print out file names
 
 	parameters.floquet.J_N = 11; // Number of points of coupling strength
@@ -41,6 +41,12 @@ int main(){
 	parameters.floquet_xxz.h = 0.8090; // Longitude field strength
 
 	parameters.evolution.step_size = parameters.floquet.tau; // Time step size
+	parameters.evolution.time_step = 3; // Number of time steps
+	parameters.evolution.evol_compute["Entropy Per Model"] = true;
+	// Initial state name
+	parameters.evolution.init_func_name = "Random Product";
+	parameters.evolution.model_num = 1; // Number of models for evolution 
+
 
 	tasks_models.Task(parameters.generic.task)(parameters);
 
