@@ -59,6 +59,8 @@ class EvolData
 		void Print_All_Name() const; // Print all possible names of data type calculation
 		void Print_All_Status() const; // Print all possible data type calculation, indicating
 									   // whether they will be calculated
+
+		void Data_Cal(const StepInfo&); // Compute data at each step
 };
 
 #endif

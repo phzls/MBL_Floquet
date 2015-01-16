@@ -79,6 +79,12 @@ void EvolData::Name_Check_() const{
 	}
 }
 
+void EvolData::Data_Cal(const StepInfo& info){
+	for (map<string, bool>::iterator it = func_status_.begin(); it != func_status_.end(); it++){
+		if (it -> second) ( this ->* (data_cal_[it -> first]) ) (info);
+	}
+}
+
 void EvolData::Data_Func_Map_Init_(){
 	map<string, Data_Init>::iterator init_it;
 	map<string, Data_Cal>::iterator cal_it;
