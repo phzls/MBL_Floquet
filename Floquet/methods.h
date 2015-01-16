@@ -52,6 +52,13 @@ void rightmost_sigma_z_sum(Matrix<T1, Dynamic, Dynamic>&, const vector< vector<T
 template <class T1, class T2>
 void evec_to_basic(EvolMatrix<T1>* const &, vector<vector<T2> >&);
 
+/*
+ * Construct a left reduced density matrix from a state vector for a spin chain where local
+ * dimension is 2. The first integer is the total size of spin chain, and the second integer
+ * is the size of left part.
+ */
+void reduced_density_left_2(const VectorXcd&, int, int, MatrixXcd&);
+
 #include "level_cal.tpp"
 #include "rightmost_sigma_z_sum.tpp"
 #include "evec_to_basic.tpp"
