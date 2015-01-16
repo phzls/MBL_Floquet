@@ -29,19 +29,24 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		stringstream repr_; // Representation string stream of the model
 		string type_; // Type string of the model
 
+		bool eigen_info_; // Whether eigenvectors have been computed
+
 	public:
 		// When local dimension is not given
 		FloEvolVanilla(int size): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
-			constructed_(false){eigen.resize(1);}
+			constructed_(false), eigen_info_(false){eigen.resize(1);}
 
 		// When local dimension is given
 		FloEvolVanilla(int size, int local_dim): 
 			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, local_dim), 
-			constructed_(false){eigen.resize(1);}
+			constructed_(false), eigen_info_(false){eigen.resize(1);}
 
 		// Diagnolize time evolution matrix with eigenvectors kept
 		void Evol_Diag() {
-			if (constructed_) eigen[0].compute(evol_op_);
+			if (constructed_){
+				eigen[0].compute(evol_op_);
+				eigen_info_ = true;
+			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
 				abort();
@@ -51,7 +56,10 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		// Diagnolize time evolution matrix, user can determine whether eigenvectors are kept
 		// False is not kept; True is kept
 		void Evol_Diag(bool keep) {
-			if (constructed_) eigen[0].compute(evol_op_, keep);
+			if (constructed_){
+				eigen[0].compute(evol_op_, keep);
+				eigen_info_ = keep;
+			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
 				abort();

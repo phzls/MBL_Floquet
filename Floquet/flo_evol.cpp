@@ -11,9 +11,9 @@ using namespace std;
 void FloEvolVanilla::Transition_Compute(TransitionMatrix& transition, 
 const string& matrix_name) const{
 	if (matrix_name == "Basic_Full"){
-		if (constructed_) transition.Basic_Full(eigen[0].eigenvectors());
+		if (eigen_info_) transition.Basic_Full(eigen[0].eigenvectors());
 		else{
-			cout << "Evolution Operator " << Repr() <<" has not been constructed." << endl;
+			cout << "Evolution Operator " << Repr() <<" has not been diagonalized." << endl;
 			abort();
 		}
 	}
