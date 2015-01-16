@@ -2,6 +2,9 @@
 #define PARAMETERS_H
 
 #include <string>
+#include <vector>
+#include <utility>
+#include <map>
 
 using namespace std;
 
@@ -80,7 +83,9 @@ struct Evolution
 	int time_step; // Number of time steps
 	double step_size; // Size of time step; would be tau for floquet models
 	int model_num; // Number of different models used for time evolution
+	int jump; // jump of time points in evolution
 	string init_func_name; // Initial state construction function name
+	map<string,bool> evol_compute; // Determine which data to compute
 };
 
 /*
