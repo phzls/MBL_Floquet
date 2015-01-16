@@ -6,6 +6,7 @@
 #include "initial_obj.h"
 #include "evol_data.h"
 #include "tasks_models.h"
+#include "eigen_output.h"
 
 using namespace std;
 
@@ -42,6 +43,7 @@ void flo_evolution(const AllPara& parameters){
 
 	init_info.size = parameters.generic.size;
 	init_info.norm_delta = 1.0e-15;
+	init_info.debug = debug;
 
 	EvolData evol_data(parameters);
 
@@ -98,10 +100,21 @@ void flo_evolution(const AllPara& parameters){
 						abort();
 					}
 
+					if (debug){
+						cout << "Time step:" << t << endl;
+						cout << "State in binary basis:"<<endl;
+						complex_matrix_write(state_basic);
+
+						cout << "State in evec basis:" << endl;
+						complex_matrix_write(state_evec);
+						cout << endl;
+					}
+
 					StepInfo info;
 					info.model = i;
 					info.realization = n;
 					info.time = t;
+					info.debug = debug;
 
 					evol_data.Data_Compute(state_basic, info);
 				}

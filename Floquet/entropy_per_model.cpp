@@ -7,6 +7,7 @@
 #include "evol_data.h"
 #include "methods.h"
 #include "generic_func.h"
+#include "eigen_output.h"
 
 using namespace std;
 using namespace Eigen;
@@ -45,6 +46,12 @@ void EvolData::Entropy_Per_Model_Cal_(const VectorXcd& state_basic, const StepIn
 	MatrixXcd reduced_density; // Reduced density matrix for the left part
 	reduced_density_left_2(state_basic, size_, left_size, reduced_density);
 
+	if (info.debug){
+		cout << "Reduced density matrix:" << endl;
+		complex_matrix_write(reduced_density);
+		cout << endl;
+	}
+
 	SelfAdjointEigenSolver<MatrixXcd> density_eigen; // Eigen for reduced density matrix
 
 	density_eigen.compute(reduced_density, false); // Eigenvectors not computed
@@ -58,6 +65,12 @@ void EvolData::Entropy_Per_Model_Cal_(const VectorXcd& state_basic, const StepIn
 		{
 			entropy_per_model_[time][realization] += -eval*log2(eval);
 		}
+	}
+
+	if (info.debug){
+		cout << "Entropy per model:" << endl;
+		cout << entropy_per_model_[time][realization] << endl;
+		cout << endl;
 	}
 }
 

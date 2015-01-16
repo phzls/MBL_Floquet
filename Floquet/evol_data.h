@@ -19,9 +19,10 @@ using namespace Eigen;
  * This structure gives relevant information at each step that can be used for computation.
  */
 struct StepInfo{
-	int model;
-	int realization;
-	int time;
+	int model; // The index of current model
+	int realization; // The index of current realization
+	int time; // The index of current time step
+	bool debug; // Whether output debug information
 
 	int left_size; // If partition the chain to two halves, the size of left part
 };

@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "initial_obj.h"
 #include "mtrand.h"
+#include "eigen_output.h"
 
 using namespace std;
 using namespace Eigen;
@@ -60,6 +61,12 @@ VectorXcd& init_state){
 
 	norm_check(init_basic, delta, "Binary state");
 
+	if (init_info.debug){
+		cout << "Initial state in binary basis:" << endl;
+		complex_matrix_write(init_basic);
+		cout << endl;
+	}
+
 	init_state = transition.Matrix("Basic_Full").adjoint() * init_basic;
 
 	if (init_state.size() != total_rank){
@@ -69,5 +76,11 @@ VectorXcd& init_state){
 		abort();
 	}
 
-	norm_check(init_state, delta, "Initial state"); 
+	norm_check(init_state, delta, "Initial state");
+
+	if (init_info.debug){
+		cout << "Initial state in evec basis:" << endl;
+		complex_matrix_write(init_state);
+		cout << endl;
+	} 
 }
