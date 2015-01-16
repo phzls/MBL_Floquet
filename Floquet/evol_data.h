@@ -28,8 +28,15 @@ struct StepInfo{
 
 class EvolData;
 
+// Functions that initialize data using parameters passed in
 typedef void (EvolData::*Data_Init)(const AllPara&);
+
+// Functions that compute data from a state vector and step information
 typedef void (EvolData::*Data_Cal)(const VectorXcd&, const StepInfo&);
+
+// Functions that output data using parameters. The string is used as part of the output
+// file name
+typedef void (EvolData::*Data_Out)(const AllPara&, const string&);
 
 class EvolData
 {	
@@ -39,17 +46,18 @@ class EvolData
 		
 		map<string, Data_Init> data_init_; // Correlate name with data_init function
 		map<string, Data_Cal> data_cal_; // Correlate name with data_cal function
+		map<string, Data_Out> data_out_; // Correlate name with data_out function
 
 		void Data_Func_Map_Init_(); // Initialize data_init_ and data_cal_;
 		void Name_Check_() const; // Check names in different maps are consistent
 
-		void Data_Init_(); // Initialize data according to func_stauts
-
-		// Entropy per model. The outer index is for realization; the inner index is for time
+		// Entropy per model. The outer index is for time; the inner index is for realization
 		vector<vector<double> > entropy_per_model_;
 		void Entropy_Per_Model_Init_(const AllPara&); // Initialize entropy_per_model
 		// Compute entropy_per_model 
 		void Entropy_Per_Model_Cal_(const VectorXcd&, const StepInfo&); 
+		// Output entropy_per_model
+		void Entropy_Per_Model_Out_(const AllPara&, const string&);
 
 		const int size_; // Size of the system
 		
@@ -60,7 +68,11 @@ class EvolData
 		void Print_All_Status() const; // Print all possible data type calculation, indicating
 									   // whether they will be calculated
 
-		void Data_Cal(const StepInfo&); // Compute data at each step
+		// Compute data at each step. The entry which is true in func_status will be computed.
+		void Data_Cal(const StepInfo&); 
+
+		// Output data to file. All the data that are computed will be outputted
+		void Data_Out(const AllPara&, const string&);
 };
 
 #endif

@@ -85,23 +85,35 @@ void EvolData::Data_Cal(const StepInfo& info){
 	}
 }
 
+void EvolData:Data_Out(const AllPara& parameters, const string& type_name){
+	for (map<string, bool>::iterator it = func_status_.begin(); it != func_status_.end(); it++){
+		if (it -> second) ( this ->* (data_out_[it -> first]) ) (parameters, type_name);
+	}
+}
+
 void EvolData::Data_Func_Map_Init_(){
 	map<string, Data_Init>::iterator init_it;
 	map<string, Data_Cal>::iterator cal_it;
+	map<string, Data_Out>::iterator out_it;
 
+	// Entropy Per Model data
 	string name1 = "Entropy Per Model";
 	Data_Init init_func1 = &EvolData::Entropy_Per_Model_Init_;
 	Data_Cal cal_func1 = &EvolData::Entropy_Per_Model_Cal_;
+	Data_Out out_func1 = &EvolData::Entropy_Per_Model_Out_;
 
+	// Make sure the name has not been used before
 	init_it = data_init_.find(name1);
 	cal_it = data_cal_.find(name1);
-	if (init_it != data_init_.end() || cal_it != data_cal_.end()){
+	out_it = data_out_.find(name1);
+	if (init_it != data_init_.end() || cal_it != data_cal_.end() || out_it != data_out_.end()){
 		cout << name1 << " for evolution has appeared before." << endl;
 		abort();
 	}
 
 	data_init_[name1] = init_func1;
 	data_cal_[name1] = cal_func1;
+	data_out_[name1] = out_func1;
 
 	// Check data_init_ and data_cal_ have the same size
 	if (data_init_.size() != data_cal_.size()){
@@ -113,10 +125,28 @@ void EvolData::Data_Func_Map_Init_(){
 		}
 		cout << "Total Number: " << data_init_.size();
 
+		cout << "Registered calculations:" << endl;
 		for (cal_it = data_cal_.begin(); cal_it != data_cal_.end(); cal_it ++){
 			cout << cal_it -> first << endl;
 		}
 		cout << "Total Number: " << data_cal_.size(); 
+	}
+
+	// Check data_init_ and data_out_ have the same size
+	if (data_init_.size() != data_out_.size()){
+		cout << "Number of initializations in evolution is not the same as number of output."
+			 << endl;
+		cout << "Registered initializations:" << endl;
+		for (init_it = data_init_.begin(); init_it != data_init_.end(); init_it ++){
+			cout << init_it -> first << endl;
+		}
+		cout << "Total Number: " << data_init_.size();
+
+		cout << "Registered output:" << endl;
+		for (out_it = data_out_.begin(); out_it != data_out_.end(); out_it ++){
+			cout << out_it -> first << endl;
+		}
+		cout << "Total Number: " << data_out_.size(); 
 	}
 
 }
