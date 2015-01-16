@@ -79,13 +79,13 @@ void EvolData::Name_Check_() const{
 	}
 }
 
-void EvolData::Data_Cal(const StepInfo& info){
+void EvolData::Data_Compute(const VectorXcd& state, const StepInfo& info){
 	for (map<string, bool>::iterator it = func_status_.begin(); it != func_status_.end(); it++){
-		if (it -> second) ( this ->* (data_cal_[it -> first]) ) (info);
+		if (it -> second) ( this ->* (data_cal_[it -> first]) ) (state, info);
 	}
 }
 
-void EvolData:Data_Out(const AllPara& parameters, const string& type_name){
+void EvolData::Data_Output(const AllPara& parameters, const string& type_name){
 	for (map<string, bool>::iterator it = func_status_.begin(); it != func_status_.end(); it++){
 		if (it -> second) ( this ->* (data_out_[it -> first]) ) (parameters, type_name);
 	}

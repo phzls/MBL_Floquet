@@ -21,7 +21,7 @@ using namespace Eigen;
 struct StepInfo{
 	int model;
 	int realization;
-	int time_step;
+	int time;
 
 	int left_size; // If partition the chain to two halves, the size of left part
 };
@@ -69,10 +69,10 @@ class EvolData
 									   // whether they will be calculated
 
 		// Compute data at each step. The entry which is true in func_status will be computed.
-		void Data_Cal(const StepInfo&); 
+		void Data_Compute(const VectorXcd&, const StepInfo&); 
 
 		// Output data to file. All the data that are computed will be outputted
-		void Data_Out(const AllPara&, const string&);
+		void Data_Output(const AllPara&, const string&);
 };
 
 #endif
