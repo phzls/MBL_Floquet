@@ -16,11 +16,11 @@ int main(){
 	AllPara parameters;
 	
 	parameters.generic.task = "Flo Evolution";
-	parameters.generic.model = "XXZ Flo";
+	parameters.generic.model = "Random Rotation Flo";
 
-	parameters.generic.size = 2; // System size
-	parameters.generic.num_realizations = 1; // Number of realizations
-	parameters.generic.threads_N = 1; // Number of threads in openmp
+	parameters.generic.size = 8; // System size
+	parameters.generic.num_realizations = 400; // Number of realizations
+	parameters.generic.threads_N = 4; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors
 	parameters.generic.erase = true; // Whether erase matrix after diagonization
 	parameters.generic.debug = false; // Whether output debug information
@@ -40,12 +40,15 @@ int main(){
 	parameters.floquet_xxz.g = 0.9045; // Transverse field strength
 	parameters.floquet_xxz.h = 0.8090; // Longitude field strength
 
+	parameters.evolution.time_step = 10; // Number of time steps
 	parameters.evolution.step_size = parameters.floquet.tau; // Time step size
-	parameters.evolution.time_step = 3; // Number of time steps
+	parameters.evolution.init_func_name = "Product Random";
 	parameters.evolution.evol_compute["Entropy Per Model"] = true;
 	// Initial state name
-	parameters.evolution.init_func_name = "Random Product";
-	parameters.evolution.model_num = 1; // Number of models for evolution 
+	parameters.evolution.model_num = 1; // Number of models for evolution
+	// If partition the chain to two halves, the size of left part
+	parameters.evolution.left_size = parameters.generic.size / 2; 
+	parameters.evolution.jump = 1; // jump of time points in evolution
 
 
 	tasks_models.Task(parameters.generic.task)(parameters);
