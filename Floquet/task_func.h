@@ -16,6 +16,11 @@ void flo_level(const AllPara&);
  * Compute entry and norm representations of the right most sigma matrix at the end of chain
  * for floquet systems.
  */
-void flo_rightmost_sigma_z(const AllPara& parameters);
+void flo_rightmost_sigma_z(const AllPara&);
+
+/*
+ * Compute the time evolution for a floquet system
+ */
+void flo_evolution(const AllPara&);
 
 #endif
