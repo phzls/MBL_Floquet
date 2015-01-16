@@ -40,7 +40,7 @@ VectorXcd& init_state){
 		double theta = u1rand() * Pi;
 		double phi = u1rand() * 2*Pi;
 
-		spin_amp.resize(2); // 0 for spin down, 1 for spin up
+		spin_amp[i].resize(2); // 0 for spin down, 1 for spin up
 
 		spin_amp[i][1] = complex<double>(cos(theta/2),0);
 		spin_amp[i][0] = exp( Complex_I*complex<double>(phi,0) ) * 
