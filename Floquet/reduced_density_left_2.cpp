@@ -15,9 +15,9 @@ using namespace Eigen;
 
 void reduced_density_left_2(const VectorXcd& state_basic, int size, int left_size, 
 MatrixXcd& reduced_density){
-	const int right_size = size - left_size; // Length of right part of the chain
-	const int left_dim = 1 << left_size; // Total dimension of the left part Hiblert space
-  	const int right_dim = 1 << right_size; // Total dimension of the right part space
+	  const int right_size = size - left_size; // Length of right part of the chain
+	  const int left_dim = 1 << left_size; // Total dimension of the left part Hiblert space
+    const int right_dim = 1 << right_size; // Total dimension of the right part space
 
   	if (right_size <=0){
   		cout << "Left part for reduced density matrix calculation is too long." << endl;
