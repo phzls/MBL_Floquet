@@ -40,6 +40,8 @@ int main(){
 	parameters.floquet_xxz.g = 0.9045; // Transverse field strength
 	parameters.floquet_xxz.h = 0.8090; // Longitude field strength
 
+	parameters.evolution.step_size = parameters.floquet.tau; // Time step size
+
 	tasks_models.Task(parameters.generic.task)(parameters);
 
 	return 0;
