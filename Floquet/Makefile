@@ -1,5 +1,5 @@
 models = flo_evol_random.o flo_evol_random_rotation.o flo_evol_xxz.o flo_evol.o
-evolutions = mtrand.o flo_level.o flo_rightmost_sigma_z.o evol_data.o entropy_per_model.o
+evolutions = mtrand.o flo_level.o flo_rightmost_sigma_z.o evol_data.o entropy_per_model.o flo_evolution.o
 functions = generic_func.o update.o tasks_models.o model_func.o sort.o reduced_density_left_2.o
 transitions = transition.o basic_full.o basic_parity.o parity_full.o
 results = level_stats.o
