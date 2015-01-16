@@ -60,12 +60,6 @@ class FloEvolRandom : public FloEvolVanilla
 		// Construct evolutionary operator
 		void Evol_Construct(); 
 
-		// Compute various transition matrix.
-		void Transition_Compute(TransitionMatrix&, const string&) const{
-			cout << "Transition Matrix Computation Not Implemented Yet." << endl;
-			abort();
-		};
-
 		virtual ~FloEvolRandom() {};
 };
 
@@ -138,12 +132,6 @@ class FloEvolRandomRotation : public FloEvolVanilla
 
 		// Construct evolutionary operator
 		void Evol_Construct();
-
-		// Compute various transition matrix. 
-		void Transition_Compute(TransitionMatrix&, const string&) const{
-			cout << "Transition Matrix Computation Not Implemented Yet." << endl;
-			abort();
-		}; 
 
 		virtual ~FloEvolRandomRotation() {};
 };
