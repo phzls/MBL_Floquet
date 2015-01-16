@@ -118,6 +118,7 @@ void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& n
 
 	for (int t=0; t<time_step; t++){
 		double time = t * step_size * jump;
+		generic_mean_sd(entropy_per_model_[t], mean[t], sd[t]);
 		fout << setw(10) << time << setw(width) << mean[t] << setw(width) << sd[t] << endl;
 	}
 }
