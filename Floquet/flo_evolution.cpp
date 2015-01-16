@@ -1,6 +1,8 @@
 #include <iostream>
 #include <omp.h>
 #include <cmath>
+#include <string>
+#include <algorithm>
 #include "evol_class.h"
 #include "parameters.h"
 #include "initial_obj.h"
@@ -60,8 +62,28 @@ void flo_evolution(const AllPara& parameters){
 		floquet -> Evol_Diag();
 		if (erase) floquet -> Evol_Erase();
 
+		if (debug){
+			cout << "Eigenvectors and eigenvalues:" << endl;
+			
+			for (int i=0; i<floquet -> eigen.size(); i++){
+				cout << "Sector " << i <<" :" << endl;
+				cout << "Eigenvectors:" << endl;
+				complex_matrix_write(floquet -> eigen[i].eigenvectors());
+				cout << endl;
+				cout << "Eigenvalues:" << endl;
+				complex_matrix_write(floquet -> eigen[i].eigenvalues());
+				cout << endl;
+			}
+		}
+
 		cout << "Construct Transition Matrix." << endl;
 		floquet -> Transition_Compute(transition, "Basic_Full");
+
+		if (debug){
+			cout << "Basic to Full transtion matrix:" << endl;
+			complex_matrix_write(transition.Matrix("Basic_Full"));
+			cout << endl;
+		}
 
 		for (int n=0; n<num_realization; n++){
 			cout << endl;
@@ -116,6 +138,7 @@ void flo_evolution(const AllPara& parameters){
 					info.realization = n;
 					info.time = t;
 					info.debug = debug;
+					info.left_size = parameters.evolution.left_size;
 
 					evol_data.Data_Compute(state_basic, info);
 				}
@@ -126,7 +149,9 @@ void flo_evolution(const AllPara& parameters){
 		}
 
 		cout << "Output data." << endl;
-		evol_data.Data_Output(parameters, floquet -> Repr());
+		string init_string = init_func_name;
+		replace(init_string.begin(), init_string.end(),' ','_');
+		evol_data.Data_Output(parameters, floquet -> Repr() + ",Init_" + init_string);
 
 		cout << endl;
 		cout << endl;
