@@ -86,6 +86,7 @@ struct Evolution
 	int jump; // jump of time points in evolution
 	string init_func_name; // Initial state construction function name
 	map<string,bool> evol_compute; // Determine which data to compute
+	int left_size; // If partition the chain to two halves, the size of left part
 };
 
 /*
