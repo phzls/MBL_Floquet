@@ -64,4 +64,14 @@ class FloEvolXXZFunc: public ModelFunc
 		virtual ~FloEvolXXZFunc(){};
 };
 
+// For inter random floquet operator
+class FloEvolInterRandomFunc: public ModelFunc
+{
+	public:
+		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+
+		virtual ~FloEvolInterRandomFunc(){};
+};
+
 #endif
