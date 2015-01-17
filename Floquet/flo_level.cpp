@@ -34,7 +34,10 @@ void flo_level(const AllPara& parameters){
 	const double J_min = parameters.floquet.J_min; // Minimum J
 
 	const double angle_min = parameters.floquet_random.angle_min; // Minimum angle
-	const double angle_sup = parameters.floquet_random.angle_sup; // Supreme angle	
+	const double angle_sup = parameters.floquet_random.angle_sup; // Supreme angle
+
+	const double g = parameters.floquet_xxz.g; // Transverse field strength
+	const double h = parameters.floquet_xxz.h; // Longitude field strength	
 
 	const int width = parameters.output.width; // Output spacing
 
@@ -87,6 +90,12 @@ void flo_level(const AllPara& parameters){
 			if (found != string::npos){
 				// It is the random rotation floquet
 				base_filename << ",angle_min=" << angle_min <<",angle_sup=" << angle_sup;
+			}
+			int found1 = floquet[0] -> Type().find("Inter");
+			int found2 = floquet[0] -> Type().find("XXZ");
+			if (found1 != string::npos || found2 != string::npos){
+				// It is the inter random floquet or xxz floqueet
+				base_filename << ",g=" << g << ",h=" << h;
 			}
 
 			string post_string =  ",level_spacing.txt";
