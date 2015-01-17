@@ -34,7 +34,7 @@ void FloEvolRandomRotation::Evol_Para_Init(){
 		axis_[i].resize(3);
 	}
 
-	// We generate angle uniformly random on [0,2*pi) and a random unit vector on 3D
+	// We generate angle uniformly random on [angle_min,angle_sup) and a random unit vector on 3D
 	// sphere, where z uniformly on [0,1] and phi uniformly on [0,2*pi). It rotates a
 	// density matrix on block sphere w.r.t the axis of unit vector by amount of angle
 	const double angle_range = param_.angle_sup - param_.angle_min;
@@ -229,8 +229,19 @@ void FloEvolRandomRotation::Para_Check_(){
 		cout << "Rotation angle_sup should be no less than angle_min." << endl;
 		abort();
 	}
-	if (param_.angle_min < 0 || param_.angle_sup > 2*Pi){
-		cout << "Rotation angle should be between 0 and 2*pi." << endl;
+	if (param_.angle_sup - param_.angle_min > 2*Pi){
+		cout << "Rotation angle should be within 2*pi." << endl;
+		abort();
+	}
+}
+
+/*
+ * Return evol_op; not meant to be called in polymorphism
+ */
+const MatrixXcd& FloEvolRandomRotation::Evol_Op() const{
+	if (constructed_) return evol_op_;
+	else{
+		cout << Repr() << " has not been constructed yet." << endl;
 		abort();
 	}
 }

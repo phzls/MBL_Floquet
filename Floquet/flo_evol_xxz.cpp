@@ -324,3 +324,22 @@ void FloEvolXXZ::Evol_Odd_Construct_(MatrixXcd& evol_x_odd, MatrixXcd& evol_z_od
     	cout << endl;
     }
 }
+
+/*
+ * Return evol_op_even_ and evol_op_odd_; not meant to be called in polymorphism
+ */
+const MatrixXcd& FloEvolXXZ::Evol_Op_Even() const{
+    if (constructed_) return evol_op_even_;
+    else{
+        cout << Repr() << " has not been constructed yet." << endl;
+        abort();
+    }
+}
+
+const MatrixXcd& FloEvolXXZ::Evol_Op_Odd() const{
+    if (constructed_) return evol_op_odd_;
+    else{
+        cout << Repr() << " has not been constructed yet." << endl;
+        abort();
+    }
+}
