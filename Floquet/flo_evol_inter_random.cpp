@@ -107,7 +107,7 @@ void FloEvolInterRandom::Evol_Construct(){
 /*
  * Return evol_op; not meant to be called in polymorphism
  */
-const MatrixXcd& FloEvolRandom::Evol_Op() const{
+const MatrixXcd& FloEvolInterRandom::Evol_Op() const{
 	if (constructed_) return evol_op_;
 	else{
 		cout << Repr() << " has not been constructed yet." << endl;

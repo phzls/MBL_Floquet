@@ -247,6 +247,9 @@ class FloEvolInterRandom : public FloEvolVanilla
 		// Construct evolutionary operator
 		void Evol_Construct(); 
 
+		// Access evol_op_, not meant to be called during polymorphism
+		const MatrixXcd& Evol_Op() const;
+
 		virtual ~FloEvolInterRandom() {};
 };
 
