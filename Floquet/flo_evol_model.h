@@ -60,6 +60,9 @@ class FloEvolRandom : public FloEvolVanilla
 		// Construct evolutionary operator
 		void Evol_Construct(); 
 
+		const MatrixXcd& Evol_Op() const; // Access evol_op_, not meant to be called during
+										  // polymorphism
+
 		virtual ~FloEvolRandom() {};
 };
 
@@ -133,6 +136,9 @@ class FloEvolRandomRotation : public FloEvolVanilla
 		// Construct evolutionary operator
 		void Evol_Construct();
 
+		const MatrixXcd& Evol_Op() const; // Access evol_op_, not meant to be called during
+										  // polymorphism
+
 		virtual ~FloEvolRandomRotation() {};
 };
 
@@ -197,7 +203,52 @@ class FloEvolRandomRotation : public FloEvolVanilla
 			return dim;
 		}
 
+		// Access evol_op_even_ and evol_op_odd_, not meant to be called during polymorphism
+		const MatrixXcd& Evol_Op_Even() const; 
+		const MatrixXcd& Evol_Op_Odd() const;
+
 		virtual ~FloEvolXXZ() {};
 };
+
+//=================================================================================================
+
+/*
+ * The random floquet operator which interpolates flo_evol_xxz (when J=1) and 
+ * flo_evol_random rotation (when J=0).
+ */
+class FloEvolInterRandom : public FloEvolVanilla
+{
+	struct Param // The parameters used in the model
+	{
+		const double tau; // Time step size
+		const double J; // Nearest neighboring
+		const double g; // Transverse field strength
+		const double h; // Longitude field strength
+		const int size; // Size of the chain
+
+		Param(double tau, double J, double g, double h, int L): 
+			tau(tau), J(J), g(g), h(h), size(L) {};
+	};
+
+	private:
+		const Param param_;
+
+		void Repr_Init_(); // Initialize the representation string stream as well as type
+
+		const bool debug_; // Used for debug output
+
+	public:
+		FloEvolInterRandom(int size, double tau, double J, double g, double h, bool debug = false):
+			FloEvolVanilla(size), param_(tau, J, g, h, size), debug_(debug) { Repr_Init_(); }
+
+		// No parameters to initialize
+		void Evol_Para_Init() {};
+
+		// Construct evolutionary operator
+		void Evol_Construct(); 
+
+		virtual ~FloEvolInterRandom() {};
+};
+
 
 #endif
