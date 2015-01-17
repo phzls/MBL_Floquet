@@ -38,47 +38,39 @@ void FloEvolInterRandom::Evol_Construct(){
 		abort();
 	}
 
-	/* For random unitary part Ur, we generate angle uniformly random on [-J*Pi,J*pi) and a random
-	 * unit vector on 3D sphere, where z uniformly on [0,1] and phi uniformly on [0,2*pi). For
-	 * xxz part Uxxz, the time step tau is taken to be J*tau.
+	/* For random unitary part Ur, we generate angle uniformly random on [-(1-J)*Pi,(1-J)*pi) and 
+	 * a random unit vector on 3D sphere, where z uniformly on [0,1] and phi uniformly on 
+	 * [0,2*pi). Also J=1 so that no z part. For xxz part Uxxz, the time step tau is taken to be
+	 * J*tau. The xxz part natively is written in parity states, so it needs to be converted into
+	 * binary basis.
 	 */
 
 	FloEvolXXZ* floquet_xxz = new FloEvolXXZ(param_.size, param_.J * param_.tau, param_.g, 
 		param_.h, debug_);
 
 	floquet_xxz -> Evol_Construct();
+	floquet_xxz -> Evol_Diag();
+
+	TransitionMatrix transition;
+	floquet_xxz -> Transition_Compute(transition, "Basic_Parity");
 
 	// even XXZ part of time evolution operator
-	MatrixXcd Uxxz_even = floquet_xxz -> Evol_Op_Even();
+	MatrixXcd Uxxz_even = transition.Matrix("Basic_Even") * ( floquet_xxz -> Evol_Op_Even() )
+		* transition.Matrix("Basic_Even").adjoint();
 
 	// odd XXZ part of time evolution operator
-	MatrixXcd Uxxz_odd = floquet_xxz -> Evol_Op_Odd();
+	MatrixXcd Uxxz_odd = transition.Matrix("Basic_Odd") * ( floquet_xxz -> Evol_Op_Odd() )
+	 * transition.Matrix("Basic_Odd").adjoint();
+
+	transition.Erase_All();
 	
 	// XXZ part of time evolution operator
-	MatrixXcd Uxxz = MatrixXcd::Zero(dim_, dim_);
-
-	for (int i=0; i< Uxxz_even.cols(); i++){
-		for (int j=0; j<Uxxz_even.rows(); j++){
-			Uxxz(j,i) = Uxxz_even(j,i);
-		}
-	}
-
-	int even_rank = Uxxz_even.cols();
-	if (even_rank != Uxxz_even.rows()){
-		cout << "Uxxz_even is not square." << endl;
-		abort();
-	}
-
-	for (int i=0; i<Uxxz_odd.cols(); i++){
-		for (int j=0; j<Uxxz_odd.rows();j++){
-			Uxxz(j+even_rank, i+even_rank) = Uxxz_odd(j,i);
-		}
-	}
+	MatrixXcd Uxxz = Uxxz_even + Uxxz_odd;
 
 	delete floquet_xxz;
 
 	FloEvolRandomRotation* floquet_r = new FloEvolRandomRotation(param_.size, param_.tau, 
-		param_.J, -param_.J*Pi, param_.J*Pi, debug_);
+		0, -(1-param_.J)*Pi, (1-param_.J)*Pi, debug_);
 
 	floquet_r -> Evol_Para_Init();
 	floquet_r -> Evol_Construct();
