@@ -153,7 +153,7 @@ pylab.legend(loc='upper right', ncol=1, prop={'size':15}, bbox_to_anchor=(1.15, 
 pylab.ylabel(r"$\langle(\Delta\phi)^2\rangle$")
 pylab.xlabel(r"$j$")
 
-#pylab.savefig("Floquet_10_level_spacing_mean_square_compare_v2.pdf",box_inches='tight')
+#pylab.savefig("Floquet_10_level_spacing_mean_square_compare_v3.pdf",box_inches='tight')
 
 
 draw2 = Draw.Draw()
@@ -163,7 +163,7 @@ draw2.figure_set()
 
 index = 0
 for n in filename:
-    if n.find("mean") == -1 and n.find("Rotation") > -1 and n.find("2.61") > -1:
+    if n.find("mean") == -1 and n.find("Inter") > -1:
         break
     else:
         index += 1
@@ -175,23 +175,28 @@ print min(data[1][index][9]), max(data[1][index][9])
 
 bin_width = 0.05
 
-instance = 10
+instance = 1
 
 label = ( general[index] + " L=" + length[index]+" "+"J="+str(data[0][index][instance])
-          +" angle=" + str(angle_min[index]) )
+          )
 print label
 
-draw2.hist(data[1][index][instance], bin_width, label = label)
+draw2.hist(data[1][index][instance], bin_width = bin_width, label = label)
 pylab.legend(loc='upper right', ncol=1, prop={'size':15} )
 
 J_s = str(data[0][index][instance]).replace('.','_')
-angle_s = angle_min[index].replace('.','_')
+#angle_s = angle_min[index].replace('.','_')
 pylab.xlabel(r"$\langle\Delta \phi_i \rangle$")
+
+print_label = label.replace('.', '_')
+print_label = print_label.replace(' ', '_')
+print_label = print_label + "_level_spacing"
+
+print print_label
 
 pylab.subplots_adjust(bottom=0.12)
 
-#pylab.savefig("Random_Rotation_Floquet_10_level_spacing_J_"+J_s+"_angle_"+angle_s+".pdf",
-#              box_inches='tight')
+pylab.savefig(print_label+".pdf", box_inches='tight')
 
 pylab.show()
 
