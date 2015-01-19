@@ -89,6 +89,8 @@ void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& n
 	const bool output = parameters.output.filename_output;
 	const int width = parameters.output.width;
 	const double step_size = parameters.evolution.step_size;
+	const bool log_time = parameters.evolution.log_time;
+	const int log_time_jump = parameters.evolution.log_time_jump;
 
 	if (entropy_per_model_.size() != time_step){
 		cout << "Not enough time steps are computed for entropy." << endl;
@@ -109,15 +111,24 @@ void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& n
 	vector<double> sd(time_step);
 
 	stringstream filename;
-	filename << name <<",Realizations=" << num_realizations << ",Total_time_step=" << time_step
-		     << ",jump=" << jump << ",entropy_per_model.txt";
+	filename << name <<",Realizations=" << num_realizations << ",Total_time_step=" << time_step;
+
+	if (log_time) filename <<",log_time";
+
+	filename << ",jump=" << jump << ",entropy_per_model.txt";
 
 	if (output) cout << filename.str() <<endl;
 
 	ofstream fout( filename.str().c_str() );
 
 	for (int t=0; t<time_step; t++){
-		double time = t * step_size * jump;
+		double time = t * step_size * jump; // An overflow still happens for entropy
+
+		if (log_time){
+			long long int power = pow(log_time_jump,t);
+			time = step_size * power;
+		}
+		
 		generic_mean_sd(entropy_per_model_[t], mean[t], sd[t]);
 		fout << setw(10) << time << setw(width) << mean[t] << setw(width) << sd[t] << endl;
 	}

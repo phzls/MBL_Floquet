@@ -87,6 +87,10 @@ struct Evolution
 	string init_func_name; // Initial state construction function name
 	map<string,bool> evol_compute; // Determine which data to compute
 	int left_size; // If partition the chain to two halves, the size of left part
+
+	bool log_time; // Determine whether time increases logarithmically
+	int log_time_jump; // The base number which time increases on when logarithmically
+
 };
 
 /*

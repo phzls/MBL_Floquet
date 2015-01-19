@@ -36,6 +36,11 @@ void flo_evolution(const AllPara& parameters){
 	const int jump = parameters.evolution.jump; // jump of time points
 	const string init_func_name = parameters.evolution.init_func_name; 
 
+	// Whether time changes logarithmically 
+	const bool log_time = parameters.evolution.log_time; 
+	// The base under which time changes logarithmically
+	const int log_time_jump = parameters.evolution.log_time_jump;
+
 	EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet;
 	TransitionMatrix transition;
 	VectorXcd init_state; // Initial state
@@ -99,7 +104,17 @@ void flo_evolution(const AllPara& parameters){
 			{
 				#pragma omp for
 				for (int t=0; t < time_step; t++){
-					int power = t*jump;
+					long long int power = t*jump;
+
+					// If time changes logarithmically
+					if (log_time){
+						power = pow(log_time_jump,t);
+					}
+
+					if (power < 0){
+						cout << "Overflow happens in time evolution." << endl;
+						abort();
+					}
 
 					VectorXcd state_evec(init_state.size()); // Current state in evec basis
 					VectorXcd state_basic(init_state.size()); // Current state in binary basis

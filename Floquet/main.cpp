@@ -51,6 +51,9 @@ int main(){
 	parameters.evolution.left_size = parameters.generic.size / 2; 
 	parameters.evolution.jump = 1; // jump of time points in evolution
 
+	parameters.evolution.log_time = true; // whehter time changes logarithmically
+	parameters.evolution.log_time_jump = 2; // The base for time change logarithmically
+
 
 	tasks_models.Task(parameters.generic.task)(parameters);
 
