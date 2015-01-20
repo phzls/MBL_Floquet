@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <utility>
+#include <iomanip>
 #include "flo_evol_model.h"
 #include "methods.h"
 #include "output_func.h"
@@ -38,9 +39,14 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 	MatrixXcd sigma_z_entry(0,0); // Record entry
 	MatrixXd sigma_z_norm(0,0); // Record norm for each entry
 
+	vector<double> ave_phases(1 << size, 0); // Use to store average phases
+
 	ofstream entry_out; // Output entry representation
 	ofstream norm_out; // Output norm of each entry representation
-	stringstream base_name;
+	ofstream phase_out; // Output phases of the corresponding eigenvectors used in 
+						// representing the matrix. The two orders match.
+	stringstream base_name_m; // Used for matrix related output
+	stringstream base_name_p; // Used for phases related output
 
 	// The first entry is phases of eigenvalues, and for the second pair,
 	// the first is its position in sector; the second is its position in 
@@ -60,15 +66,20 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 		tasks_models.Model(model, parameters, floquet);
 
 		if (!output_init){
-			base_name << floquet -> Repr();
+			base_name_m << floquet -> Repr();
+			base_name_p << floquet -> Repr();
 
-			base_name<<",Realizations="<<num_realization<<",right_most_sigma_z";
+			base_name_m<<",Realizations="<<num_realization<<",right_most_sigma_z";
+			base_name_p<<",Realizations="<<num_realization<<",eval_phases";
 
 			string post_string =  "_entry.txt";
-			Of_Construct(entry_out, base_name, post_string, true) ;
+			Of_Construct(entry_out, base_name_m, post_string, true) ;
 
 			post_string = "_norm.txt";
-			Of_Construct(norm_out, base_name, post_string, true) ;
+			Of_Construct(norm_out, base_name_m, post_string, true) ;
+
+			post_string = ".txt";
+			Of_Construct(phase_out, base_name_p, post_string, true);
 
 			output_init = true;
 		}
@@ -106,6 +117,8 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 
 		// Sort according to the phase magnitude
 		sort(eval_pos.begin(), eval_pos.end(), Vec_Pair_Double_First_Sort<pair<int,int> >);
+
+		for (int i=0; i<eval_pos.size(); i++) ave_phases[i] += eval_pos[i].first;
 
 		eigen_dim = 0; // Compute number of eigenvectors
 		for (int j=0; j< floquet -> eigen.size(); j++){
@@ -212,6 +225,11 @@ void flo_rightmost_sigma_z(const AllPara& parameters){
 
 		Write_File(entry_out, entry_row, width);
 		Write_File(norm_out, norm_row, width);
+	}
+
+	for (int i=0; i<ave_phases.size();i++){
+		ave_phases[i] /= double(num_realization);
+		phase_out << setw(width) << ave_phases[i] << endl;
 	}
 
 }
