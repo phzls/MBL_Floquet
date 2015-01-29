@@ -134,6 +134,7 @@ void FloEvolMarkovInterRandom::Bath_XXZ_Construct_(MatrixXcd& U, string type){
 		int state = i;
 		int prev_spin = 2* (state & 1) - 1 ;
 		state = state >> 1;
+		
 		U(i,i) += (param_.h + sign) * prev_spin; // Contain part from the bath
 
 		for (int j=1;j<size_;j++){
