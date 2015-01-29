@@ -36,7 +36,7 @@ void EvolData::Entropy_Per_Model_Init_(const AllPara& parameters){
 }
 
 /*
- * Compute the entropy at a given time step and realization
+ * Compute the entropy at a given time step and realization, given a state vector
  */
 void EvolData::Entropy_Per_Model_Cal_(const VectorXcd& state_basic, const StepInfo& info){
 	const int realization = info.realization;
@@ -55,6 +55,54 @@ void EvolData::Entropy_Per_Model_Cal_(const VectorXcd& state_basic, const StepIn
 	SelfAdjointEigenSolver<MatrixXcd> density_eigen; // Eigen for reduced density matrix
 
 	density_eigen.compute(reduced_density, false); // Eigenvectors not computed
+
+	entropy_per_model_[time][realization] = 0;
+
+	for (int i=0; i<density_eigen.eigenvalues().rows();i++){
+		double eval = density_eigen.eigenvalues()(i);
+
+		if (abs(eval)>1.0e-15)
+		{
+			entropy_per_model_[time][realization] += -eval*log2(eval);
+		}
+	}
+
+	if (info.debug){
+		cout << "Entropy per model:" << endl;
+		cout << entropy_per_model_[time][realization] << endl;
+		cout << endl;
+	}
+}
+
+/*
+ * Compute the entropy at a given time step and realization, given a complex density matrix
+ */
+void EvolData::Entropy_Per_Model_Cal_C_(const MatrixXcd& density_matrix, const StepInfo& info){
+	const int realization = info.realization;
+	const int time = info.time;
+
+	// Check whether density_matrix is Hermitian
+	if (density_matrix.rows() != density_matrix.cols()){
+		cout << "Density matrix passed in entropy_per_model_cal_C is not square." << endl;
+		cout << "Rows: " << density_matrix.rows() << endl;
+		cout << "Cols: " << density_matrix.cols() << endl;
+		abort();
+	}
+
+	for (int i=0; i< density_matrix.rows(); i++){
+		for (int j=i; j<density_matrix.rows();j++){
+			if (density_matrix(i,j) != conj(density_matrix(j,i))){
+				cout << "Density matrix is not Hermitian at (" << i << "," << j << ")." << endl;
+				cout << "At (" << i << "," << j << "): " << density_matrix(i,j) << endl;
+				cout << "At (" << j << "," << i << "): " <<  density_matrix(j,i) << endl;
+				abort();
+			}
+		}
+	}
+
+	SelfAdjointEigenSolver<MatrixXcd> density_eigen; // Eigen for reduced density matrix
+
+	density_eigen.compute(density_matrix, false); // Eigenvectors not computed
 
 	entropy_per_model_[time][realization] = 0;
 
