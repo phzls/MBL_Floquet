@@ -234,14 +234,3 @@ void FloEvolRandomRotation::Para_Check_(){
 		abort();
 	}
 }
-
-/*
- * Return evol_op; not meant to be called in polymorphism
- */
-const MatrixXcd& FloEvolRandomRotation::Evol_Op() const{
-	if (constructed_) return evol_op_;
-	else{
-		cout << Repr() << " has not been constructed yet." << endl;
-		abort();
-	}
-}
