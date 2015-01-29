@@ -94,6 +94,8 @@ void FloEvolInterRandom::Evol_Construct(){
 		complex_matrix_write(evol_op_);
 		cout<<endl;
 	}
+
+	delete floquet_r;
 }
 
 /*
