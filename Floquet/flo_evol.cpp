@@ -7,7 +7,6 @@ using namespace std;
  ** This file implements some simple functions in flo_evol.h
  **/
 
-
 void FloEvolVanilla::Transition_Compute(TransitionMatrix& transition, 
 const string& matrix_name) const{
 	if (matrix_name == "Basic_Full"){
@@ -23,6 +22,8 @@ const string& matrix_name) const{
 		abort();
 	}
 }
+
+//========================================================================================
 
 void FloEvolParity::Transition_Compute(TransitionMatrix& transition, 
 const string& matrix_name) const{
@@ -118,6 +119,40 @@ const MatrixXcd& FloEvolParity::Get_U(int parity) const {
 				 << Repr() << endl;
 			abort();
 		}
+	}
+	else{
+		cout << Repr() << " has not been constructed yet." << endl;
+		abort();
+	}
+}
+
+//=======================================================================================
+
+const MatrixXcd& FloEvolMultiSec::Get_U(string name) const {
+	if (constructed_){
+		map<string,int>::const_iterator it = op_name_.find(name);
+
+		if(it == op_name_.end()){
+			cout << "The type of time evolution operator is not understood." << endl;
+			abort();
+		}
+		else return evol_op_[it -> second];
+	}
+	else{
+		cout << Repr() << " has not been constructed yet." << endl;
+		abort();
+	}
+}
+
+const MatrixXcd& FloEvolMultiSec::Get_U(int num) const {
+	if (constructed_){
+		if (num < 0 || num >= evol_op_.size())
+		{
+			cout << "The type of time evolution operator is not understood for " 
+				 << Repr() << endl;
+			abort();
+		}
+		else return evol_op_[num];
 	}
 	else{
 		cout << Repr() << " has not been constructed yet." << endl;

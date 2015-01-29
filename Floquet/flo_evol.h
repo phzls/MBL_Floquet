@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include <Eigen/Dense>
 #include <Eigen/Eigenvalues>
 #include "evol_class.h"
@@ -221,6 +222,83 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		}
 
 		virtual ~FloEvolParity() {};
+};
+
+//======================================================================================
+
+/*
+ * The general evolution operator for Floquet system with multiple sectors. It can also be 
+ * used for Markov Chain dynamics. There are multiple evolutionary operators. 
+ */
+
+class FloEvolMultiSec : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
+{		
+	protected:
+		vector<MatrixXcd> evol_op_; // Set of evolution operators
+		map<string,int> op_name_; // Map operator's name to the position in above vector
+
+		bool constructed_; // Whether the matrix has been constructed and not erased
+
+		stringstream repr_; // Representation string stream of the model
+		string type_; // Type string of the model
+
+		bool eigen_info_; // Whether eigenvectors have been computed
+
+	public:
+		// When local dimension is not given
+		FloEvolMultiSec(int size, int type_num): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
+			constructed_(false), eigen_info_(false){evol_op_.resize(type_num); 
+				eigen.resize(type_num);}
+
+		// When local dimension is given
+		FloEvolMultiSec(int size, int local_dim, int type_num): 
+			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, local_dim), 
+			constructed_(false), eigen_info_(false){evol_op_.resize(type_num); 
+				eigen.resize(type_num);}
+
+		// Diagnolize time evolution matrix, user can determine whether eigenvectors are kept
+		// False is not kept; True is kept. By default, they are kept.
+		void Evol_Diag(bool keep = true){
+			if (constructed_){
+				for (int i=0; i< evol_op_.size(); i++) eigen[i].compute(evol_op_[i]);
+				eigen_info_ = keep;
+			}
+			else{
+				cout << "The matrix for diagonalization does not exist." <<endl;
+				abort();
+			}
+		};
+
+		// Return the string format of representation string stream 
+		string Repr() const {return repr_.str();} 
+
+		// Return the type of the model
+		string Type() const {return type_;} 
+
+		// Return the type of the basis that eigenstates are written in
+		string Eigen_Type() const {return "Markov";}
+
+		// Erase the evolutionary operator
+		void Evol_Erase() {for (int i=0; i<evol_op_.size();i++) evol_op_[i].resize(0,0); 
+					       constructed_ = false;}
+
+		// Return even or odd evol_op according to the string or integer
+		const MatrixXcd& Get_U(string) const;
+
+		const MatrixXcd& Get_U(int) const;
+
+		// No real Hamiltonian to return
+		const MatrixXd& Get_real_H(string a) const{
+			cout << "No real Hamiltonian is constructed for " << Repr() << endl;
+			abort();
+		}
+
+		const MatrixXd& Get_real_H(int a = 0) const{
+			cout << "No real Hamiltonian is constructed for " << Repr() << endl;
+			abort();
+		}
+
+		virtual ~FloEvolMultiSec() {};
 };
 
 #endif
