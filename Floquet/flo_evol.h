@@ -89,8 +89,38 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		// Construct Transition Matrix
 		void Transition_Compute(TransitionMatrix&, const string&) const;
 
+		// Return evol_op no matter what the input is
+		const MatrixXcd& Get_U(string a) const {
+			if (constructed_) return evol_op_;
+			else{
+				cout << Repr() << " has not been constructed yet." << endl;
+				abort();
+			}
+		}
+
+		const MatrixXcd& Get_U(int a=0) const {
+			if (constructed_) return evol_op_;
+			else{
+				cout << Repr() << " has not been constructed yet." << endl;
+				abort();
+			}
+		}
+
+		// No real Hamiltonian to return
+		const MatrixXd& Get_real_H(string a) const{
+			cout << "No real Hamiltonian is constructed for " << Repr() << endl;
+			abort();
+		}
+
+		const MatrixXd& Get_real_H(int a = 0) const{
+			cout << "No real Hamiltonian is constructed for " << Repr() << endl;
+			abort();
+		}
+
 		virtual ~FloEvolVanilla() {};
 };
+
+//=========================================================================================
 
 /*
  * The evolution operator for Floquet system with parity symmetry to reduce
@@ -172,6 +202,23 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 
 		// Construct Transition Matrix
 		void Transition_Compute(TransitionMatrix&, const string&) const;
+
+		// Return even or odd evol_op according to the string or integer, where 0 is 
+		// even and 1 is odd.
+		const MatrixXcd& Get_U(string) const;
+
+		const MatrixXcd& Get_U(int) const;
+
+		// No real Hamiltonian to return
+		const MatrixXd& Get_real_H(string a) const{
+			cout << "No real Hamiltonian is constructed for " << Repr() << endl;
+			abort();
+		}
+
+		const MatrixXd& Get_real_H(int a = 0) const{
+			cout << "No real Hamiltonian is constructed for " << Repr() << endl;
+			abort();
+		}
 
 		virtual ~FloEvolParity() {};
 };

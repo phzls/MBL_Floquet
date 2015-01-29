@@ -85,3 +85,42 @@ const string& matrix_name) const{
 		abort();
 	}
 }
+
+const MatrixXcd& FloEvolParity::Get_U(string parity) const {
+	if (constructed_){
+		if (parity == "even" || parity == "Even"){
+			return evol_op_even_;
+		}
+		else if (parity == "odd" || parity == "Odd"){
+			return evol_op_odd_;
+		}
+		else{
+			cout << "The type of time evolution operator is not understood." << endl;
+			abort();
+		}
+	}
+	else{
+		cout << Repr() << " has not been constructed yet." << endl;
+		abort();
+	}
+}
+
+const MatrixXcd& FloEvolParity::Get_U(int parity) const {
+	if (constructed_){
+		if (parity == 0){
+			return evol_op_even_;
+		}
+		else if (parity == 1){
+			return evol_op_odd_;
+		}
+		else{
+			cout << "The type of time evolution operator is not understood for " 
+				 << Repr() << endl;
+			abort();
+		}
+	}
+	else{
+		cout << Repr() << " has not been constructed yet." << endl;
+		abort();
+	}
+}
