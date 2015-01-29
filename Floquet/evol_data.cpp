@@ -31,6 +31,7 @@ EvolData::EvolData(const AllPara& parameters): size_(parameters.generic.size){
 
 	Name_Check_();
 
+	// Initialize all quantities which will be computed
 	for (map<string, bool>::iterator it = func_status_.begin(); it != func_status_.end(); it++){
 		if (it -> second) ( this ->* (data_init_[it -> first]) ) (parameters);
 	}
@@ -94,12 +95,14 @@ void EvolData::Data_Output(const AllPara& parameters, const string& type_name){
 void EvolData::Data_Func_Map_Init_(){
 	map<string, Data_Init>::iterator init_it;
 	map<string, Data_Cal>::iterator cal_it;
+	map<string, Data_Cal_C>::iterator cal_C_it;
 	map<string, Data_Out>::iterator out_it;
 
 	// Entropy Per Model data
 	string name1 = "Entropy Per Model";
 	Data_Init init_func1 = &EvolData::Entropy_Per_Model_Init_;
 	Data_Cal cal_func1 = &EvolData::Entropy_Per_Model_Cal_;
+	Data_Cal_C cal_C_func1 = &EvolData::Entropy_Per_Model_Cal_C_;
 	Data_Out out_func1 = &EvolData::Entropy_Per_Model_Out_;
 
 	// Make sure the name has not been used before
@@ -113,6 +116,7 @@ void EvolData::Data_Func_Map_Init_(){
 
 	data_init_[name1] = init_func1;
 	data_cal_[name1] = cal_func1;
+	data_cal_C_[name1] = cal_C_func1;
 	data_out_[name1] = out_func1;
 
 	// Check data_init_ and data_cal_ have the same size

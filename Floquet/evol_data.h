@@ -35,6 +35,9 @@ typedef void (EvolData::*Data_Init)(const AllPara&);
 // Functions that compute data from a state vector and step information
 typedef void (EvolData::*Data_Cal)(const VectorXcd&, const StepInfo&);
 
+// Functions that compute data from a complex density matrix and step information
+typedef void (EvolData::*Data_Cal_C)(const MatrixXcd&, const StepInfo&);
+
 // Functions that output data using parameters. The string is used as part of the output
 // file name
 typedef void (EvolData::*Data_Out)(const AllPara&, const string&);
@@ -47,6 +50,7 @@ class EvolData
 		
 		map<string, Data_Init> data_init_; // Correlate name with data_init function
 		map<string, Data_Cal> data_cal_; // Correlate name with data_cal function
+		map<string, Data_Cal_C> data_cal_C_; // Correlate name with data_cal_C function
 		map<string, Data_Out> data_out_; // Correlate name with data_out function
 
 		void Data_Func_Map_Init_(); // Initialize data_init_ and data_cal_;
@@ -55,8 +59,10 @@ class EvolData
 		// Entropy per model. The outer index is for time; the inner index is for realization
 		vector<vector<double> > entropy_per_model_;
 		void Entropy_Per_Model_Init_(const AllPara&); // Initialize entropy_per_model
-		// Compute entropy_per_model 
+		// Compute entropy_per_model given state vector
 		void Entropy_Per_Model_Cal_(const VectorXcd&, const StepInfo&); 
+		// Compute entropy_per_model given complex density matrix
+		void Entropy_Per_Model_Cal_C_(const MatrixXcd&, const StepInfo&); 
 		// Output entropy_per_model
 		void Entropy_Per_Model_Out_(const AllPara&, const string&);
 
@@ -69,8 +75,13 @@ class EvolData
 		void Print_All_Status() const; // Print all possible data type calculation, indicating
 									   // whether they will be calculated
 
-		// Compute data at each step. The entry which is true in func_status will be computed.
+		// Compute data at each step given a state vector. The entry which is true in 
+		// func_status will be computed.
 		void Data_Compute(const VectorXcd&, const StepInfo&); 
+
+		// Compute data at each step given a complex density matrix. The entry which is true in 
+		// func_status will be computed.
+		void Data_Compute(const MatrixXcd&, const StepInfo&); 
 
 		// Output data to file. All the data that are computed will be outputted
 		void Data_Output(const AllPara&, const string&);
