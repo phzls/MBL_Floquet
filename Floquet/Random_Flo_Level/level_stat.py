@@ -96,11 +96,19 @@ angle_sup_label = "angle sup="
 Label.string_extract(filename, angle_sup, start_string = angle_sup_start, end_string = ',')
 print angle_sup
 
+# Number of points
+J_N = [[] for n in filename]
+J_N_string = "J_N="
+
+Label.string_extract(filename, J_N, start_string = J_N_string, end_string = ',')
+
 Label.label_build(label, '', general, end = True, concat = '')
 Label.label_build(label, '', cal_type, end = True)
 Label.label_build(label, length_label, length, end = True)
 Label.label_build(label, angle_min_label, angle_min, end = True)
 Label.label_build(label, angle_sup_label, angle_sup, end = True)
+Label.label_build(label, "runs=", realization, end = True)
+Label.label_build(label, J_N_string, J_N, end = True)
 print label
 
 
@@ -124,36 +132,38 @@ for n in filename:
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init(ymax = 3, ymin = 1)
+draw1.figure_init(ymax = 2.1, ymin = 1.2)
 draw1.figure_set()
 
-in_range = ["3.14", "1.04", "1.57", "2.09", "2.61"] # Angles
-must_in_range = ["square"]
+in_range = ["L=11"] # Angles or length
+must_in_range = ["square", "runs=100"]
 
 extra_index= [] # The original two scenarios
-
+"""
 for n in xrange(len(label)):
     if label[n].find("square") > -1 and label[n].find("angle") == -1:
         extra_index.append(n)
+"""
 
 plot_label = ['' for n in filename]
 print general
 Label.label_build(plot_label, '', general, end = True, concat = '')
 Label.label_build(plot_label, length_label, length, end = True)
 Label.label_build(plot_label, "angle=", angle_min, end = True)
+Label.label_build(plot_label, "runs=", realization, end = True)
 
-print plot_label
+print "Plot label:", plot_label
 
 draw1.plot_range(label, in_range = in_range, must_in_range = must_in_range,
                  index = extra_index, printout = True)
 
 draw1.errorbar(data[0], data[1], yerr = data[2], label = plot_label)
 
-pylab.legend(loc='upper right', ncol=1, prop={'size':15}, bbox_to_anchor=(1.15, 0.8))
+pylab.legend(loc='upper right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.15, 0.8))
 pylab.ylabel(r"$\langle(\Delta\phi)^2\rangle$")
 pylab.xlabel(r"$j$")
 
-#pylab.savefig("Floquet_10_level_spacing_mean_square_compare_v3.pdf",box_inches='tight')
+#pylab.savefig("Inter_Floquet_12_level_spacing_mean_square_compare_v1.pdf",box_inches='tight')
 
 
 draw2 = Draw.Draw()
@@ -196,7 +206,7 @@ print print_label
 
 pylab.subplots_adjust(bottom=0.12)
 
-pylab.savefig(print_label+".pdf", box_inches='tight')
+#pylab.savefig(print_label+".pdf", box_inches='tight')
 
 pylab.show()
 
