@@ -1,4 +1,3 @@
-
 #ifndef FLO_EVOL_MODEL_H
 #define FLO_EVOL_MODEL_H
 
@@ -59,9 +58,6 @@ class FloEvolRandom : public FloEvolVanilla
 
 		// Construct evolutionary operator
 		void Evol_Construct(); 
-
-		const MatrixXcd& Evol_Op() const; // Access evol_op_, not meant to be called during
-										  // polymorphism
 
 		virtual ~FloEvolRandom() {};
 };
@@ -136,9 +132,6 @@ class FloEvolRandomRotation : public FloEvolVanilla
 		// Construct evolutionary operator
 		void Evol_Construct();
 
-		const MatrixXcd& Evol_Op() const; // Access evol_op_, not meant to be called during
-										  // polymorphism
-
 		virtual ~FloEvolRandomRotation() {};
 };
 
@@ -203,10 +196,6 @@ class FloEvolRandomRotation : public FloEvolVanilla
 			return dim;
 		}
 
-		// Access evol_op_even_ and evol_op_odd_, not meant to be called during polymorphism
-		const MatrixXcd& Evol_Op_Even() const; 
-		const MatrixXcd& Evol_Op_Odd() const;
-
 		virtual ~FloEvolXXZ() {};
 };
 
@@ -247,10 +236,72 @@ class FloEvolInterRandom : public FloEvolVanilla
 		// Construct evolutionary operator
 		void Evol_Construct(); 
 
-		// Access evol_op_, not meant to be called during polymorphism
-		const MatrixXcd& Evol_Op() const;
-
 		virtual ~FloEvolInterRandom() {};
+};
+
+//=================================================================================================
+
+/*
+ * The random floquet operator which interpolates flo_evol_xxz (when J=1) and 
+ * flo_evol_random rotation (when J=0) used in Markov time dynamics. The rightmost spin is
+ * coupled with the bath, which corresponding to position 0 in binary representation. The
+ * default value takes g=0.9045 and h=0.8090. By default tau=0.8. It has 2 evolution operators,
+ * 0 or "down" corresponds to the one where bath spin is down, and 1 or "up" corresponds to the
+ * one where bath spin is up. They are written in the basic binary basis.
+ */
+class FloEvolMarkovInterRandom : public FloEvolMultiSec
+{
+	struct Param // The parameters used in the model
+	{
+		const double tau; // Time step size
+		const double J; // Nearest neighboring
+		const double g; // Transverse field strength
+		const double h; // Longitude field strength
+		const int size; // Size of the chain
+
+		Param(double tau, double J, double g, double h, int L): 
+			tau(tau), J(J), g(g), h(h), size(L) {};
+	};
+
+	private:
+		const Param param_;
+
+		void Repr_Init_(); // Initialize the representation string stream as well as type
+
+		void Op_Name_Init_(); // Initialize the map linking name and position of evol_op
+
+		const bool debug_; // Used for debug output
+
+		void Bath_XXZ_Construct_(MatrixXcd&, string); // Construct the xxz part of the operator
+
+	public:
+		FloEvolMarkovInterRandom(int size, double J, double tau = 0.8, double g = 0.9045, 
+			double h = 0.8090, bool debug = false):
+			FloEvolMultiSec(size, 2), param_(tau, J, g, h, size), debug_(debug) { Repr_Init_(); }
+
+		// No parameters to initialize
+		void Evol_Para_Init() {};
+
+		// Construct evolutionary operator
+		void Evol_Construct(); 
+
+		// Return the type of the basis that eigenstates are written in
+		string Eigen_Type() const {return "Basic";}
+
+		void Transition_Compute(TransitionMatrix& transition, const string& matrix_name) const{
+			cout << "Transition matrix computation is not implemented for " << Type() << endl;
+			abort();				
+		}
+
+		// Return dimension of each sector. Here only 1 sector (in terms of eigenvectors)
+		// exists, so total dimension is returned.
+		vector<int> Get_Sector_Dim() const{
+			vector<int> dim(1);
+			dim[0] = dim_;
+			return dim;
+		}
+
+		virtual ~FloEvolMarkovInterRandom() {};
 };
 
 
