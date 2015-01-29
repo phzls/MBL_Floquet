@@ -77,6 +77,18 @@ class EvolMatrix
 		// Return the dimension of each sector of symmetry
 		virtual vector<int> Get_Sector_Dim() const = 0;
 
+		// Return the complex unitary operator according to a string
+		virtual const MatrixXcd& Get_U(string) const = 0;
+
+		// Return the complex unitary operator according to an integer
+		virtual const MatrixXcd& Get_U(int) const = 0;
+
+		// Return the real Hamiltonian operator according to a string
+		virtual const MatrixXd& Get_real_H(string) const = 0;
+
+		// Return the real Hamiltonian operator according to an integer
+		virtual const MatrixXd& Get_real_H(int) const = 0;
+
 		virtual ~EvolMatrix(){};
 };
 
