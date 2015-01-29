@@ -115,20 +115,15 @@ for i in range(len(matrix_off)):
     if len(matrix_off[i]) != 0:
         draw.append(Draw.Draw())
 
-        draw[index].figure_init()
+        draw[index].figure_init(logx = True, logy = True)
         draw[index].figure_set()
 
-        bin_start = 0
-        if coupling[i] != -1 and float(coupling[i])<0.5:
-            bin_end = 0.01
-            bin_width = 0.00005
-        else:
-            bin_end = 0.25
-            bin_width = 0.005
-
         print label[i], min(matrix_off[i]), max(matrix_off[i])
-        draw[index].hist(matrix_off[i], bin_start, bin_end, bin_width, label = label[i])
-        pylab.legend(loc='upper right', ncol=1, prop={'size':15} )
+        matrix_off_square = [n*n for n in matrix_off[i]]
+        print "Sum of square:", sum(matrix_off_square)
+
+        draw[index].hist(matrix_off[i], bin_num = 50, label = label[i])
+        pylab.legend(ncol=1, prop={'size':14} )
 
         if coupling[i] != -1:
             J_s = coupling[i].replace('.','_')
@@ -140,7 +135,7 @@ for i in range(len(matrix_off)):
 
         print_label = label[i].replace('.', '_')
         print_label = print_label.replace(' ', '_')
-        print_label = print_label + "_run=" + realization[i] + "_sigma_z_norm_bin"
+        print_label = print_label + "_run=" + realization[i] + "_sigma_z_norm_bin_logx_logy"
         print print_label
 
         pylab.savefig(print_label+".pdf", box_inches='tight')
