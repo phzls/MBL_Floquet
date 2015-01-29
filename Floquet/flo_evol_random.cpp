@@ -218,14 +218,3 @@ void FloEvolRandom::Evol_Z_Construct_(MatrixXcd& Uz){
 		Uz(i,i) = exp(-Complex_I * complex<double>(H,0) );
 	}
 }
-
-/*
- * Return evol_op; not meant to be called in polymorphism
- */
-const MatrixXcd& FloEvolRandom::Evol_Op() const{
-	if (constructed_) return evol_op_;
-	else{
-		cout << Repr() << " has not been constructed yet." << endl;
-		abort();
-	}
-}
