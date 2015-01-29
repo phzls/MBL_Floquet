@@ -85,7 +85,7 @@ void TasksModels::Map_Construct_(){
 
 	model_name5 = "Markov Inter Random Flo";
 	model_type5 = "Markov Inter Random Floquet";
-	model_function5 = new FloEvolInterRandomFunc();
+	model_function5 = new FloEvolMarkovInterRandomFunc();
 	Model_Map_Insert(model_name5, model_type5, model_function5);
 }
 
