@@ -55,11 +55,11 @@ void FloEvolInterRandom::Evol_Construct(){
 	floquet_xxz -> Transition_Compute(transition, "Basic_Parity");
 
 	// even XXZ part of time evolution operator
-	MatrixXcd Uxxz_even = transition.Matrix("Basic_Even") * ( floquet_xxz -> Evol_Op_Even() )
+	MatrixXcd Uxxz_even = transition.Matrix("Basic_Even") * ( floquet_xxz -> Get_U("Even") )
 		* transition.Matrix("Basic_Even").adjoint();
 
 	// odd XXZ part of time evolution operator
-	MatrixXcd Uxxz_odd = transition.Matrix("Basic_Odd") * ( floquet_xxz -> Evol_Op_Odd() )
+	MatrixXcd Uxxz_odd = transition.Matrix("Basic_Odd") * ( floquet_xxz -> Get_U("Odd") )
 	 * transition.Matrix("Basic_Odd").adjoint();
 
 	transition.Erase_All();
@@ -76,7 +76,7 @@ void FloEvolInterRandom::Evol_Construct(){
 	floquet_r -> Evol_Construct();
 
 	// Random part of time evolution operator
-	MatrixXcd Ur = floquet_r -> Evol_Op();
+	MatrixXcd Ur = floquet_r -> Get_U();
 
 	evol_op_ = Ur * Uxxz;
 
@@ -96,15 +96,4 @@ void FloEvolInterRandom::Evol_Construct(){
 	}
 
 	delete floquet_r;
-}
-
-/*
- * Return evol_op; not meant to be called in polymorphism
- */
-const MatrixXcd& FloEvolInterRandom::Evol_Op() const{
-	if (constructed_) return evol_op_;
-	else{
-		cout << Repr() << " has not been constructed yet." << endl;
-		abort();
-	}
 }
