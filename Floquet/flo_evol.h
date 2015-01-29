@@ -256,11 +256,23 @@ class FloEvolMultiSec : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 			constructed_(false), eigen_info_(false){evol_op_.resize(type_num); 
 				eigen.resize(type_num);}
 
-		// Diagnolize time evolution matrix, user can determine whether eigenvectors are kept
-		// False is not kept; True is kept. By default, they are kept.
-		void Evol_Diag(bool keep = true){
+		// Diagnolize time evolution matrix. Eigenvectors are kept.
+		void Evol_Diag(){
 			if (constructed_){
 				for (int i=0; i< evol_op_.size(); i++) eigen[i].compute(evol_op_[i]);
+				eigen_info_ = true;
+			}
+			else{
+				cout << "The matrix for diagonalization does not exist." <<endl;
+				abort();
+			}
+		};
+
+		// Diagnolize time evolution matrix, user can determine whether eigenvectors are kept
+		// False is not kept; True is kept. 
+		void Evol_Diag(bool keep){
+			if (constructed_){
+				for (int i=0; i< evol_op_.size(); i++) eigen[i].compute(evol_op_[i], keep);
 				eigen_info_ = keep;
 			}
 			else{
@@ -274,9 +286,6 @@ class FloEvolMultiSec : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 
 		// Return the type of the model
 		string Type() const {return type_;} 
-
-		// Return the type of the basis that eigenstates are written in
-		string Eigen_Type() const {return "Markov";}
 
 		// Erase the evolutionary operator
 		void Evol_Erase() {for (int i=0; i<evol_op_.size();i++) evol_op_[i].resize(0,0); 
