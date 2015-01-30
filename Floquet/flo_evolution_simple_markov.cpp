@@ -91,6 +91,7 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 				info.realization = n;
 				info.time = t;
 				info.debug = debug;
+				info.delta = init_info.norm_delta;
 
 				// This comes first because we start with t=0	
 				evol_data.Data_Compute(state_density, info);
@@ -135,7 +136,7 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 		string task_string = parameters.generic.task;
 		replace(task_string.begin(), task_string.end(),' ','_');
 
-		evol_data.Data_Output(parameters, floquet -> Repr() + "," + task_string + ",Init_"
+		evol_data.Data_Output(parameters, floquet -> Repr() + ",Task_" + task_string + ",Init_"
 		 + init_string);
 
 		cout << endl;
