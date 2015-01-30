@@ -24,6 +24,8 @@ struct StepInfo{
 	int time; // The index of current time step
 	bool debug; // Whether output debug information
 
+	double delta; // A small number
+
 	int left_size; // If partition the chain to two halves, the size of left part
 };
 
