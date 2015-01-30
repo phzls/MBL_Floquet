@@ -54,6 +54,9 @@ class InitObj
 		// Print out all init_func
 		void Print() const;
 
+		// Print out all init_func_C
+		void Print_C() const;
+
 		~InitObj(){};
 };
 

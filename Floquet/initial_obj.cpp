@@ -16,11 +16,32 @@ init_func InitObj::Init_Func(const string& init_func_name) const {
 	else return it -> second;
 }
 
+init_func_C InitObj::Init_Func_C(const string& init_func_name) const {
+	map<string, init_func_C>::const_iterator it = init_func_C_map_.find(init_func_name);
+
+	if (it == init_func_C_map_.end()){
+		cout << "The requested init_func does not exist." << endl;
+		Print_C();
+		cout << "Requested function: " << init_func_name << endl;
+		abort();
+	}
+	else return it -> second;
+}
+
 void InitObj::Print() const {
 	map<string, init_func>::const_iterator it;
 
 	cout << "Initial State Construction Functions: "<< endl;
 	for (it = init_func_map_.begin(); it != init_func_map_.end(); it++){
+		cout << it -> first << endl;
+	}
+}
+
+void InitObj::Print_C() const {
+	map<string, init_func_C>::const_iterator it;
+
+	cout << "Initial State Construction Functions: "<< endl;
+	for (it = init_func_C_map_.begin(); it != init_func_C_map_.end(); it++){
 		cout << it -> first << endl;
 	}
 }
