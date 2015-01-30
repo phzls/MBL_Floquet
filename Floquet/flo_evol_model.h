@@ -293,11 +293,11 @@ class FloEvolMarkovInterRandom : public FloEvolMultiSec
 			abort();				
 		}
 
-		// Return dimension of each sector. Here only 1 sector (in terms of eigenvectors)
-		// exists, so total dimension is returned.
+		// Return dimension of each sector. Here each sector has dimension dim_, and the number
+		// of sectors equal to number of evol_op
 		vector<int> Get_Sector_Dim() const{
-			vector<int> dim(1);
-			dim[0] = dim_;
+			vector<int> dim(evol_op_.size());
+			for (int i=0; i< dim.size(); i++) dim[i] = dim_;
 			return dim;
 		}
 
