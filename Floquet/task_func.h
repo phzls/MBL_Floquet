@@ -23,4 +23,9 @@ void flo_rightmost_sigma_z(const AllPara&);
  */
 void flo_evolution(const AllPara&);
 
+/*
+ * Compute the simple Markov time evolution for a floquet system
+ */
+void flo_evolution_simple_markov(const AllPara&);
+
 #endif

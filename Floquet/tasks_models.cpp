@@ -38,6 +38,16 @@ void TasksModels::Map_Construct_(){
 	task_function3 = &flo_evolution;
 	Task_Map_Insert(task_name3, task_type3, task_function3);
 
+	// Compute time evolution for a Floquet system
+	string task_name4;
+	string task_type4;
+	task_func task_function4;
+
+	task_name4 = "Flo Simple Markov Evolution";
+	task_type4 = "Floquet";
+	task_function4 = &flo_evolution_simple_markov;
+	Task_Map_Insert(task_name4, task_type4, task_function4);
+
 	// Random Floquet Operator
 	string model_name1;
 	string model_type1;
