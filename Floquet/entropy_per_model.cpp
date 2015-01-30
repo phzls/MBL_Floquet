@@ -91,7 +91,7 @@ void EvolData::Entropy_Per_Model_Cal_C_(const MatrixXcd& density_matrix, const S
 
 	for (int i=0; i< density_matrix.rows(); i++){
 		for (int j=i; j<density_matrix.rows();j++){
-			if (density_matrix(i,j) != conj(density_matrix(j,i))){
+			if ( norm( density_matrix(i,j) - conj(density_matrix(j,i)) ) > info.delta ){
 				cout << "Density matrix is not Hermitian at (" << i << "," << j << ")." << endl;
 				cout << "At (" << i << "," << j << "): " << density_matrix(i,j) << endl;
 				cout << "At (" << j << "," << i << "): " <<  density_matrix(j,i) << endl;
