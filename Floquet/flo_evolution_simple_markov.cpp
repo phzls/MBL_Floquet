@@ -2,6 +2,7 @@
 #include <cmath>
 #include <string>
 #include <algorithm>
+#include <omp.h>
 #include "evol_class.h"
 #include "parameters.h"
 #include "initial_obj.h"
@@ -127,9 +128,15 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 		}
 
 		cout << "Output data." << endl;
+
 		string init_string = init_func_name;
 		replace(init_string.begin(), init_string.end(),' ','_');
-		evol_data.Data_Output(parameters, floquet -> Repr() + ",Init_" + init_string);
+
+		string task_string = parameters.generic.task;
+		replace(task_string.begin(), task_string.end(),' ','_');
+
+		evol_data.Data_Output(parameters, floquet -> Repr() + "," + task_string + ",Init_"
+		 + init_string);
 
 		cout << endl;
 		cout << endl;

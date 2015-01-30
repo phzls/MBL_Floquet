@@ -164,9 +164,15 @@ void flo_evolution(const AllPara& parameters){
 		}
 
 		cout << "Output data." << endl;
+		
 		string init_string = init_func_name;
 		replace(init_string.begin(), init_string.end(),' ','_');
-		evol_data.Data_Output(parameters, floquet -> Repr() + ",Init_" + init_string);
+
+		string task_string = parameters.generic.task;
+		replace(task_string.begin(), task_string.end(),' ','_');
+
+		evol_data.Data_Output(parameters, floquet -> Repr() + "," + task_string + ",Init_"
+		 + init_string);
 
 		cout << endl;
 		cout << endl;
