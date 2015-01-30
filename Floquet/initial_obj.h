@@ -25,8 +25,11 @@ struct InitInfo
 	bool debug; // Whether output debug information
 };
 
-// Pointer to all possible initial state construction function
+// Pointer to all possible initial state construction function which gives a state vector
 typedef void (*init_func)(const InitInfo&, const TransitionMatrix&, VectorXcd&);
+
+// Pointer to all possible initial state construction function which gives a density matrix
+typedef void (*init_func_C)(const InitInfo&, MatrixXcd&);
 
 class InitObj
 {
@@ -34,13 +37,19 @@ class InitObj
 		// Map that stores init_func and its name to be called
 		map<string, init_func>init_func_map_; 
 
-		void map_init_(); // Initialize init_func_map
+		// Map that stores init_func_C and its name to be called
+		map<string, init_func_C>init_func_C_map_; 
+
+		void map_init_(); // Initialize init_func_map and init_func_C_map
 
 	public:
 		InitObj() {map_init_();}
 
-		// Use a string to access different initial construction functions
+		// Use a string to access different initial construction functions for state vector
 		init_func Init_Func(const string&) const;
+
+		// Use a string to access different initial construction functions for density matrix
+		init_func_C Init_Func_C(const string&) const;
 
 		// Print out all init_func
 		void Print() const;
@@ -54,6 +63,7 @@ class InitObj
 
 void product_random(const InitInfo&, const TransitionMatrix&, VectorXcd&);
 void random_product(const InitInfo&, const TransitionMatrix&, VectorXcd&);
+void random_product(const InitInfo&, MatrixXcd&);
 
 
 /*
@@ -61,5 +71,6 @@ void random_product(const InitInfo&, const TransitionMatrix&, VectorXcd&);
  */
 void random_pure_amplitude(vector<complex<double> >&);
 void norm_check(const VectorXcd&, double, const string&);
+void state_to_density(const VectorXcd&, MatrixXcd&);
 
 #endif

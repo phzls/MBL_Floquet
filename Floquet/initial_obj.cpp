@@ -27,9 +27,11 @@ void InitObj::Print() const {
 
 void InitObj::map_init_(){
 	map<string, init_func>::const_iterator it;
+	map<string, init_func_C>::const_iterator it_C;
 
 	string name1 = "Random Product";
 	init_func func1 = random_product;
+	init_func_C func_C1 = random_product;
 
 	it = init_func_map_.find(name1);
 	if (it != init_func_map_.end()){
@@ -37,6 +39,13 @@ void InitObj::map_init_(){
 		abort();
 	}
 	init_func_map_[name1] = func1;
+
+	it_C = init_func_C_map_.find(name1);
+	if (it_C != init_func_C_map_.end()){
+		cout << "init_func " << name1 << " already exists." << endl;
+		abort();
+	}
+	init_func_C_map_[name1] = func_C1;
 
 	string name2 = "Product Random";
 	init_func func2 = product_random;
