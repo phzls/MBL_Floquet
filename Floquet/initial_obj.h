@@ -65,8 +65,11 @@ class InitObj
  */
 
 void product_random(const InitInfo&, const TransitionMatrix&, VectorXcd&);
+
 void random_product(const InitInfo&, const TransitionMatrix&, VectorXcd&);
 void random_product(const InitInfo&, MatrixXcd&);
+
+void random_pure(const InitInfo&, MatrixXcd&);
 
 
 /*
