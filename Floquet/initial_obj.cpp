@@ -78,5 +78,15 @@ void InitObj::map_init_(){
 	}
 	init_func_map_[name2] = func2;
 
+	string name3 = "Random Pure";
+	init_func_C func_C3 = random_pure;
+
+	it_C = init_func_C_map_.find(name3);
+	if (it_C != init_func_C_map_.end()){
+		cout << "init_func " << name3 << " already exists." << endl;
+		abort();
+	}
+	init_func_C_map_[name3] = func_C3;
+
 }
 
