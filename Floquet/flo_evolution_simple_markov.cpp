@@ -82,16 +82,17 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 			// A temporary holder for density matrix
 			MatrixXcd temp_density;
 
+			StepInfo info;
+			info.model = i;
+			info.realization = n;
+			info.debug = debug;
+			info.delta = init_info.norm_delta;
+
 			cout << "Time evolution starts." << endl;
 
 			for (int t=0; t < time_step; t++){
 
-				StepInfo info;
-				info.model = i;
-				info.realization = n;
 				info.time = t;
-				info.debug = debug;
-				info.delta = init_info.norm_delta;
 
 				// This comes first because we start with t=0	
 				evol_data.Data_Compute(state_density, info);
