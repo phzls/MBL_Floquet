@@ -2,10 +2,9 @@
 #include <iostream>
 #include "constants.h"
 #include "flo_evol_model.h"
-#include "mtrand.h"
+#include "randomc.h"
 
-extern MTRand u1rand; // points in [0,1)
-extern MTRand_closed u2rand; // points in [0,1]
+extern CRandomMersenne RanGen_mersenne; // points in [0,1)
 
 using namespace std;
 
@@ -33,11 +32,11 @@ void FloEvolRandom::Evol_Para_Init(){
 	}
 
 	// We generate psi and xi randomly in [0, 2*pi), and (sin(phi))^2 randomly from 
-	// [0, 1] where phi belongs to [0, pi/2]
+	// [0, 1) where phi belongs to [0, pi/2)
 	for (int i=0; i<size_; i++){
-		su2_angle_[i][0] = 2*Pi*u1rand(); // Angle psi
-		su2_angle_[i][1] = 2*Pi*u1rand(); // Angle xi
-		su2_angle_[i][2] = u2rand(); // (sin(phi))^2
+		su2_angle_[i][0] = 2*Pi*RanGen_mersenne.Random(); // Angle psi
+		su2_angle_[i][1] = 2*Pi*RanGen_mersenne.Random(); // Angle xi
+		su2_angle_[i][2] = RanGen_mersenne.Random(); // (sin(phi))^2
 	}
 
 	if (debug_){

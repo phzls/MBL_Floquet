@@ -2,11 +2,7 @@
 #include <iostream>
 #include "constants.h"
 #include "flo_evol_model.h"
-#include "mtrand.h"
 #include "eigen_output.h"
-
-extern MTRand u1rand; // points in [0,1)
-extern MTRand_closed u2rand; // points in [0,1]
 
 using namespace std;
 

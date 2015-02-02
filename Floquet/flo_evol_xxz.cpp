@@ -4,7 +4,6 @@
 #include <cmath>
 #include "constants.h"
 #include "flo_evol_model.h"
-#include "mtrand.h"
 #include "eigen_output.h"
 
 using namespace std;

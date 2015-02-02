@@ -2,10 +2,9 @@
 #include <iostream>
 #include "constants.h"
 #include "flo_evol_model.h"
-#include "mtrand.h"
+#include "randomc.h"
 
-extern MTRand u1rand; // points in [0,1)
-extern MTRand_closed u2rand; // points in [0,1]
+extern CRandomMersenne RanGen_mersenne; // points in [0,1)
 
 using namespace std;
 
@@ -39,10 +38,10 @@ void FloEvolRandomRotation::Evol_Para_Init(){
 	// density matrix on block sphere w.r.t the axis of unit vector by amount of angle
 	const double angle_range = param_.angle_sup - param_.angle_min;
 	for (int i=0; i<size_; i++){
-		angle_[i] = param_.angle_min + angle_range* u1rand();
+		angle_[i] = param_.angle_min + angle_range* RanGen_mersenne.Random();
 
-		double z = 2 * u2rand() - 1;
-		double phi = 2 * Pi * u1rand();
+		double z = 2 * RanGen_mersenne.Random() - 1;
+		double phi = 2 * Pi * RanGen_mersenne.Random();
 
 		if (debug_) cout << "angle: " << angle_[i] << " phi: " << phi << endl;
 
