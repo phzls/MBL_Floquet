@@ -63,6 +63,11 @@ void EvolData::Entropy_Per_Model_Cal_(const VectorXcd& state_basic, const StepIn
 
 		if (abs(eval)>1.0e-15)
 		{
+			if (eval<0){
+				cout << "Density matrix has significant negative eigenvalues." << endl;
+				cout << eval << endl;
+				abort();
+			}
 			entropy_per_model_[time][realization] += -eval*log2(eval);
 		}
 	}
@@ -109,8 +114,14 @@ void EvolData::Entropy_Per_Model_Cal_C_(const MatrixXcd& density_matrix, const S
 	for (int i=0; i<density_eigen.eigenvalues().rows();i++){
 		double eval = density_eigen.eigenvalues()(i);
 
-		if (abs(eval)>1.0e-15)
+		if (abs(eval)>1.0e-12)
 		{
+			if ( eval*log2(eval) != eval*log2(eval) ){
+				cout << "Significant negative eigenvalues of density matrix." << endl;
+				cout << "eval: " << eval << endl;
+				cout << "Time: " << time << "  Realization: " << realization << endl;
+				abort();
+			}
 			entropy_per_model_[time][realization] += -eval*log2(eval);
 		}
 	}
