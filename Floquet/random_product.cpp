@@ -1,15 +1,15 @@
 #include <vector>
 #include <cmath>
 #include <complex>
+#include "randomc.h"
 #include "constants.h"
 #include "initial_obj.h"
-#include "mtrand.h"
 #include "eigen_output.h"
 
 using namespace std;
 using namespace Eigen;
 
-extern MTRand u1rand;
+extern CRandomMersenne RanGen_mersenne; // points in [0,1)
 
 /**
  ** This function creates an initial state which is the random product state. Specifically,
@@ -37,8 +37,8 @@ VectorXcd& init_state){
 
 	for (int i=0;i<size;i++)
 	{
-		double theta = u1rand() * Pi;
-		double phi = u1rand() * 2*Pi;
+		double theta = RanGen_mersenne.Random() * Pi;
+		double phi = RanGen_mersenne.Random() * 2*Pi;
 
 		spin_amp[i].resize(2); // 0 for spin down, 1 for spin up
 
@@ -108,8 +108,8 @@ void random_product(const InitInfo& init_info, MatrixXcd& init_state_density){
 
 	for (int i=0;i<size;i++)
 	{
-		double theta = u1rand() * Pi;
-		double phi = u1rand() * 2*Pi;
+		double theta = RanGen_mersenne.Random() * Pi;
+		double phi = RanGen_mersenne.Random() * 2*Pi;
 
 		spin_amp[i].resize(2); // 0 for spin down, 1 for spin up
 

@@ -3,13 +3,11 @@
 #include <complex>
 #include "constants.h"
 #include "initial_obj.h"
-#include "mtrand.h"
 #include "eigen_output.h"
 
 using namespace std;
 using namespace Eigen;
 
-extern MTRand u1rand;
 
 /**
  ** Construct a state which is a product of two random pure states of half chains 
