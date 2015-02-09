@@ -83,7 +83,7 @@ void EvolData::Leftmost_Spin_Z_Per_Model_Out_(const AllPara& parameters, const s
 
 	if (leftmost_spin_z_per_model_.size() != time_step){
 		cout << "Not enough time steps are computed for leftmost_spin_z." << endl;
-		cout << "Expected: " << num_realizations << endl;
+		cout << "Expected: " << time_step << endl;
 		cout << "Computed: " << leftmost_spin_z_per_model_.size() << endl;
 	}
 

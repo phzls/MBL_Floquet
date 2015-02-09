@@ -153,7 +153,7 @@ void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& n
 
 	if (entropy_per_model_.size() != time_step){
 		cout << "Not enough time steps are computed for entropy." << endl;
-		cout << "Expected: " << num_realizations << endl;
+		cout << "Expected: " << time_step << endl;
 		cout << "Computed: " << entropy_per_model_.size() << endl;
 	}
 
