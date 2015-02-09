@@ -274,6 +274,8 @@ class FloEvolMarkovInterRandom : public FloEvolMultiSec
 
 		void Bath_XXZ_Construct_(MatrixXcd&, string); // Construct the xxz part of the operator
 
+		void Eigen_Name_Construct_(); // Construct eigen_name during diagonalization
+
 	public:
 		FloEvolMarkovInterRandom(int size, double J, double tau = 0.8, double g = 0.9045, 
 			double h = 0.8090, bool debug = false):
@@ -303,6 +305,72 @@ class FloEvolMarkovInterRandom : public FloEvolMultiSec
 
 		virtual ~FloEvolMarkovInterRandom() {};
 };
+
+//=================================================================================================
+
+/*
+ * This operator constructs both flo_evol_markov_inter_random and flo_evol_inter_random which
+ * shares the same flo_evol_random_rotation part. Therefore the latter is just the "isolated"
+ * part of the former. In the evol_op, 0 is for coupling to bath of down spin, 1 for coupling 
+ * to bath of up spin, 2 for the isolated system
+ */
+class FloEvolMarkovInterRandomBoth : public FloEvolMultiSec
+{
+	struct Param // The parameters used in the model
+	{
+		const double tau; // Time step size
+		const double J; // Nearest neighboring
+		const double g; // Transverse field strength
+		const double h; // Longitude field strength
+		const int size; // Size of the chain
+
+		Param(double tau, double J, double g, double h, int L): 
+			tau(tau), J(J), g(g), h(h), size(L) {};
+	};
+
+	private:
+		const Param param_;
+
+		void Repr_Init_(); // Initialize the representation string stream as well as type
+
+		void Op_Name_Init_(); // Initialize the map linking name and position of evol_op
+
+		const bool debug_; // Used for debug output
+
+		void Bath_XXZ_Construct_(MatrixXcd&, string); // Construct the xxz part of the operator
+
+		void Eigen_Name_Construct_(); // Construct eigen_name during diagonalization
+
+	public:
+		FloEvolMarkovInterRandomBoth(int size, double J, double tau = 0.8, double g = 0.9045, 
+			double h = 0.8090, bool debug = false):
+			FloEvolMultiSec(size, 3), param_(tau, J, g, h, size), debug_(debug) { Repr_Init_(); }
+
+		// No parameters to initialize
+		void Evol_Para_Init() {};
+
+		// Construct evolutionary operator
+		void Evol_Construct(); 
+
+		// Return the type of the basis that eigenstates are written in
+		string Eigen_Type() const {return "Basic";}
+
+		void Transition_Compute(TransitionMatrix& transition, const string& matrix_name) const{
+			cout << "Transition matrix computation is not implemented for " << Type() << endl;
+			abort();				
+		}
+
+		// Return dimension of each sector. Here each sector has dimension dim_, and the number
+		// of sectors equal to number of evol_op
+		vector<int> Get_Sector_Dim() const{
+			vector<int> dim(evol_op_.size());
+			for (int i=0; i< dim.size(); i++) dim[i] = dim_;
+			return dim;
+		}
+
+		virtual ~FloEvolMarkovInterRandomBoth() {};
+};
+
 
 
 #endif
