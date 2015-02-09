@@ -1,7 +1,6 @@
 #include <iostream>
 #include <utility>
 #include "initial_obj.h"
-#include "tasks_models.h"
 #include "eigen_output.h"
 #include "sort.h"
 
@@ -13,7 +12,6 @@ using namespace std;
  ** and spin down is 0. We treat 0 in the binary basis system as the rightmost position.
  **/
 
-extern TasksModels tasks_models; // Record all the tasks and methods. Defined in main.
 
 /*
  * This function gives the initial state in density matrix, and the evolution model must
@@ -21,49 +19,42 @@ extern TasksModels tasks_models; // Record all the tasks and methods. Defined in
  */
 void largest_leftmost_spin_z_complex_eigenstate(const InitInfo& init_info, 
 MatrixXcd& init_state_density){
-	EvolMatrix<ComplexEigenSolver<MatrixXcd> >* init_model;
 
 	// Any number smaller than this has leftmost spin down
-	const int down = 1 << (init_info.init_para.generic.size);
+	const int down = 1 << (init_info.size - 1);
 
-	// Construct time evolution model and diagonalize it
-	tasks_models.Model(init_info.init_model, init_info.init_para, init_model);
-
-	init_model -> Evol_Para_Init();
-	init_model -> Evol_Construct();
-	init_model -> Evol_Diag();
-	init_model -> Evol_Erase();
+	const vector<ComplexEigenSolver<MatrixXcd>* > eigen = init_info.complex_eigen;
 
 	if (init_info.debug){
 		cout << "Eigenvectors and eigenvalues of init_model:" << endl;
 			
-		for (int i=0; i<init_model -> eigen.size(); i++){
+		for (int i=0; i<eigen.size(); i++){
 			cout << "Sector " << i <<" :" << endl;
 			cout << "Eigenvectors:" << endl;
-			complex_matrix_write(init_model -> eigen[i].eigenvectors());
+			complex_matrix_write(eigen[i] -> eigenvectors());
 			cout << endl;
 			cout << "Eigenvalues:" << endl;
-			complex_matrix_write(init_model -> eigen[i].eigenvalues());
+			complex_matrix_write(eigen[i] -> eigenvalues());
 			cout << endl;
 		}
 	}
 
 	// Record magnitude of leftmost spin z. The first integer in the pair is for sector,
 	// the second is for the position in that sector
-	vector<pair<double, pair<int, int> > > leftmost_spin_z_pos(init_model -> Get_Dim()); 
+	vector<pair<double, pair<int, int> > > leftmost_spin_z_pos(init_info.dim); 
 
 	int index = 0; // A continuous index of all eigenstates
-	for (int i=0; i<init_model -> eigen.size();i++){
-		for (int j=0; j<init_model -> eigen[i].eigenvectors().cols(); j++){
+	for (int i=0; i<eigen.size();i++){
+		for (int j=0; j<eigen[i] -> eigenvectors().cols(); j++){
 			leftmost_spin_z_pos[index].first = 0;
 			leftmost_spin_z_pos[index].second.first = i;
 			leftmost_spin_z_pos[index].second.second = j;
 
 			double temp;
 
-			for (int k=0; k<init_model -> eigen[j].eigenvectors().rows(); k++){
-				if (k<down) temp -= norm( init_model -> eigen[i].eigenvectors()(k,j) );
-				else temp += norm( init_model -> eigen[i].eigenvectors()(k,j) );
+			for (int k=0; k<eigen[j] -> eigenvectors().rows(); k++){
+				if (k<down) temp -= norm( eigen[i] -> eigenvectors()(k,j) );
+				else temp += norm( eigen[i] -> eigenvectors()(k,j) );
 			}
 
 			leftmost_spin_z_pos[index].first = abs(temp);
@@ -92,7 +83,7 @@ MatrixXcd& init_state_density){
 	// The eigenstate with the largest leftmost spin z magnitude
 	VectorXcd state(index);
 	for (int i=0; i<index;i++){
-		state(i) = init_model -> eigen[sec].eigenvectors()(i,rel_pos);
+		state(i) = eigen[sec] -> eigenvectors()(i,rel_pos);
 	}
 
 	state_to_density(state, init_state_density);
