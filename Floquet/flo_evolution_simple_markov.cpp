@@ -34,21 +34,26 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 	const int model_num = parameters.evolution.model_num; // Number of models
 	const string init_func_name = parameters.evolution.init_func_name; 
 
-	EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet;
-
 	InitObj init_obj;
-	InitInfo init_info; // Information used for initial state
-
-	init_info.size = parameters.generic.size;
-	init_info.norm_delta = 1.0e-15;
-	init_info.debug = debug;
 
 	EvolData evol_data(parameters);
 
+	// Parallelize model part instead of realization part when model_num > realization
+	bool model_parallel = false;
+	if (model_num > num_realization) model_parallel = true;
+
 	// Parallel the models, assuming time evolution is still serial
-	#pragma omp parallel for num_threads(threads_N)
+	#pragma omp parallel for num_threads(threads_N) if (model_parallel)
 	for (int i=0; i<model_num;i++){
 		cout << i << "th model:" << endl;
+
+		InitInfo init_info; // Information used for initial state
+
+		init_info.size = parameters.generic.size;
+		init_info.norm_delta = 1.0e-15;
+		init_info.debug = debug;
+
+		EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet;
 
 		cout << "Initialize Model." << endl;
 		tasks_models.Model(model, parameters, floquet);
@@ -70,7 +75,7 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 
 		// This should not be parallelized if model is parallelized...
 		// Parallel the initial states, assuming time evolution is still serial
-		#pragma omp parallel for num_threads(threads_N)
+		#pragma omp parallel for num_threads(threads_N) if (!model_parallel)
 		for (int n=0; n<num_realization; n++){
 			cout << endl;
 			cout << n << "th realization:" << endl;
