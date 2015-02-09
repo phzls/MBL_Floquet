@@ -4,6 +4,7 @@
 #include <map>
 #include <Eigen/Dense>
 #include "transition.h"
+#include "parameters.h"
 
 using namespace std;
 using namespace Eigen;
@@ -23,6 +24,8 @@ struct InitInfo
 	int dim; // Total dimension of Hilbert space
 	double norm_delta; // A small number used to check whether norm is 1
 	bool debug; // Whether output debug information
+	string init_model; // A time evolution model used for initial state
+	AllPara init_para; // Parameters used for time evolution model
 };
 
 // Pointer to all possible initial state construction function which gives a state vector
@@ -70,6 +73,8 @@ void random_product(const InitInfo&, const TransitionMatrix&, VectorXcd&);
 void random_product(const InitInfo&, MatrixXcd&);
 
 void random_pure(const InitInfo&, MatrixXcd&);
+
+void largest_leftmost_spin_z_complex_eigenstate(const InitInfo&, MatrixXcd&);
 
 
 /*
