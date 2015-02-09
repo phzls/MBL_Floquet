@@ -24,8 +24,8 @@ struct InitInfo
 	int dim; // Total dimension of Hilbert space
 	double norm_delta; // A small number used to check whether norm is 1
 	bool debug; // Whether output debug information
-	string init_model; // A time evolution model used for initial state
-	AllPara init_para; // Parameters used for time evolution model
+	vector<ComplexEigenSolver<MatrixXcd>* > complex_eigen; // Some complex eigensystems
+	vector<EigenSolver<MatrixXd>* > real_eigen; // Some real eigensystems
 };
 
 // Pointer to all possible initial state construction function which gives a state vector
@@ -80,8 +80,11 @@ void largest_leftmost_spin_z_complex_eigenstate(const InitInfo&, MatrixXcd&);
 /*
  * Some useful functions for initial state construction
  */
+// Construct a vector of amplitudes which can be used for random pure state
 void random_pure_amplitude(vector<complex<double> >&);
+// Check whehter the norm of a complex vector is close to 1
 void norm_check(const VectorXcd&, double, const string&);
+// Compute the complex density matrix of a corresponding normalized complex state vector
 void state_to_density(const VectorXcd&, MatrixXcd&);
 
 #endif
