@@ -1,8 +1,8 @@
 % Construct the xxz floquet with bath at the right in basic binary basis
-function [U, H] = XXZ_binary(L, tau, bath)
+function [U, H] = XXZ_bath_binary(L, tau, bath)
 
-if bath ~= 1 & bath ~= -1
-    bath
+if bath ~= 1 && bath ~= -1
+    disp(bath);
     error('bath must be either 1 or -1')
 end
 
