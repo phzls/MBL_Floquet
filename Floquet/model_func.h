@@ -84,4 +84,14 @@ class FloEvolMarkovInterRandomFunc: public ModelFunc
 		virtual ~FloEvolMarkovInterRandomFunc(){};
 };
 
+// For Markov inter random both floquet operator
+class FloEvolMarkovInterRandomBothFunc: public ModelFunc
+{
+	public:
+		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+
+		virtual ~FloEvolMarkovInterRandomBothFunc(){};
+};
+
 #endif

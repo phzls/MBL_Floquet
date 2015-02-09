@@ -113,3 +113,26 @@ EvolMatrix< EigenSolver<MatrixXd> >*&)
 	cout << "Wrong pointers for model." << endl;
 	abort();
 }
+
+void FloEvolMarkovInterRandomBothFunc::operator() (const AllPara& parameters, 
+EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
+	const int size = parameters.generic.size; // System Size
+	const double J = parameters.floquet.J; // Coupling strength
+	const double tau = parameters.floquet.tau; // Time step, which seems not used here
+	const double g = parameters.floquet_xxz.g; // Transverse field strength
+	const double h = parameters.floquet_xxz.h; // Longitude field strength
+
+	const bool debug = parameters.generic.debug;
+
+	model = new FloEvolMarkovInterRandomBoth(size, J, tau, g, h, debug);
+
+	type_ = model -> Type();
+	replace(type_.begin(), type_.end(), '_', ' ');
+}
+
+void FloEvolMarkovInterRandomBothFunc::operator() (const AllPara&, 
+EvolMatrix< EigenSolver<MatrixXd> >*&)
+{
+	cout << "Wrong pointers for model." << endl;
+	abort();
+}
