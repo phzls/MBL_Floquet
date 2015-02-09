@@ -43,8 +43,8 @@ void FloEvolMarkovInterRandom::Evol_Construct(){
 		abort();
 	}
 
-	/* For random unitary part Ur, we generate angle uniformly random on [-(1-J)*Pi,(1-J)*pi) and 
-	 * a random unit vector on 3D sphere, where z uniformly on [0,1] and phi uniformly on 
+	/* For random unitary part Ur, we generate angle uniformly random on [-(1-J)*Pi,(1-J)*pi)  
+	 * and a random unit vector on 3D sphere, where z uniformly on [0,1] and phi uniformly on 
 	 * [0,2*pi). Also J=1 so that no z part. For xxz part Uxxz, the time step tau is taken to be
 	 * J*tau. The xxz part natively is written in parity states, so it needs to be converted into
 	 * binary basis.
@@ -174,4 +174,9 @@ void FloEvolMarkovInterRandom::Bath_XXZ_Construct_(MatrixXcd& U, string type){
 	}
 
 	U = U_eigen.eigenvectors() * U * U_eigen.eigenvectors().adjoint();
+}
+
+void FloEvolMarkovInterRandom::Eigen_Name_Construct_(){
+	eigen_name[op_name_["Down"]] = "Bath Down";
+	eigen_name[op_name_["Up"]] = "Bath Up";
 }
