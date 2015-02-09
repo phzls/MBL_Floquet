@@ -80,6 +80,18 @@ class EvolData
 		// Output leftmost_spin_z_per_model
 		void Leftmost_Spin_Z_Per_Model_Out_(const AllPara&, const string&);
 
+		// Average leftmost spin z for multiple models, each with one run. The outer index is
+		// for time; the inner index is for model
+		vector<vector<double> > leftmost_spin_z_one_run_;
+		// Initialize leftmost_spin_z_one_run
+		void Leftmost_Spin_Z_One_Run_Init_(const AllPara&);
+		// Compute leftmost_spin_z_one_run given state vector, not implemented yet
+		void Leftmost_Spin_Z_One_Run_Cal_(const VectorXcd&, const StepInfo&); 
+		// Compute leftmost_spin_z_one_run given complex density matrix
+		void Leftmost_Spin_Z_One_Run_Cal_C_(const MatrixXcd&, const StepInfo&);
+		// Output leftmost_spin_z_one_run
+		void Leftmost_Spin_Z_One_Run_Out_(const AllPara&, const string&);
+
 		const int size_; // Size of the system
 		
 	public:
