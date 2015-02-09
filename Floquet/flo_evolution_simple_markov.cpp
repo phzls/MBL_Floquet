@@ -2,7 +2,7 @@
 #include <cmath>
 #include <string>
 #include <algorithm>
-#include <omp.h>
+//#include <omp.h>
 #include "evol_class.h"
 #include "parameters.h"
 #include "initial_obj.h"
@@ -45,6 +45,8 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 
 	EvolData evol_data(parameters);
 
+	// Parallel the models, assuming time evolution is still serial
+	#pragma omp parallel for num_threads(threads_N)
 	for (int i=0; i<model_num;i++){
 		cout << i << "th model:" << endl;
 
@@ -55,9 +57,18 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 		cout << "Diagonalize Evolution Operator." << endl;
 		floquet -> Evol_Para_Init();
 		floquet -> Evol_Construct();
+		floquet -> Evol_Diag();
+
+		// Record eigensystems of the corresponding isolated system
+		init_info.complex_eigen.resize(0);
+		for (int i=0; i<floquet -> eigen.size(); i++){
+			if (floquet -> eigen_name[i] == "Isolated")
+				init_info.complex_eigen.push_back(& floquet -> eigen[i]);
+		}
 
 		const int sec_num = floquet -> Get_Sector_Dim().size();
 
+		// This should not be parallelized if model is parallelized...
 		// Parallel the initial states, assuming time evolution is still serial
 		#pragma omp parallel for num_threads(threads_N)
 		for (int n=0; n<num_realization; n++){
