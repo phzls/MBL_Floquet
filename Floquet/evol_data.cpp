@@ -125,6 +125,27 @@ void EvolData::Data_Func_Map_Init_(){
 	data_cal_C_[name1] = cal_C_func1;
 	data_out_[name1] = out_func1;
 
+	// Leftmost Spin Z Per Model data
+	string name2 = "Leftmost Spin Z Per Model";
+	Data_Init init_func2 = &EvolData::Leftmost_Spin_Z_Per_Model_Init_;
+	Data_Cal cal_func2 = &EvolData::Leftmost_Spin_Z_Per_Model_Cal_;
+	Data_Cal_C cal_C_func2 = &EvolData::Leftmost_Spin_Z_Per_Model_Cal_C_;
+	Data_Out out_func2 = &EvolData::Leftmost_Spin_Z_Per_Model_Out_;
+
+	// Make sure the name has not been used before
+	init_it = data_init_.find(name2);
+	cal_it = data_cal_.find(name2);
+	out_it = data_out_.find(name2);
+	if (init_it != data_init_.end() || cal_it != data_cal_.end() || out_it != data_out_.end()){
+		cout << name2 << " for evolution has appeared before." << endl;
+		abort();
+	}
+
+	data_init_[name2] = init_func2;
+	data_cal_[name2] = cal_func2;
+	data_cal_C_[name2] = cal_C_func2;
+	data_out_[name2] = out_func2;
+
 	// Check data_init_ and data_cal_ have the same size
 	if (data_init_.size() != data_cal_.size()){
 		cout << "Number of initializations in evolution is not the same as number of calculations."
