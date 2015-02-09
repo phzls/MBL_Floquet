@@ -50,7 +50,7 @@ MatrixXcd& init_state_density){
 			leftmost_spin_z_pos[index].second.first = i;
 			leftmost_spin_z_pos[index].second.second = j;
 
-			double temp;
+			double temp = 0;
 
 			for (int k=0; k<eigen[j] -> eigenvectors().rows(); k++){
 				if (k<down) temp -= norm( eigen[i] -> eigenvectors()(k,j) );
