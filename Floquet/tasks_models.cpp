@@ -97,6 +97,16 @@ void TasksModels::Map_Construct_(){
 	model_type5 = "Markov Inter Random Floquet";
 	model_function5 = new FloEvolMarkovInterRandomFunc();
 	Model_Map_Insert(model_name5, model_type5, model_function5);
+
+	// Markov Inter Random Both Floquet Operator
+	string model_name6;
+	string model_type6;
+	ModelFunc* model_function6;
+
+	model_name6 = "Markov Inter Random Both Flo";
+	model_type6 = "Markov Inter Random Both Floquet";
+	model_function6 = new FloEvolMarkovInterRandomBothFunc();
+	Model_Map_Insert(model_name6, model_type6, model_function6);
 }
 
 void TasksModels::Task_Map_Insert(const string& task_name, const string& task_type, 
