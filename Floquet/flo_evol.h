@@ -35,18 +35,19 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 	public:
 		// When local dimension is not given
 		FloEvolVanilla(int size): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
-			constructed_(false), eigen_info_(false){eigen.resize(1);}
+			constructed_(false), eigen_info_(false){eigen.resize(1); eigen_name.resize(1,"");}
 
 		// When local dimension is given
 		FloEvolVanilla(int size, int local_dim): 
 			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, local_dim), 
-			constructed_(false), eigen_info_(false){eigen.resize(1);}
+			constructed_(false), eigen_info_(false){eigen.resize(1); eigen_name.resize(1,"");}
 
 		// Diagnolize time evolution matrix with eigenvectors kept
 		void Evol_Diag() {
 			if (constructed_){
 				eigen[0].compute(evol_op_);
 				eigen_info_ = true;
+				eigen_name[0] = "Full";
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -60,6 +61,7 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 			if (constructed_){
 				eigen[0].compute(evol_op_, keep);
 				eigen_info_ = keep;
+				eigen_name[0] = "Full";
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -151,12 +153,12 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 	public:
 		// When local dimension is not given
 		FloEvolParity(int size): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
-			constructed_(false), eigen_info_(false){eigen.resize(2);}
+			constructed_(false), eigen_info_(false){eigen.resize(2); eigen_name.resize(2,"");}
 
 		// When local dimension is given
 		FloEvolParity(int size, int local_dim): 
 			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, local_dim), 
-			constructed_(false), eigen_info_(false){eigen.resize(2);}
+			constructed_(false), eigen_info_(false){eigen.resize(2);eigen_name.resize(2,"");}
 
 		// Diagnolize time evolution matrix with eigenvectors kept
 		void Evol_Diag(){
@@ -164,7 +166,8 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 				eigen[0].compute(evol_op_even_);
 				// In case there is no odd sector for small chain
 				if (evol_op_odd_.rows()>0) eigen[1].compute(evol_op_odd_);
-
+				eigen_name[0] = "Even";
+				eigen_name[1] = "Odd";
 				eigen_info_ = true;
 			}
 			else{
@@ -180,6 +183,8 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 				eigen[0].compute(evol_op_even_, keep);
 				// In case there is no odd sector for small chain
 			if (evol_op_odd_.rows()>0) eigen[1].compute(evol_op_odd_, keep);
+			eigen_name[0] = "Even";
+			eigen_name[1] = "Odd";
 			eigen_info_ = keep;
 			}
 			else{
@@ -242,25 +247,32 @@ class FloEvolMultiSec : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		stringstream repr_; // Representation string stream of the model
 		string type_; // Type string of the model
 
-		bool eigen_info_; // Whether eigenvectors have been computed
+		vector<bool> eigen_info_; // Whether eigenvectors have been computed for each sector
+
+		virtual void Eigen_Name_Construct_() = 0; // Construct eigen_name during diagonalization
 
 	public:
 		// When local dimension is not given
 		FloEvolMultiSec(int size, int type_num): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
 			constructed_(false), eigen_info_(false){evol_op_.resize(type_num); 
-				eigen.resize(type_num);}
+				eigen.resize(type_num); eigen_info_.resize(type_num, false); 
+				eigen_name.resize(type_num, "");}
 
 		// When local dimension is given
 		FloEvolMultiSec(int size, int local_dim, int type_num): 
 			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, local_dim), 
 			constructed_(false), eigen_info_(false){evol_op_.resize(type_num); 
-				eigen.resize(type_num);}
+				eigen.resize(type_num);eigen_info_.resize(type_num, false);
+				eigen_name.resize(type_num, "");}
 
 		// Diagnolize time evolution matrix. Eigenvectors are kept.
 		void Evol_Diag(){
 			if (constructed_){
-				for (int i=0; i< evol_op_.size(); i++) eigen[i].compute(evol_op_[i]);
-				eigen_info_ = true;
+				for (int i=0; i< evol_op_.size(); i++){
+					eigen[i].compute(evol_op_[i]);
+					eigen_info_[i] = true;
+				}
+				Eigen_Name_Construct_();
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -269,11 +281,37 @@ class FloEvolMultiSec : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		};
 
 		// Diagnolize time evolution matrix, user can determine whether eigenvectors are kept
-		// False is not kept; True is kept. 
+		// False is not kept; True is kept.  
 		void Evol_Diag(bool keep){
 			if (constructed_){
-				for (int i=0; i< evol_op_.size(); i++) eigen[i].compute(evol_op_[i], keep);
-				eigen_info_ = keep;
+				for (int i=0; i< evol_op_.size(); i++){
+					eigen[i].compute(evol_op_[i], keep);
+					eigen_info_[i] = keep;
+				}
+				Eigen_Name_Construct_();
+			}
+			else{
+				cout << "The matrix for diagonalization does not exist." <<endl;
+				abort();
+			}
+		};
+
+		// Diagnolize time evolution matrix, user can determine for each sector that whether 
+		// eigenvectors are kept. False is not kept; True is kept. If the bool vector has 
+		// fewer elements than the number of sectors, the remaining ones eigenvectors are kept.
+		void Evol_Diag(vector<bool> keep){
+			if (constructed_){
+				for (int i=0; i< evol_op_.size(); i++){
+					if (i<keep.size()){
+						eigen[i].compute(evol_op_[i], keep[i]);
+						eigen_info_[i] = keep[i];
+					}
+					else{
+						eigen[i].compute(evol_op_[i]);
+						eigen_info_[i] = true;
+					}
+				}
+				Eigen_Name_Construct_();
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;

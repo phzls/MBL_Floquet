@@ -38,6 +38,8 @@ class EvolMatrix
 		vector<T> eigen; // Eigenvalues and Eigenvectors for possible different sectors if 
 						 // there is some symmetry to simplity the operator
 
+		vector<string> eigen_name; // Name of each eigensectors
+
 		// Initialize parameters which will be used in constructing time evolution operator.
 		// These parameters will only exist for concrete model classes.
 		virtual void Evol_Para_Init() = 0;
