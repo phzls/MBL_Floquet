@@ -279,7 +279,8 @@ class FloEvolMarkovInterRandom : public FloEvolMultiSec
 	public:
 		FloEvolMarkovInterRandom(int size, double J, double tau = 0.8, double g = 0.9045, 
 			double h = 0.8090, bool debug = false):
-			FloEvolMultiSec(size, 2), param_(tau, J, g, h, size), debug_(debug) { Repr_Init_(); }
+			FloEvolMultiSec(size, 2), param_(tau, J, g, h, size), debug_(debug) { Repr_Init_(); 
+			Op_Name_Init_();}
 
 		// No parameters to initialize
 		void Evol_Para_Init() {};
@@ -337,14 +338,16 @@ class FloEvolMarkovInterRandomBoth : public FloEvolMultiSec
 
 		const bool debug_; // Used for debug output
 
-		void Bath_XXZ_Construct_(MatrixXcd&, string); // Construct the xxz part of the operator
+		void Bath_XXZ_Construct_(MatrixXcd&, string); 
+			// Construct the xxz part of the bath operator
 
 		void Eigen_Name_Construct_(); // Construct eigen_name during diagonalization
 
 	public:
 		FloEvolMarkovInterRandomBoth(int size, double J, double tau = 0.8, double g = 0.9045, 
 			double h = 0.8090, bool debug = false):
-			FloEvolMultiSec(size, 3), param_(tau, J, g, h, size), debug_(debug) { Repr_Init_(); }
+			FloEvolMultiSec(size, 3), param_(tau, J, g, h, size), debug_(debug) { Repr_Init_(); 
+			Op_Name_Init_();}
 
 		// No parameters to initialize
 		void Evol_Para_Init() {};
@@ -368,7 +371,7 @@ class FloEvolMarkovInterRandomBoth : public FloEvolMultiSec
 			return dim;
 		}
 
-		virtual ~FloEvolMarkovInterRandomBoth() {};
+		virtual ~FloEvolMarkovInterRandomBoth() {}
 };
 
 
