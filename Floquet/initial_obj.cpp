@@ -88,5 +88,15 @@ void InitObj::map_init_(){
 	}
 	init_func_C_map_[name3] = func_C3;
 
+	string name4 = "Largest Leftmost Spin Z Value";
+	init_func_C func_C4 = largest_leftmost_spin_z_complex_eigenstate;
+
+	it_C = init_func_C_map_.find(name4);
+	if (it_C != init_func_C_map_.end()){
+		cout << "init_func " << name4 << " already exists." << endl;
+		abort();
+	}
+	init_func_C_map_[name4] = func_C4;
+
 }
 
