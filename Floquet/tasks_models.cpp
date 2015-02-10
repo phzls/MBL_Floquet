@@ -38,7 +38,7 @@ void TasksModels::Map_Construct_(){
 	task_function3 = &flo_evolution;
 	Task_Map_Insert(task_name3, task_type3, task_function3);
 
-	// Compute time evolution for a Floquet system
+	// Compute Markov time evolution for a Floquet system
 	string task_name4;
 	string task_type4;
 	task_func task_function4;
@@ -47,6 +47,17 @@ void TasksModels::Map_Construct_(){
 	task_type4 = "Floquet";
 	task_function4 = &flo_evolution_simple_markov;
 	Task_Map_Insert(task_name4, task_type4, task_function4);
+
+	// Compute the representation of leftmost sigma_z operator for a floquet
+	// system in the basis of eigenstates
+	string task_name5;
+	string task_type5;
+	task_func task_function5;
+
+	task_name5 = "Flo Leftmost Sigma_z";
+	task_type5 = "Floquet";
+	task_function5 = &flo_leftmost_sigma_z;
+	Task_Map_Insert(task_name5, task_type5, task_function5);
 
 	// Random Floquet Operator
 	string model_name1;
