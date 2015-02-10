@@ -8,8 +8,8 @@ using namespace std;
 
 /**
  ** This file creates initial state, which is an eigenstate of a particular evolution model.
- ** This eigenstate has the largest magnitude for the leftmost spin z, where spin up is 1
- ** and spin down is 0. We treat 0 in the binary basis system as the rightmost position.
+ ** This eigenstate has the largest value for the leftmost spin z, where spin up is 1
+ ** and spin down is -1. We treat 0 in the binary basis system as the rightmost position.
  **/
 
 
@@ -52,13 +52,12 @@ MatrixXcd& init_state_density){
 
 			double temp = 0;
 
-			for (int k=0; k<eigen[j] -> eigenvectors().rows(); k++){
+			for (int k=0; k<eigen[i] -> eigenvectors().rows(); k++){
 				if (k<down) temp -= norm( eigen[i] -> eigenvectors()(k,j) );
 				else temp += norm( eigen[i] -> eigenvectors()(k,j) );
 			}
 
-			leftmost_spin_z_pos[index].first = abs(temp);
-
+			leftmost_spin_z_pos[index].first = temp;
 			index ++;
 		}
 	}
@@ -70,20 +69,28 @@ MatrixXcd& init_state_density){
 		abort();
 	}
 
-	// Sort according to leftmost spin z magnitude
+	// Sort according to leftmost spin z value
 	sort(leftmost_spin_z_pos.begin(), leftmost_spin_z_pos.end(), 
 		Vec_Pair_Double_First_Sort<pair<int,int> >);
 
-	// Sector of the eigenstate with the largest leftmost spin z magnitude
+	// Sector of the eigenstate with the largest leftmost spin z value
 	const int sec = leftmost_spin_z_pos[index-1].second.first;
 	// Relative position in the sector for the eigenstate with the largest leftmost 
-	// spin z magnitude
+	// spin z value
 	const int rel_pos = leftmost_spin_z_pos[index-1].second.second;
 
-	// The eigenstate with the largest leftmost spin z magnitude
+	// The eigenstate with the largest leftmost spin z value
 	VectorXcd state(index);
 	for (int i=0; i<index;i++){
 		state(i) = eigen[sec] -> eigenvectors()(i,rel_pos);
+	}
+
+	if (init_info.debug){
+		cout << "Largest leftmost spin z value:  " << leftmost_spin_z_pos[index-1].first << endl;
+		cout << endl;
+		cout << "Initial state in binary basis:" << endl;
+		complex_matrix_write(state);
+		cout << endl;
 	}
 
 	state_to_density(state, init_state_density);
