@@ -100,11 +100,14 @@ void FloEvolXXZ::Evol_General_Construct_(MatrixXcd& evol_op, int dim){
 	}
 
 	if (debug_){
+        cout << "tau is :" << param_.tau << endl;
+        cout << endl;
+        
 		cout << "Eigenvalues of x part:" << endl;
 		cout << x_eigen.eigenvalues();
 		cout <<endl;
 
-		cout << "Eigenvectors of x par:" << endl;
+		cout << "Eigenvectors of x part:" << endl;
 		complex_matrix_write(x_eigen.eigenvectors());
 		cout << endl;
 
