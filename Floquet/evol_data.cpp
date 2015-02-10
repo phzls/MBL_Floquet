@@ -94,7 +94,21 @@ void EvolData::Data_Compute(const MatrixXcd& state_density, const StepInfo& info
 
 void EvolData::Data_Output(const AllPara& parameters, const string& type_name){
 	for (map<string, bool>::iterator it = func_status_.begin(); it != func_status_.end(); it++){
-		if (it -> second) ( this ->* (data_out_[it -> first]) ) (parameters, type_name);
+		if (it -> second){
+			map<string, Data_Out>::iterator out_it = data_out_.find(it -> first);
+			if (out_it != data_out_.end())
+				( this ->* (data_out_[it -> first]) ) (parameters, type_name);
+		}
+	}
+}
+
+void EvolData::Data_Output_Total(const AllPara& parameters, const string& type_name){
+	for (map<string, bool>::iterator it = func_status_.begin(); it != func_status_.end(); it++){
+		if (it -> second){
+			map<string, Data_Out_Total>::iterator out_it = data_out_total_.find(it -> first);
+			if (out_it != data_out_total_.end())
+				( this ->* (data_out_total_[it -> first]) ) (parameters, type_name);
+		}
 	}
 }
 
@@ -103,6 +117,7 @@ void EvolData::Data_Func_Map_Init_(){
 	map<string, Data_Cal>::iterator cal_it;
 	map<string, Data_Cal_C>::iterator cal_C_it;
 	map<string, Data_Out>::iterator out_it;
+	map<string, Data_Out_Total>::iterator out_total_it;
 
 	// Entropy Per Model data
 	string name1 = "Entropy Per Model";
@@ -151,12 +166,12 @@ void EvolData::Data_Func_Map_Init_(){
 	Data_Init init_func3 = &EvolData::Leftmost_Spin_Z_One_Run_Init_;
 	Data_Cal cal_func3 = &EvolData::Leftmost_Spin_Z_One_Run_Cal_;
 	Data_Cal_C cal_C_func3 = &EvolData::Leftmost_Spin_Z_One_Run_Cal_C_;
-	Data_Out out_func3 = &EvolData::Leftmost_Spin_Z_One_Run_Out_;
+	Data_Out_Total out_total_func3 = &EvolData::Leftmost_Spin_Z_One_Run_Out_;
 
 	// Make sure the name has not been used before
 	init_it = data_init_.find(name3);
 	cal_it = data_cal_.find(name3);
-	out_it = data_out_.find(name3);
+	out_total_it = data_out_total_.find(name3);
 	if (init_it != data_init_.end() || cal_it != data_cal_.end() || out_it != data_out_.end()){
 		cout << name3 << " for evolution has appeared before." << endl;
 		abort();
@@ -165,7 +180,7 @@ void EvolData::Data_Func_Map_Init_(){
 	data_init_[name3] = init_func3;
 	data_cal_[name3] = cal_func3;
 	data_cal_C_[name3] = cal_C_func3;
-	data_out_[name3] = out_func3;
+	data_out_total_[name3] = out_total_func3;
 
 	// Check data_init_ and data_cal_ have the same size
 	if (data_init_.size() != data_cal_.size()){
@@ -185,7 +200,7 @@ void EvolData::Data_Func_Map_Init_(){
 	}
 
 	// Check data_init_ and data_out_ have the same size
-	if (data_init_.size() != data_out_.size()){
+	if (data_init_.size() != data_out_.size() + data_out_total_.size()){
 		cout << "Number of initializations in evolution is not the same as number of output."
 			 << endl;
 		cout << "Registered initializations:" << endl;
@@ -194,11 +209,16 @@ void EvolData::Data_Func_Map_Init_(){
 		}
 		cout << "Total Number: " << data_init_.size();
 
-		cout << "Registered output:" << endl;
+		cout << "Registered output for each model:" << endl;
 		for (out_it = data_out_.begin(); out_it != data_out_.end(); out_it ++){
 			cout << out_it -> first << endl;
 		}
-		cout << "Total Number: " << data_out_.size(); 
+		cout << "Registered output for total:" << endl;
+		for (out_total_it = data_out_total_.begin(); out_total_it != data_out_total_.end();
+		out_total_it ++){
+			cout << out_total_it -> first << endl;
+		}
+		cout << "Total Number: " << data_out_.size() + data_out_total_.size(); 
 	}
 
 }
