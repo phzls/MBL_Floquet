@@ -26,6 +26,12 @@ struct InitInfo
 	bool debug; // Whether output debug information
 	vector<ComplexEigenSolver<MatrixXcd>* > complex_eigen; // Some complex eigensystems
 	vector<EigenSolver<MatrixXd>* > real_eigen; // Some real eigensystems
+
+	~InitInfo(){
+		// These vectors should not be used with new
+		for (int i=0; i<complex_eigen.size();i++) complex_eigen[i] = NULL;
+		for (int i=0; i<real_eigen.size();i++) real_eigen[i] = NULL;
+	}
 };
 
 // Pointer to all possible initial state construction function which gives a state vector
