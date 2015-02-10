@@ -45,12 +45,13 @@ using namespace Eigen;
  const StepInfo& info){
 	const int model = info.model;
 	const int time = info.time;
-	const int realizations = info.realization;
+	const int realization = info.realization;
 
 	// Check if number of realization is 1
-	if (realizations != 1){
+	if (realization >= 1){
 		cout << "Leftmost_Spin_Z_One_Run is only implemented for one realization from each"
-			 << "model." << endl;
+			 << " model." << endl;
+		cout << "Current realization: " << realization << endl;
 		abort();
 	}
 
@@ -62,15 +63,15 @@ using namespace Eigen;
 		abort();
 	}
 
-	const int row_num = density.matrix.rows();
-	const int size = __builtin_popcount(row_num); // Size of the chain
+	const int row_num = density_matrix.rows();
+	const int size = __builtin_popcount(row_num - 1); // Size of the chain
 	const int down = 1 << (size-1); // Number below this will have leftmost spin down
 
 	leftmost_spin_z_one_run_[time][model] = 0;
 
 	for (int i=0; i<row_num; i++){
-		if (i<down) leftmost_spin_z_one_run_[time][model] -= density_matrix(i,i);
-		else leftmost_spin_z_one_run_[time][model] += density_matrix(i,i); 
+		if (i<down) leftmost_spin_z_one_run_[time][model] -= real(density_matrix(i,i));
+		else leftmost_spin_z_one_run_[time][model] += real(density_matrix(i,i)); 
 	}
 
 	if (info.debug){

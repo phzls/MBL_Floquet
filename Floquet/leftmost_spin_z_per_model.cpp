@@ -53,15 +53,15 @@ using namespace Eigen;
 		abort();
 	}
 
-	const int row_num = density.matrix.rows();
-	const int size = __builtin_popcount(row_num); // Size of the chain
+	const int row_num = density_matrix.rows();
+	const int size = __builtin_popcount(row_num - 1); // Size of the chain
 	const int down = 1 << (size-1); // Number below this will have leftmost spin down
 
 	leftmost_spin_z_per_model_[time][realization] = 0;
 
 	for (int i=0; i<row_num; i++){
-		if (i<down) leftmost_spin_z_per_model_[time][realization] -= density_matrix(i,i);
-		else leftmost_spin_z_per_model_[time][realization] += density_matrix(i,i); 
+		if (i<down) leftmost_spin_z_per_model_[time][realization] -= real(density_matrix(i,i));
+		else leftmost_spin_z_per_model_[time][realization] += real(density_matrix(i,i)); 
 	}
 
 	if (info.debug){
