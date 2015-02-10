@@ -162,9 +162,9 @@ void FloEvolMarkovInterRandomBoth::Bath_XXZ_Construct_(MatrixXcd& U, string type
 	}
 
 	// Effective time step
-	const double tau = param_.J * param_.tau;
+	const double tau = param_.tau;
 
-	// Construct Hamiltonian first
+	// Construct z part Hamiltonian first, which is diagonal
 	U = MatrixXcd::Zero(dim_,dim_);
 
 	SelfAdjointEigenSolver<MatrixXcd> U_eigen;
@@ -175,41 +175,30 @@ void FloEvolMarkovInterRandomBoth::Bath_XXZ_Construct_(MatrixXcd& U, string type
 		int prev_spin = 2* (state & 1) - 1 ;
 		state = state >> 1;
 		
-		U(i,i) += (param_.h + sign) * prev_spin; // Contain part from the bath
+		// Coupling to the bath is not reduced by the coupling J
+		U(i,i) += (param_.J*param_.h + sign) * prev_spin; // Contain part from the bath
 
 		for (int j=1;j<size_;j++){
 			int current_spin = 2* (state & 1) - 1;
 			state = state >> 1;
 
-			U(i,i) += param_.h * current_spin + current_spin * prev_spin;
+			U(i,i) += param_.J* (param_.h * current_spin + current_spin * prev_spin);
 
 			prev_spin = current_spin;
 		}
-
-		// Off-diagonal terms
-		int site = 1;
-
-		for (int j=0; j<size_; j++){
-			int target = i ^ site;
-			site = site << 1;
-			U(target,i) += param_.g; 
-		}
-
 	}
 
 	// Write out Hamiltonian matrix
 	if (debug_){
-		cout << "XXZ Hamiltonian with bath " << type << " :" << endl;
+		cout << "XXZ Hamiltonian z part with bath " << type << " :" << endl;
 		complex_matrix_write(U);
 		cout << endl;
 	}
 
-	U_eigen.compute(U);
-
 	for (int i=0; i<dim_; i++){
 		for (int j=0; j< dim_; j++){
 			if (i==j){
-				U(i,j) = exp(-Complex_I * complex<double>(tau,0) * U_eigen.eigenvalues()(i));
+				U(i,j) = exp(-Complex_I * complex<double>(tau,0) * U(i,j));
 			}
 			else{
 				U(i,j) = complex<double>(0,0);
@@ -217,11 +206,65 @@ void FloEvolMarkovInterRandomBoth::Bath_XXZ_Construct_(MatrixXcd& U, string type
 		}
 	}
 
-	U = U_eigen.eigenvectors() * U * U_eigen.eigenvectors().adjoint();
+	if (debug_){
+		cout << "XXZ Floquet z part with bath " << type << " :" << endl;
+		complex_matrix_write(U);
+		cout << endl;
+	}
+
+	// x part, which is off-diagonal part
+	MatrixXcd Ux = MatrixXcd::Zero(dim_,dim_);
+
+	for (int i=0; i<dim_; i++){
+		// Off-diagonal terms
+		int site = 1;
+		for (int j=0; j<size_; j++){
+			int target = i ^ site;
+			site = site << 1;
+			Ux(target,i) += param_.J * param_.g; 
+		}
+	}
+
+	// Write out Hamiltonian matrix
+	if (debug_){
+		cout << "XXZ Hamiltonian x part with bath " << type << " :" << endl;
+		complex_matrix_write(Ux);
+		cout << endl;
+	}
+
+	U_eigen.compute(Ux);
+
+	for (int i=0; i<dim_; i++){
+		for (int j=0; j< dim_; j++){
+			if (i==j){
+				Ux(i,j) = exp(-Complex_I * complex<double>(tau,0) * U_eigen.eigenvalues()(i));
+			}
+			else{
+				Ux(i,j) = complex<double>(0,0);
+			}
+		}
+	}
+
+	Ux = U_eigen.eigenvectors() * Ux * U_eigen.eigenvectors().adjoint();
+
+	if (debug_){
+		cout << "XXZ Floquet x part with bath " << type << " :" << endl;
+		complex_matrix_write(Ux);
+		cout << endl;
+	}
+
+	U = Ux * U;
 }
 
 void FloEvolMarkovInterRandomBoth::Eigen_Name_Construct_(){
 	eigen_name[op_name_["Up"]] = "Bath Up";
 	eigen_name[op_name_["Down"]] = "Bath Down";
 	eigen_name[op_name_["Isolated"]] = "Isolated";
+
+	if (debug_){
+		cout << "Eigen names:"<<endl;
+		for (int i=0; i<3;i++){
+			cout << i << "  " << eigen_name[i] << endl;
+		}
+	}
 }
