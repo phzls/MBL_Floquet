@@ -15,10 +15,10 @@ int main(){
 	AllPara parameters;
 	
 	parameters.generic.task = "Flo Simple Markov Evolution";
-	parameters.generic.model = "Markov Inter Random Flo";
+	parameters.generic.model = "Markov Inter Random Both Flo";
 
-	parameters.generic.size = 8; // System size
-	parameters.generic.num_realizations = 100; // Number of realizations
+	parameters.generic.size = 6; // System size
+	parameters.generic.num_realizations = 1; // Number of realizations
 	parameters.generic.threads_N = 4; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
 									 // level statistics calculation
@@ -40,12 +40,13 @@ int main(){
 	parameters.floquet_xxz.g = 0.9045; // Transverse field strength
 	parameters.floquet_xxz.h = 0.8090; // Longitude field strength
 
-	parameters.evolution.time_step = 10; // Number of time steps
+	parameters.evolution.time_step = 100; // Number of time steps
 	parameters.evolution.step_size = parameters.floquet.tau; // Time step size
-	parameters.evolution.init_func_name = "Random Product";
-	parameters.evolution.evol_compute["Entropy Per Model"] = true;
-	// Initial state name
-	parameters.evolution.model_num = 1; // Number of models for evolution
+	parameters.evolution.init_func_name = "Largest Leftmost Spin Z Value"; // Initial state name
+	parameters.evolution.evol_compute["Entropy Per Model"] = false;
+	parameters.evolution.evol_compute["Leftmost Spin Z Per Model"] = false;
+	parameters.evolution.evol_compute["Leftmost Spin Z One Run"] = true;
+	parameters.evolution.model_num = 100; // Number of models for evolution
 	// If partition the chain to two halves, the size of left part
 	parameters.evolution.left_size = parameters.generic.size / 2; 
 	parameters.evolution.jump = 1; // jump of time points in evolution
@@ -53,8 +54,11 @@ int main(){
 	parameters.evolution.log_time = false; // whehter time changes logarithmically
 	parameters.evolution.log_time_jump = 2; // The base for time change logarithmically
 
+	Eigen::initParallel();
 
 	tasks_models.Task(parameters.generic.task)(parameters);
+
+	cout << "Calculation finished." << endl;
 
 	return 0;
 }
