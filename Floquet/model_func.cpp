@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void FloEvolRandomFunc::operator() (const AllPara& parameters, 
+string FloEvolRandomFunc::operator() (const AllPara& parameters, 
 EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const int size = parameters.generic.size; // System Size
 	const double tau = parameters.floquet.tau; // Time step, which seems not used here
@@ -16,16 +16,18 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 
 	model = new FloEvolRandom(size, tau, J, debug);
 
-	type_ = model -> Type();
-	replace(type_.begin(), type_.end(), '_', ' ');
+	string type = model -> Type();
+	replace(type.begin(), type.end(), '_', ' ');
+
+	return type;
 }
 
-void FloEvolRandomFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&){
+string FloEvolRandomFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&){
 	cout << "Wrong pointers for model." << endl;
 	abort();
 }
 
-void FloEvolRandomRotationFunc::operator() (const AllPara& parameters, 
+string FloEvolRandomRotationFunc::operator() (const AllPara& parameters, 
 EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const int size = parameters.generic.size; // System Size
 	const double tau = parameters.floquet.tau; // Time step, which seems not used here
@@ -38,17 +40,19 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 
 	model = new FloEvolRandomRotation(size, tau, J, angle_min, angle_sup, debug);
 
-	type_ = model -> Type();
-	replace(type_.begin(), type_.end(), '_', ' ');
+	string type = model -> Type();
+	replace(type.begin(), type.end(), '_', ' ');
+
+	return type;
 }
 
-void FloEvolRandomRotationFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
+string FloEvolRandomRotationFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
 {
 	cout << "Wrong pointers for model." << endl;
 	abort();
 }
 
-void FloEvolXXZFunc::operator() (const AllPara& parameters, 
+string FloEvolXXZFunc::operator() (const AllPara& parameters, 
 EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const int size = parameters.generic.size; // System Size
 	const double tau = parameters.floquet.tau; // Time step, which seems not used here
@@ -59,17 +63,19 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 
 	model = new FloEvolXXZ(size, tau, g, h, debug);
 
-	type_ = model -> Type();
-	replace(type_.begin(), type_.end(), '_', ' ');
+	string type = model -> Type();
+	replace(type.begin(), type.end(), '_', ' ');
+
+	return type;
 }
 
-void FloEvolXXZFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
+string FloEvolXXZFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
 {
 	cout << "Wrong pointers for model." << endl;
 	abort();
 }
 
-void FloEvolInterRandomFunc::operator() (const AllPara& parameters, 
+string FloEvolInterRandomFunc::operator() (const AllPara& parameters, 
 EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const int size = parameters.generic.size; // System Size
 	const double J = parameters.floquet.J; // Coupling strength
@@ -81,17 +87,19 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 
 	model = new FloEvolInterRandom(size, tau, J, g, h, debug);
 
-	type_ = model -> Type();
-	replace(type_.begin(), type_.end(), '_', ' ');
+	string type = model -> Type();
+	replace(type.begin(), type.end(), '_', ' ');
+
+	return type;
 }
 
-void FloEvolInterRandomFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
+string FloEvolInterRandomFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
 {
 	cout << "Wrong pointers for model." << endl;
 	abort();
 }
 
-void FloEvolMarkovInterRandomFunc::operator() (const AllPara& parameters, 
+string FloEvolMarkovInterRandomFunc::operator() (const AllPara& parameters, 
 EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const int size = parameters.generic.size; // System Size
 	const double J = parameters.floquet.J; // Coupling strength
@@ -103,18 +111,20 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 
 	model = new FloEvolMarkovInterRandom(size, J, tau, g, h, debug);
 
-	type_ = model -> Type();
-	replace(type_.begin(), type_.end(), '_', ' ');
+	string type = model -> Type();
+	replace(type.begin(), type.end(), '_', ' ');
+
+	return type;
 }
 
-void FloEvolMarkovInterRandomFunc::operator() (const AllPara&, 
+string FloEvolMarkovInterRandomFunc::operator() (const AllPara&, 
 EvolMatrix< EigenSolver<MatrixXd> >*&)
 {
 	cout << "Wrong pointers for model." << endl;
 	abort();
 }
 
-void FloEvolMarkovInterRandomBothFunc::operator() (const AllPara& parameters, 
+string FloEvolMarkovInterRandomBothFunc::operator() (const AllPara& parameters, 
 EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const int size = parameters.generic.size; // System Size
 	const double J = parameters.floquet.J; // Coupling strength
@@ -126,11 +136,16 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 
 	model = new FloEvolMarkovInterRandomBoth(size, J, tau, g, h, debug);
 
-	type_ = model -> Type();
-	replace(type_.begin(), type_.end(), '_', ' ');
+	string type = model -> Type();
+	replace(type.begin(), type.end(), '_', ' ');
+
+	return type;
+
+//	type_ = model -> Type();
+//	replace(type_.begin(), type_.end(), '_', ' ');
 }
 
-void FloEvolMarkovInterRandomBothFunc::operator() (const AllPara&, 
+string FloEvolMarkovInterRandomBothFunc::operator() (const AllPara&, 
 EvolMatrix< EigenSolver<MatrixXd> >*&)
 {
 	cout << "Wrong pointers for model." << endl;

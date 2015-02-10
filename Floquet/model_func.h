@@ -18,16 +18,11 @@ using namespace Eigen;
 
 class ModelFunc
 {
- 	protected:
- 		string type_;
  	public:
- 		virtual void operator() (const AllPara&, 
+ 		virtual string operator() (const AllPara&, 
  			EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&) = 0;
 
- 		virtual void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&) = 0; 
-
- 		// Get the type of the model: Floquet, Hamiltonian or All
- 		string Type() const {return type_;}
+ 		virtual string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&) = 0; 
 
  		virtual ~ModelFunc(){};
 };
@@ -36,9 +31,9 @@ class ModelFunc
 class FloEvolRandomFunc: public ModelFunc
 {
 	public:
-		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
 
-		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+		string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 
 		virtual ~FloEvolRandomFunc(){};
 };
@@ -48,8 +43,8 @@ class FloEvolRandomFunc: public ModelFunc
 class FloEvolRandomRotationFunc: public ModelFunc
 {
 	public:
-		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
-		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+		string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 
 		virtual ~FloEvolRandomRotationFunc(){};
 };
@@ -58,8 +53,8 @@ class FloEvolRandomRotationFunc: public ModelFunc
 class FloEvolXXZFunc: public ModelFunc
 {
 	public:
-		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
-		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+		string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 
 		virtual ~FloEvolXXZFunc(){};
 };
@@ -68,8 +63,8 @@ class FloEvolXXZFunc: public ModelFunc
 class FloEvolInterRandomFunc: public ModelFunc
 {
 	public:
-		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
-		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+		string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 
 		virtual ~FloEvolInterRandomFunc(){};
 };
@@ -78,8 +73,8 @@ class FloEvolInterRandomFunc: public ModelFunc
 class FloEvolMarkovInterRandomFunc: public ModelFunc
 {
 	public:
-		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
-		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+		string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 
 		virtual ~FloEvolMarkovInterRandomFunc(){};
 };
@@ -88,8 +83,8 @@ class FloEvolMarkovInterRandomFunc: public ModelFunc
 class FloEvolMarkovInterRandomBothFunc: public ModelFunc
 {
 	public:
-		void operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
-		void operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+		string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 
 		virtual ~FloEvolMarkovInterRandomBothFunc(){};
 };
