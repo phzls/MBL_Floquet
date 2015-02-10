@@ -2,13 +2,14 @@
 #include <cmath>
 #include <string>
 #include <algorithm>
-//#include <omp.h>
+#include <omp.h>
 #include "evol_class.h"
 #include "parameters.h"
 #include "initial_obj.h"
 #include "evol_data.h"
 #include "tasks_models.h"
 #include "eigen_output.h"
+#include "flo_evol_model.h"
 
 using namespace std;
 
@@ -42,6 +43,9 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 	bool model_parallel = false;
 	if (model_num > num_realization) model_parallel = true;
 
+	// A string used to record model for last output
+	string model_type;
+
 	// Parallel the models, assuming time evolution is still serial
 	#pragma omp parallel for num_threads(threads_N) if (model_parallel)
 	for (int i=0; i<model_num;i++){
@@ -55,7 +59,6 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 
 		EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet;
 
-		cout << "Initialize Model." << endl;
 		tasks_models.Model(model, parameters, floquet);
 		init_info.dim = floquet -> Get_Dim();
 
@@ -66,15 +69,25 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 
 		// Record eigensystems of the corresponding isolated system
 		init_info.complex_eigen.resize(0);
-		for (int i=0; i<floquet -> eigen.size(); i++){
-			if (floquet -> eigen_name[i] == "Isolated")
-				init_info.complex_eigen.push_back(& floquet -> eigen[i]);
+		for (int j=0; j<floquet -> eigen.size(); j++){
+			if (debug){
+				cout << "Sector " << j << endl;
+				cout << "Matrix:" << endl;
+				complex_matrix_write(floquet -> Get_U(j));
+				cout << "Eigenvalues:"<< endl;
+				complex_matrix_write(floquet -> eigen[j].eigenvalues());
+				cout << endl;
+			}
+
+			if (floquet -> eigen_name[j] == "Isolated"){
+				init_info.complex_eigen.push_back(& (floquet -> eigen[j]) );
+				if (debug) cout << "Attached eigen: " << j << endl;
+			}
 		}
 
 		const int sec_num = floquet -> Get_Sector_Dim().size();
 
-		// This should not be parallelized if model is parallelized...
-		// Parallel the initial states, assuming time evolution is still serial
+		// Parallel the initial states when time evolution is still serial
 		#pragma omp parallel for num_threads(threads_N) if (!model_parallel)
 		for (int n=0; n<num_realization; n++){
 			cout << endl;
@@ -116,9 +129,13 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 				// Evol the state to t+1
 				temp_density = MatrixXcd::Zero(init_info.dim, init_info.dim);
 
-				for (int i=0; i<sec_num; i++){
-					temp_density += floquet -> Get_U(i) * state_density * 
-						floquet -> Get_U(i).adjoint();
+				int true_sec_num = 0; // Sector number without isolated sectorss
+				for (int j=0; j<sec_num; j++){
+					if (floquet -> eigen_name[j] != "Isolated"){
+						temp_density += floquet -> Get_U(j) * state_density * 
+							floquet -> Get_U(j).adjoint();
+						true_sec_num ++;
+					}
 				}
 
 				if (temp_density.rows() != state_density.rows() || 
@@ -130,7 +147,7 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 					abort();
 				}
 
-				state_density = 1.0/double(sec_num) * temp_density;
+				state_density = 1.0/double(true_sec_num) * temp_density;
 
 				if (debug){
 					cout << "Time step:" << t+1 << endl;
@@ -159,8 +176,19 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 		cout << endl;
 		cout << endl;
 
+		if (i == 0) model_type = floquet -> Repr();
+
 		delete floquet;
 		floquet = NULL;
 	}
+
+	string init_string = init_func_name;
+	replace(init_string.begin(), init_string.end(),' ','_');
+
+	string task_string = parameters.generic.task;
+	replace(task_string.begin(), task_string.end(),' ','_');
+
+	evol_data.Data_Output_Total(parameters, model_type + ",Task_" + task_string + ",Init_"
+	+ init_string);
 
 }
