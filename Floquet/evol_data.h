@@ -40,9 +40,13 @@ typedef void (EvolData::*Data_Cal)(const VectorXcd&, const StepInfo&);
 // Functions that compute data from a complex density matrix and step information
 typedef void (EvolData::*Data_Cal_C)(const MatrixXcd&, const StepInfo&);
 
-// Functions that output data using parameters. The string is used as part of the output
-// file name
+// Functions that output data for each model using parameters. The string is used as part of 
+// the output file name
 typedef void (EvolData::*Data_Out)(const AllPara&, const string&);
+
+// Functions that output data for all models using parameters. The string is used as part of 
+// the output file name
+typedef void (EvolData::*Data_Out_Total)(const AllPara&, const string&);
 
 class EvolData
 {	
@@ -54,6 +58,7 @@ class EvolData
 		map<string, Data_Cal> data_cal_; // Correlate name with data_cal function
 		map<string, Data_Cal_C> data_cal_C_; // Correlate name with data_cal_C function
 		map<string, Data_Out> data_out_; // Correlate name with data_out function
+		map<string, Data_Out_Total> data_out_total_; // Correlate name with data_out_total function
 
 		void Data_Func_Map_Init_(); // Initialize data_init_ and data_cal_;
 		void Name_Check_() const; // Check names in different maps are consistent
@@ -111,6 +116,9 @@ class EvolData
 
 		// Output data to file. All the data that are computed will be outputted
 		void Data_Output(const AllPara&, const string&);
+
+		// Output data of all models to file. All the data that are computed will be outputted
+		void Data_Output_Total(const AllPara&, const string&);
 };
 
 #endif
