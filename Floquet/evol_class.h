@@ -23,15 +23,17 @@ class EvolMatrix
 		const int size_; // Size of the system
 		const int dim_; // Dimension of the space given size
 		const int local_dim_; // Local dimension of the Hilber space
+		int model_id_; // unique ID of this model
 
 	public:
 		// When local dimension is not given
 		EvolMatrix(int size): 
-			size_(size), local_dim_(2), dim_(1 << size){}
+			size_(size), local_dim_(2), dim_(1 << size){model_num++; model_id_ = model_num;}
 
 		// When local dimension is explicitly given
 		EvolMatrix(int size, int local_dim):
-			size_(size), local_dim_(local_dim), dim_(int(pow(double(local_dim), double(size)))){}
+			size_(size), local_dim_(local_dim), dim_(int(pow(double(local_dim), double(size))))
+			{model_num++; model_id_ = model_num;}
 
 		//T eigen; // Eigenvalues and Eigenvectors
 
@@ -91,7 +93,14 @@ class EvolMatrix
 		// Return the real Hamiltonian operator according to an integer
 		virtual const MatrixXd& Get_real_H(int) const = 0;
 
+		static int model_num;
+
+		int Model_ID() const {return model_id_;}
+
 		virtual ~EvolMatrix(){};
 };
+
+template <class T>
+int EvolMatrix<T>::model_num = 0;
 
 #endif
