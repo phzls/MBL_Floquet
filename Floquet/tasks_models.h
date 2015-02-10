@@ -81,12 +81,13 @@ EvolMatrix<T>*& model) const {
 	}
 	else{
 		// Intrinsic type is constructed here
-		it -> second.second -> operator()(parameters, model);
+		string type;
+		type = it -> second.second -> operator()(parameters, model);
 
-		if (it -> second.first != it -> second.second -> Type()){
+		if (it -> second.first != type){
 			cout << "Model type is not consistent." << endl;
 			cout << "Desired model type: " << it -> second.first << endl;
-			cout << "Constructed model type: " << it -> second.second -> Type() << endl;
+			cout << "Constructed model type: " << type << endl;
 			abort();
 		}
 
