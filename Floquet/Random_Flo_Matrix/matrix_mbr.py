@@ -151,7 +151,7 @@ for i in range(len(filename)):
             if temp_matrix[i][row][col] > threshold:
                 matrix_count[i][pos-1] += 1
 
-    matrix_bin[i] = [matrix_bin[i][n]/float(count[i]) for n in range(len(matrix_bin[i]))]
+    matrix_bin[i] = [matrix_bin[i][n]/float(count[n]) for n in range(len(matrix_bin[i]))]
 
 
     print filename[i], summation
@@ -182,7 +182,7 @@ if len(draw1._plot_range) == 1:
     print_label = print_label.replace(' ', '_')
     print_label = print_label + "_MBR"
 
-pylab.savefig(print_label + ".png", box_inches='tight')
+#pylab.savefig(print_label + ".png", box_inches='tight')
 
 draw2 = Draw.Draw()
 
@@ -208,7 +208,7 @@ if len(draw2._plot_range) == 1:
     print_label = print_label.replace(' ', '_')
     print_label = print_label + "_bin_num_" + str(bin_num) + "_binned_ave_MBR"
 
-pylab.savefig(print_label + ".pdf", box_inches='tight')
+#pylab.savefig(print_label + ".pdf", box_inches='tight')
 
 draw3 = Draw.Draw()
 
@@ -236,6 +236,6 @@ if len(draw3._plot_range) == 1:
     print_label = print_label.replace(' ', '_')
     print_label = print_label + "_bin_num_" + str(bin_num) + "_threshold_" + threshold_plot + "_count_MBR"
 
-pylab.savefig(print_label + ".pdf", box_inches='tight')
+#pylab.savefig(print_label + ".pdf", box_inches='tight')
 
 pylab.show()
