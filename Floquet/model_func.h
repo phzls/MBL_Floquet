@@ -89,4 +89,14 @@ class FloEvolMarkovInterRandomBothFunc: public ModelFunc
 		virtual ~FloEvolMarkovInterRandomBothFunc(){};
 };
 
+// For Markov inter random both floquet operator which couples to bath through a sigma_x term
+class FloEvolMarkovInterRandomBothXFunc: public ModelFunc
+{
+	public:
+		string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+		string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+
+		virtual ~FloEvolMarkovInterRandomBothXFunc(){};
+};
+
 #endif
