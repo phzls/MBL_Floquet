@@ -1,8 +1,8 @@
 //INC = ~/
 
-models = flo_evol_random.o flo_evol_random_rotation.o flo_evol_xxz.o flo_evol.o flo_evol_inter_random.o flo_evol_markov_inter_random.o flo_evol_markov_inter_random_both.o
+models = flo_evol_random.o flo_evol_random_rotation.o flo_evol_xxz.o flo_evol.o flo_evol_inter_random.o flo_evol_markov_inter_random.o flo_evol_markov_inter_random_both.o flo_evol_markov_inter_random_both_x.o
 
-evolutions = mersenne.o flo_level.o flo_rightmost_sigma_z.o evol_data.o entropy_per_model.o flo_evolution.o flo_evolution_simple_markov.o leftmost_spin_z_per_model.o leftmost_spin_z_one_run.o flo_leftmost_sigma_z.o
+evolutions = mersenne.o flo_level.o flo_rightmost_sigma_z.o evol_data.o entropy_per_model.o flo_evolution.o flo_evolution_simple_markov.o leftmost_spin_z_per_model.o leftmost_spin_z_one_run.o flo_leftmost_sigma_z.o flo_chain_end_sigma_z.o
 
 functions = generic_func.o update.o tasks_models.o model_func.o sort.o reduced_density_left_2.o
 
