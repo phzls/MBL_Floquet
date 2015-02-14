@@ -94,6 +94,14 @@ struct Evolution
 };
 
 /*
+ * Parameters used for Markov models
+ */
+struct Markov
+{
+	double K; // Coupling strength to the bath
+};
+
+/*
  * All parameters.
  */
 struct AllPara
@@ -118,6 +126,9 @@ struct AllPara
 
 	// Time evolution parameters
 	Evolution evolution;
+
+	// Markov model parameters
+	Markov markov;
 };
 
 #endif
