@@ -59,6 +59,17 @@ void TasksModels::Map_Construct_(){
 	task_function5 = &flo_leftmost_sigma_z;
 	Task_Map_Insert(task_name5, task_type5, task_function5);
 
+	// Compute the representation of leftmost and rightmost sigma_z operator for 
+	// a floquet system in the basis of eigenstates
+	string task_name6;
+	string task_type6;
+	task_func task_function6;
+
+	task_name6 = "Flo Chain End Sigma_z";
+	task_type6 = "Floquet";
+	task_function6 = &flo_chain_end_sigma_z;
+	Task_Map_Insert(task_name6, task_type6, task_function6);
+
 	// Random Floquet Operator
 	string model_name1;
 	string model_type1;
@@ -118,6 +129,17 @@ void TasksModels::Map_Construct_(){
 	model_type6 = "Markov Inter Random Both Floquet";
 	model_function6 = new FloEvolMarkovInterRandomBothFunc();
 	Model_Map_Insert(model_name6, model_type6, model_function6);
+
+	// Markov Inter Random Both Floquet Operator which couples to the bath through a
+	// sigma_x term
+	string model_name7;
+	string model_type7;
+	ModelFunc* model_function7;
+
+	model_name7 = "Markov Inter Random Both X Flo";
+	model_type7 = "Markov Inter Random Both X Floquet";
+	model_function7 = new FloEvolMarkovInterRandomBothXFunc();
+	Model_Map_Insert(model_name7, model_type7, model_function7);
 }
 
 void TasksModels::Task_Map_Insert(const string& task_name, const string& task_type, 

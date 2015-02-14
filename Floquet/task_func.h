@@ -34,4 +34,10 @@ void flo_evolution_simple_markov(const AllPara&);
  */
 void flo_leftmost_sigma_z(const AllPara&);
 
+/*
+ * Compute entry and norm representations of the leftmost and rightmostsigma matrix at the 
+ * end of chain for floquet systems.
+ */
+void flo_chain_end_sigma_z(const AllPara&);
+
 #endif
