@@ -15,7 +15,7 @@ int main(){
 	AllPara parameters;
 	
 	parameters.generic.task = "Flo Simple Markov Evolution";
-	parameters.generic.model = "Markov Inter Random Both Flo";
+	parameters.generic.model = "Markov Inter Random Both X Flo";
 
 	parameters.generic.size = 6; // System size
 	parameters.generic.num_realizations = 1; // Number of realizations
@@ -32,7 +32,9 @@ int main(){
 	parameters.floquet.J_min = 0; // Minimum J
 	parameters.floquet.J_max = 1; // Maximum J
 	parameters.floquet.tau = 0.8; // Time step size
-	parameters.floquet.J = 0.4;
+	parameters.floquet.J = 0.1;
+
+	parameters.markov.K = 1; // Coupling strength to the bath in markov models
 
 	parameters.floquet_random.angle_min = 5*Pi/6; // Minimum angle for the random rotation angle
 	parameters.floquet_random.angle_sup = 5*Pi/6; // Supreme angle for the random rotation angle
@@ -46,7 +48,7 @@ int main(){
 	parameters.evolution.evol_compute["Entropy Per Model"] = false;
 	parameters.evolution.evol_compute["Leftmost Spin Z Per Model"] = false;
 	parameters.evolution.evol_compute["Leftmost Spin Z One Run"] = true;
-	parameters.evolution.model_num = 100; // Number of models for evolution
+	parameters.evolution.model_num = 10; // Number of models for evolution
 	// If partition the chain to two halves, the size of left part
 	parameters.evolution.left_size = parameters.generic.size / 2; 
 	parameters.evolution.jump = 1; // jump of time points in evolution
