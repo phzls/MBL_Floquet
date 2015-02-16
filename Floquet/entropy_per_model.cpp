@@ -150,6 +150,8 @@ void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& n
 	const double step_size = parameters.evolution.step_size;
 	const bool log_time = parameters.evolution.log_time;
 	const int log_time_jump = parameters.evolution.log_time_jump;
+	const bool markov_jump = parameters.evolution.markov_jump;
+	const int markov_time_jump = parameters.evolution.markov_time_jump;
 
 	if (entropy_per_model_.size() != time_step){
 		cout << "Not enough time steps are computed for entropy." << endl;
@@ -174,6 +176,8 @@ void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& n
 
 	if (log_time) filename <<",log_time";
 
+	if (markov_jump) filename <<",markov_time_jump=" << markov_time_jump;
+
 	filename << ",jump=" << jump << ",entropy_per_model.txt";
 
 	if (output) cout << filename.str() <<endl;
@@ -182,6 +186,8 @@ void EvolData::Entropy_Per_Model_Out_(const AllPara& parameters, const string& n
 
 	for (int t=0; t<time_step; t++){
 		double time = t * step_size * jump; // An overflow still happens for entropy
+
+		if (markov_jump) time *= markov_time_jump;
 
 		if (log_time){
 			long long int power = pow(log_time_jump,t);
