@@ -174,12 +174,12 @@ for n in range(len(filename)):
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init(ymin = 0.0001, ymax = 1, xmax = 100, logy = True)
+draw1.figure_init()
 draw1.figure_set()
 
 #in_range = ["3.14", "1.04", "1.57", "2.09", "2.61"] # Angles
-must_in_range = ["Markov Inter Random Both Floquet", "L=8"]
-must_not_range = ["J=0.1","30000"]
+must_in_range = ["Markov Inter Random Both X Floquet", "L=8"]
+must_not_range = ["J=0.1"]
 
 draw1.plot_range(label, must_in_range = must_in_range, must_not_range = must_not_range,
                  printout = True)
@@ -190,6 +190,6 @@ pylab.legend(loc='left', ncol=1, prop={'size':14})#, bbox_to_anchor=(1.1, 0.5))
 pylab.ylabel(r"$\sigma^{z,l}(t)$")
 pylab.xlabel("time")
 
-pylab.savefig("Inter_Random_Floquet_Markov_8_J_0_9_largest_left_spin_eigenstate_left_spin_compare_log.png",box_inches='tight')
+#pylab.savefig("Inter_Random_Floquet_Markov_8_J_0_9_largest_left_spin_eigenstate_left_spin_compare_log.png",box_inches='tight')
 
 pylab.show()
