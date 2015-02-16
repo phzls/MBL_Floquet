@@ -35,6 +35,10 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 	const int model_num = parameters.evolution.model_num; // Number of models
 	const string init_func_name = parameters.evolution.init_func_name; 
 
+	// The jump time in markov time evolution
+	const int markov_time_jump = parameters.evolution.markov_time_jump; 
+	const bool markov_jump = parameters.evolution.markov_jump;
+
 	InitObj init_obj;
 
 	EvolData evol_data(parameters);
@@ -111,6 +115,9 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 			// A temporary holder for density matrix
 			MatrixXcd temp_density;
 
+			// A matrix used to advance density matrix if markov_time_jump > 1
+			MatrixXcd markov_adv;
+
 			StepInfo info;
 			info.model = i;
 			info.realization = n;
@@ -132,8 +139,33 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 				int true_sec_num = 0; // Sector number without isolated sectorss
 				for (int j=0; j<sec_num; j++){
 					if (floquet -> eigen_name[j] != "Isolated"){
-						temp_density += floquet -> Get_U(j) * state_density * 
+						if (!markov_jump || markov_time_jump == 1){
+							temp_density += floquet -> Get_U(j) * state_density * 
 							floquet -> Get_U(j).adjoint();
+						}
+						else{
+							// Not flip the spin at every step in the bath
+							int row = floquet -> Get_U(j).rows();
+							int col = floquet -> Get_U(j).cols();
+							markov_adv = MatrixXcd::Zero(row,col);
+
+							if (row != col){
+								cout << "Evolution Matrix in " << j <<"th"
+									 << " sector is not square." << endl;
+								abort(); 
+							}
+
+							for (int l=0; l<row; l++){
+								markov_adv(l,l) = pow(floquet -> eigen[j].eigenvalues()(l),
+									markov_time_jump);
+							}
+
+							markov_adv = floquet -> eigen[j].eigenvectors() * markov_adv *
+								floquet -> eigen[j].eigenvectors().adjoint();
+
+							temp_density += markov_adv * state_density * markov_adv.adjoint();
+						}
+
 						true_sec_num ++;
 					}
 				}
