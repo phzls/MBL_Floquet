@@ -9,11 +9,11 @@ suffix = ".txt"
 
 # Read all files starting with Markov
 for file in os.listdir('.'):
-    if fnmatch.fnmatch(file, "Markov*.txt"):
+    if fnmatch.fnmatch(file, "Markov*spin*.txt"):
         print file[:-len(suffix)]
         markov_file.append(file[:-len(suffix)])
 
-f = open("name.txt",'w')
+f = open("spin_name.txt",'w')
 for n in markov_file:
     print >> f, n
 f.close()
