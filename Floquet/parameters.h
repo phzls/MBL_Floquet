@@ -91,6 +91,9 @@ struct Evolution
 	bool log_time; // Determine whether time increases logarithmically
 	int log_time_jump; // The base number which time increases on when logarithmically
 
+	bool markov_jump; // Determine whether there will be markov_time_jump
+	int markov_time_jump; // The jump time in markov time evolution
+
 };
 
 /*
