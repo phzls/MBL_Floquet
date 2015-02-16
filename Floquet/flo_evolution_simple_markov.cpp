@@ -116,7 +116,31 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 			MatrixXcd temp_density;
 
 			// A matrix used to advance density matrix if markov_time_jump > 1
-			MatrixXcd markov_adv;
+			vector<MatrixXcd> markov_adv(sec_num);
+
+			for (int j=0; j<sec_num; j++){
+				int row = floquet -> Get_U(j).rows();
+				int col = floquet -> Get_U(j).cols();
+
+				if (row != col){
+					cout << "Evolution Matrix in " << j <<"th"
+						 << " sector is not square." << endl;
+					abort(); 
+				}
+
+				if (floquet -> eigen_name[j] != "Isolated"){
+					markov_adv[j] = MatrixXcd::Zero(row,col);
+
+					for (int l=0; l<row; l++){
+					markov_adv[j](l,l) = pow(floquet -> eigen[j].eigenvalues()(l),
+						markov_time_jump);
+					}
+
+					markov_adv[j] = floquet -> eigen[j].eigenvectors() * markov_adv[j] *
+						floquet -> eigen[j].eigenvectors().adjoint();
+				}
+				else markov_adv[j] = MatrixXcd::Zero(0,0);
+			}
 
 			StepInfo info;
 			info.model = i;
@@ -141,29 +165,12 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 					if (floquet -> eigen_name[j] != "Isolated"){
 						if (!markov_jump || markov_time_jump == 1){
 							temp_density += floquet -> Get_U(j) * state_density * 
-							floquet -> Get_U(j).adjoint();
+								floquet -> Get_U(j).adjoint();
 						}
 						else{
 							// Not flip the spin at every step in the bath
-							int row = floquet -> Get_U(j).rows();
-							int col = floquet -> Get_U(j).cols();
-							markov_adv = MatrixXcd::Zero(row,col);
-
-							if (row != col){
-								cout << "Evolution Matrix in " << j <<"th"
-									 << " sector is not square." << endl;
-								abort(); 
-							}
-
-							for (int l=0; l<row; l++){
-								markov_adv(l,l) = pow(floquet -> eigen[j].eigenvalues()(l),
-									markov_time_jump);
-							}
-
-							markov_adv = floquet -> eigen[j].eigenvectors() * markov_adv *
-								floquet -> eigen[j].eigenvectors().adjoint();
-
-							temp_density += markov_adv * state_density * markov_adv.adjoint();
+							temp_density += markov_adv[j] * state_density * 
+								markov_adv[j].adjoint();
 						}
 
 						true_sec_num ++;
