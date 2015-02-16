@@ -15,7 +15,8 @@ using namespace std;
  */
 void FloEvolMarkovInterRandomBothX::Repr_Init_(){
 	repr_ << "Markov_Inter_Random_Both_X_Floquet_L=" << size_ << ",J=" << param_.J 
-		  << ",g=" << param_.g << ",h=" << param_.h <<",tau="<< param_.tau;
+		  << ",g=" << param_.g << ",h=" << param_.h << ",K=" << param_.K << ",tau=" 
+		  << param_.tau;
 	type_ = "Markov_Inter_Random_Both_X_Floquet";
 }
 
