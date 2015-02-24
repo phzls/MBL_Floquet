@@ -26,10 +26,10 @@ for i=1:col
     leftmost = [leftmost,left];
 end
 
-leftmost
 
 % Sort according to leftmost
 [leftmost,I] = sort(leftmost);
+
 
 state = V(:,I(end));
 
