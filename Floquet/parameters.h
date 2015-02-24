@@ -94,6 +94,8 @@ struct Evolution
 	bool markov_jump; // Determine whether there will be markov_time_jump
 	int markov_time_jump; // The jump time in markov time evolution
 
+	int leftmost_spin_z_index; // The number gives the index of leftmost spin z value
+
 };
 
 /*
@@ -102,6 +104,18 @@ struct Evolution
 struct Markov
 {
 	double K; // Coupling strength to the bath
+};
+
+/*
+ * Initial information related to multiple sets of parameters under one model of evolution
+ * Since so far each initial state construction function only requires one set of parameters,
+ * this vector should not be used in any of these functions. Instead, the corresponding one-
+ * set-parameter variable should be passed in.
+ */
+struct MultipleInitPara
+{
+	// The set of numbers which give indices of leftmost spin z value
+	vector<int> leftmost_spin_z_index_set;
 };
 
 /*
@@ -132,6 +146,9 @@ struct AllPara
 
 	// Markov model parameters
 	Markov markov;
+
+	// Multiple sets of initial conditions
+	MultipleInitPara multi_ini_para;
 };
 
 #endif
