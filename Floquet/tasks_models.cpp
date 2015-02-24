@@ -70,6 +70,17 @@ void TasksModels::Map_Construct_(){
 	task_function6 = &flo_chain_end_sigma_z;
 	Task_Map_Insert(task_name6, task_type6, task_function6);
 
+	// Compute Markov time evolution for a Floquet system with one model and possible
+	// multiple sets of initial parameters
+	string task_name7;
+	string task_type7;
+	task_func task_function7;
+
+	task_name7 = "Flo Simple Markov Evolution One Model";
+	task_type7 = "Floquet";
+	task_function7 = &flo_evolution_simple_markov_one_model;
+	Task_Map_Insert(task_name7, task_type7, task_function7);
+
 	// Random Floquet Operator
 	string model_name1;
 	string model_type1;
