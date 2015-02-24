@@ -11,9 +11,9 @@ rightmost sigma z matrices versus phases differences.
 import drawing as Draw
 import label_build as Label
 import numpy as np
-from math import sqrt, pi
+from math import sqrt, pi,floor
 
-bin_num = 50
+bin_num = 20
 threshold = 0.03
 
 def read_matrix_norm(filename):
@@ -125,8 +125,10 @@ right_matrix_bin = []
 prod_matrix_bin = []
 
 bins = np.linspace(0, pi, bin_num+1)
+bin_width = bins[1]-bins[0]
 
 # Construct data for plotting
+# Diagonal terms are excluded
 for i in range(len(filename)):
     left_matrix.append([])
     right_matrix.append([])
@@ -150,6 +152,9 @@ for i in range(len(filename)):
 
     for row in range(len(temp_left_matrix[i])):
         for col in range(len(temp_left_matrix[i][row])):
+            if row == col:
+                continue
+
             left_matrix[i].append(temp_left_matrix[i][row][col])
             right_matrix[i].append(temp_right_matrix[i][row][col])
             prod_matrix[i].append(temp_prod_matrix[i][row][col])
@@ -159,13 +164,12 @@ for i in range(len(filename)):
                 phase_diff = 2*pi - phase_diff
             phase[i].append(phase_diff)
 
-            pos = 1
-            while bins[pos] < phase_diff:
-                pos += 1
-            left_matrix_bin[i][pos-1] += temp_left_matrix[i][row][col]
-            right_matrix_bin[i][pos-1] += temp_right_matrix[i][row][col]
-            prod_matrix_bin[i][pos-1] += temp_prod_matrix[i][row][col]
-            count[pos-1] += 1
+            pos = int(floor(phase_diff/bin_width))
+
+            left_matrix_bin[i][pos] += temp_left_matrix[i][row][col]
+            right_matrix_bin[i][pos] += temp_right_matrix[i][row][col]
+            prod_matrix_bin[i][pos] += temp_prod_matrix[i][row][col]
+            count[pos] += 1
 
     left_matrix_bin[i] = [left_matrix_bin[i][n]/float(count[n]) for n in
         range(len(left_matrix_bin[i]))]
@@ -176,10 +180,15 @@ for i in range(len(filename)):
 
     print sum(count)
 
+    print "In the first bin: ", count[0]
+    print "In the middle of prod matrix bin: ", prod_matrix_bin[i][20]
+    print "Smallest in the prod matrix bin", min(prod_matrix_bin[i])
+
+
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init(width = 0)
+draw1.figure_init(width = 0, logy = True)
 draw1.figure_set()
 
 
@@ -191,7 +200,7 @@ draw1.plot_range(label, must_in_range = must_in_range, must_not_range = must_not
 
 draw1.plot(phase_bin, prod_matrix_bin, label = legend, trun = False)
 
-pylab.legend(loc='center right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
+pylab.legend(loc='upper right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
 pylab.ylabel(r"$\langle|\sigma^{z,l\times r}_{i,j}|\rangle$")
 pylab.xlabel(r"$|\Delta\phi|$")
 
@@ -199,17 +208,17 @@ pylab.xlabel(r"$|\Delta\phi|$")
 if len(draw1._plot_range) == 1:
     print_label = legend[draw1._plot_range[0]].replace('.', '_')
     print_label = print_label.replace(' ', '_')
-    print_label = print_label + "_bin_num_" + str(bin_num) + "_binned_ave_left_right_prod"
+    print_label = print_label + "_bin_num_" + str(bin_num) + "_binned_ave_left_right_prod_log"
 
     print print_label
 
 pylab.subplots_adjust(left=0.15)
 
-pylab.savefig(print_label + ".pdf", box_inches='tight')
+#pylab.savefig(print_label + ".pdf", box_inches='tight')
 
 draw2 = Draw.Draw()
 
-draw2.figure_init(width = 0)
+draw2.figure_init(width = 0,logy = True, logx = True)
 draw2.figure_set()
 
 
@@ -221,7 +230,7 @@ draw2.plot_range(label, must_in_range = must_in_range, must_not_range = must_not
 
 draw2.plot(left_matrix_bin, right_matrix_bin, label = legend, trun = False)
 
-pylab.legend(loc='center right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
+pylab.legend(loc='upper right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
 pylab.ylabel(r"$\langle|\sigma^{z,r}_{i,j}|\rangle$")
 pylab.xlabel(r"$\langle|\sigma^{z,l}_{i,j}|\rangle$")
 
@@ -229,18 +238,18 @@ pylab.xlabel(r"$\langle|\sigma^{z,l}_{i,j}|\rangle$")
 if len(draw2._plot_range) == 1:
     print_label = legend[draw2._plot_range[0]].replace('.', '_')
     print_label = print_label.replace(' ', '_')
-    print_label = print_label + "_bin_num_" + str(bin_num) + "_binned_ave_left_vs_right"
+    print_label = print_label + "_bin_num_" + str(bin_num) + "_binned_ave_left_vs_right_loglog"
 
     print print_label
 
-pylab.subplots_adjust(left=0.15)
-pylab.subplots_adjust(bottom=0.12)
+pylab.subplots_adjust(left=0.13)
+pylab.subplots_adjust(bottom=0.13)
 
-pylab.savefig(print_label + ".pdf", box_inches='tight')
+#pylab.savefig(print_label + ".pdf", box_inches='tight')
 
 draw3 = Draw.Draw()
 
-draw3.figure_init(width = 0)
+draw3.figure_init(width = 0,logy = True)
 draw3.figure_set()
 
 
@@ -252,7 +261,7 @@ draw3.plot_range(label, must_in_range = must_in_range, must_not_range = must_not
 
 draw3.plot(phase, prod_matrix, label = legend, trun = False)
 
-pylab.legend(loc='center right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
+pylab.legend(loc='upper right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
 pylab.ylabel(r"$|\sigma^{z,l\times r}_{i,j}|$")
 pylab.xlabel(r"$|\Delta\phi|$")
 
@@ -260,15 +269,16 @@ pylab.xlabel(r"$|\Delta\phi|$")
 if len(draw2._plot_range) == 1:
     print_label = legend[draw2._plot_range[0]].replace('.', '_')
     print_label = print_label.replace(' ', '_')
-    print_label = print_label + "_left_right_prod"
+    print_label = print_label + "_left_right_prod_log"
 
     print print_label
 
-pylab.savefig(print_label + ".png", box_inches='tight')
+pylab.subplots_adjust(left=0.14)
+#pylab.savefig(print_label + ".png", box_inches='tight')
 
 draw4 = Draw.Draw()
 
-draw4.figure_init(width = 0)
+draw4.figure_init(width = 0,logy = True, logx = True)
 draw4.figure_set()
 
 
@@ -280,7 +290,7 @@ draw4.plot_range(label, must_in_range = must_in_range, must_not_range = must_not
 
 draw4.plot(left_matrix, right_matrix, label = legend, trun = False)
 
-pylab.legend(loc='center right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
+pylab.legend(loc='lower right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
 pylab.ylabel(r"$|\sigma^{z,r}_{i,j}|$")
 pylab.xlabel(r"$|\sigma^{z,l}_{i,j}|$")
 
@@ -288,17 +298,20 @@ pylab.xlabel(r"$|\sigma^{z,l}_{i,j}|$")
 if len(draw2._plot_range) == 1:
     print_label = legend[draw2._plot_range[0]].replace('.', '_')
     print_label = print_label.replace(' ', '_')
-    print_label = print_label + "_left_vs_right"
+    print_label = print_label + "_left_vs_right_log"
 
     print print_label
 
-pylab.savefig(print_label + ".png", box_inches='tight')
+pylab.subplots_adjust(left=0.14)
+pylab.subplots_adjust(bottom=0.14)
+#pylab.savefig(print_label + ".png", box_inches='tight')
 
+"""
 pylab.subplots_adjust(bottom=0.12)
 
 draw5 = Draw.Draw()
 
-draw5.figure_init(width = 0)
+draw5.figure_init(width = 0,logy = True)
 draw5.figure_set()
 
 
@@ -313,10 +326,11 @@ draw5.plot(phase_bin, right_matrix_bin, label = legend, trun = False)
 pylab.legend(loc='upper right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
 pylab.ylabel(r"$|\sigma^{z,r}_{i,j}|$")
 pylab.xlabel(r"$|\Delta\phi|$")
+pylab.subplots_adjust(left=0.15)
 
 draw6 = Draw.Draw()
 
-draw6.figure_init(width = 0)
+draw6.figure_init(width = 0,logy = True)
 draw6.figure_set()
 
 
@@ -331,6 +345,7 @@ draw6.plot(phase_bin, left_matrix_bin, label = legend, trun = False)
 pylab.legend(loc='upper right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
 pylab.ylabel(r"$|\sigma^{z,l}_{i,j}|$")
 pylab.xlabel(r"$|\Delta\phi|$")
-
+pylab.subplots_adjust(left=0.15)
+"""
 
 pylab.show()
