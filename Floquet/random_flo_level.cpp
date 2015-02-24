@@ -103,5 +103,7 @@ int main(){
 		Write_File(square_mean_out, J, temp, 15);
 	}
 
+	delete result;
+
 	return 0;
 }
