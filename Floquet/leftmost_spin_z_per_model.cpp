@@ -14,8 +14,9 @@ using namespace std;
 using namespace Eigen;
 
 /**
- ** This file contains functions related to leftmost_spin_z_per_model. It is the average of ** leftmost spin z at a spin chain model whose each site has only spin down and spin up. Spin up 
- ** is labeled as 1 and spin down is labeled as -1.
+ ** This file contains functions related to leftmost_spin_z_per_model. It is the average of
+ ** leftmost spin z at a spin chain model whose each site has only spin down and spin up. 
+ ** Spin up is labeled as 1 and spin down is labeled as -1.
  **/
 
 /*
