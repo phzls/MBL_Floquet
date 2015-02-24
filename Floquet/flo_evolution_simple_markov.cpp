@@ -60,6 +60,7 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 		init_info.size = parameters.generic.size;
 		init_info.norm_delta = 1.0e-15;
 		init_info.debug = debug;
+		init_info.leftmost_spin_z_index = parameters.evolution.leftmost_spin_z_index;
 
 		EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet;
 
@@ -210,7 +211,7 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 		replace(task_string.begin(), task_string.end(),' ','_');
 
 		evol_data.Data_Output(parameters, floquet -> Repr() + ",Task_" + task_string + ",Init_"
-		 + init_string);
+		 + init_string + init_obj.Init_Para_String(init_func_name, init_info));
 
 		cout << endl;
 		cout << endl;
@@ -228,6 +229,6 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 	replace(task_string.begin(), task_string.end(),' ','_');
 
 	evol_data.Data_Output_Total(parameters, model_type + ",Task_" + task_string + ",Init_"
-	+ init_string);
+	+ init_string + init_obj.Init_Para_String(init_func_name, init_info));
 
 }

@@ -172,7 +172,7 @@ void flo_evolution(const AllPara& parameters){
 		replace(task_string.begin(), task_string.end(),' ','_');
 
 		evol_data.Data_Output(parameters, floquet -> Repr() + ",Task_" + task_string + ",Init_"
-		 + init_string);
+		 + init_string + init_obj.Init_Para_String(init_func_name, init_info));
 
 		cout << endl;
 		cout << endl;
