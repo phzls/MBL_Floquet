@@ -94,10 +94,17 @@ Label.string_extract(filename, Total, start_string = Total_string, end_string = 
 
 # jump
 jump = [[] for n in filename]
-jump_string = "jump="
+jump_string = ",jump="
 jump_label = "jump="
 
 Label.string_extract(filename, jump, start_string = jump_string, end_string = ',')
+
+# Markov time jump
+markov_time_jump = [[] for n in filename]
+markov_time_jump_string = "markov_time_jump="
+markov_time_jump_label = "time_jump="
+
+Label.string_extract(filename, markov_time_jump, start_string = markov_time_jump_string, end_string = ',')
 
 # minimum angle for rotation if exists
 angle_min = [[] for n in filename]
@@ -144,7 +151,10 @@ Label.label_build(label, angle_sup_label, angle_sup, end = True)
 Label.label_build(label, realization_label, realization, end = True)
 
 Label.label_build(label, model_num_label, model_num, end = True)
-Label.label_build(legend, model_num_label, model_num, end = True)
+#Label.label_build(legend, model_num_label, model_num, end = True)
+
+Label.label_build(label, markov_time_jump_label, markov_time_jump, end = True)
+Label.label_build(legend, markov_time_jump_label, markov_time_jump, end = True)
 
 Label.label_build(label, type_label, cal_type, end = True)
 Label.label_build(label, task_label, cal_task, end = True)
@@ -152,11 +162,11 @@ Label.label_build(label, Total_label, Total, end = True)
 Label.label_build(label, jump_label, jump, end = True)
 
 Label.label_build(label, '', init, end = True)
-Label.label_build(legend, '', init, end = True)
+#Label.label_build(legend, '', init, end = True)
 
 
 
-print label
+#print label
 #print legend
 
 time = []
@@ -178,8 +188,8 @@ draw1.figure_init()
 draw1.figure_set()
 
 #in_range = ["3.14", "1.04", "1.57", "2.09", "2.61"] # Angles
-must_in_range = ["Markov Inter Random Both X Floquet", "L=8"]
-must_not_range = ["J=0.1"]
+must_in_range = ["Markov Inter Random Both X Floquet", "Total=30000","J=0.3","time_jump=10"]
+must_not_range = []
 
 draw1.plot_range(label, must_in_range = must_in_range, must_not_range = must_not_range,
                  printout = True)
@@ -190,6 +200,6 @@ pylab.legend(loc='left', ncol=1, prop={'size':14})#, bbox_to_anchor=(1.1, 0.5))
 pylab.ylabel(r"$\sigma^{z,l}(t)$")
 pylab.xlabel("time")
 
-#pylab.savefig("Inter_Random_Floquet_Markov_8_J_0_9_largest_left_spin_eigenstate_left_spin_compare_log.png",box_inches='tight')
+pylab.savefig("Inter_Random_Floquet_Markov_8_J_0_3_largest_left_spin_eigenstate_left_spin_markov_time_jump_model_num_100_markov_time_jump_10_size_compare.png",box_inches='tight')
 
 pylab.show()
