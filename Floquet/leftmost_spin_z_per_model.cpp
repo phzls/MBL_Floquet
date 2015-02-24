@@ -104,13 +104,13 @@ void EvolData::Leftmost_Spin_Z_Per_Model_Out_(const AllPara& parameters, const s
 	vector<double> sd(time_step);
 
 	stringstream filename;
-	filename << name <<",Realizations=" << num_realizations << ",Total_time_step=" << time_step;
+	filename << name <<",Run=" << num_realizations << ",Total=" << time_step;
 
 	if (log_time) filename <<",log_time";
 
-	if (markov_jump) filename <<",markov_time_jump=" << markov_time_jump;
+	if (markov_jump) filename <<",markov_jump=" << markov_time_jump;
 
-	filename << ",jump=" << jump << ",leftmost_spin_z_per_model.txt";
+	filename << ",jump=" << jump << ",left_spin_z_per_model.txt";
 
 	if (output) cout << filename.str() <<endl;
 

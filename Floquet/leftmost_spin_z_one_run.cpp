@@ -75,7 +75,7 @@ using namespace Eigen;
 	}
 
 	if (info.debug){
-		cout << "Average leftmost spin z per model:" << endl;
+		cout << "Average leftmost spin z one run:" << endl;
 		cout << leftmost_spin_z_one_run_[time][model] << endl;
 		cout << endl;
 	}
@@ -113,13 +113,13 @@ void EvolData::Leftmost_Spin_Z_One_Run_Out_(const AllPara& parameters, const str
 	vector<double> sd(time_step);
 
 	stringstream filename;
-	filename << name <<",Model_Num=" << model_num << ",Total_time_step=" << time_step;
+	filename << name <<",Model_Num=" << model_num << ",Total=" << time_step;
 
 	if (log_time) filename <<",log_time";
 
-	if (markov_jump) filename <<",markov_time_jump=" << markov_time_jump;
+	if (markov_jump) filename <<",markov_jump=" << markov_time_jump;
 
-	filename << ",jump=" << jump << ",leftmost_spin_z_one_run.txt";
+	filename << ",jump=" << jump << ",left_spin_z_one_run.txt";
 
 	if (output) cout << filename.str() <<endl;
 
