@@ -26,6 +26,14 @@ struct InitInfo
 	bool debug; // Whether output debug information
 	vector<ComplexEigenSolver<MatrixXcd>* > complex_eigen; // Some complex eigensystems
 	vector<EigenSolver<MatrixXd>* > real_eigen; // Some real eigensystems
+	int leftmost_spin_z_index; // The number gives the index of leftmost spin z value for 
+							   // eigenvectors
+
+	MultipleInitPara multi_ini_para;
+	int multi_ini_para_num; // Number of sets of parameters for initial conditon
+
+	// A deep copy construct except for multi_ini_para
+	InitInfo(const InitInfo&);
 
 	~InitInfo(){
 		// These vectors should not be used with new
@@ -60,6 +68,12 @@ class InitObj
 		// Use a string to access different initial construction functions for density matrix
 		init_func_C Init_Func_C(const string&) const;
 
+		// Initialize multi_ini_para_num in InitInfo according to the initial condition string
+		void Multi_Num_Init(const string&, InitInfo&) const;
+
+		// Return possible strings for parameters of initial condition
+		string Init_Para_String(const string&, const InitInfo&) const
+
 		// Print out all init_func
 		void Print() const;
 
@@ -81,6 +95,7 @@ void random_product(const InitInfo&, MatrixXcd&);
 void random_pure(const InitInfo&, MatrixXcd&);
 
 void largest_leftmost_spin_z_complex_eigenstate(const InitInfo&, MatrixXcd&);
+void leftmost_spin_z_complex_eigenstate(const InitInfo& init_info, MatrixXcd& init_state_density);
 
 
 /*

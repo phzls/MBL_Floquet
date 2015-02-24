@@ -1,8 +1,21 @@
 #include <iostream>
 #include <map>
+#include <sstream>
 #include "initial_obj.h"
 
 using namespace std;
+
+InitInfo::InitInfo(const InitInfo& init_info){
+	size = init_info.size;
+	dim = init_info.dim;
+	norm_delta = init_info.norm_delta;
+	debug = init_info.debug;
+	complex_eigen = init_info.complex_eigen;
+	real_eigen = init_info.real_eigen;
+	leftmost_spin_z_index = init_info.leftmost_spin_z_index;
+	multi_ini_para = init_info.multi_init_para;
+	multi_ini_para_num = init_info.multi_ini_para_num;s
+}
 
 init_func InitObj::Init_Func(const string& init_func_name) const {
 	map<string, init_func>::const_iterator it = init_func_map_.find(init_func_name);
@@ -98,5 +111,35 @@ void InitObj::map_init_(){
 	}
 	init_func_C_map_[name4] = func_C4;
 
+	string name5 = "Leftmost Spin Z Value";
+	init_func_C func_C5 = leftmost_spin_z_complex_eigenstate;
+
+	it_C = init_func_C_map_.find(name5);
+	if (it_C != init_func_C_map_.end()){
+		cout << "init_func " << name5 << " already exists." << endl;
+		abort();
+	}
+	init_func_C_map_[name5] = func_C5;
+
+}
+
+void InitObj::Multi_Num_Init(const string& init_name, InitInfo& init_info) const {
+	if (init_name == "Leftmost Spin Z Value"){
+		init_info.multi_ini_para_num = init_info.multi_ini_para.leftmost_spin_z_index_set.size();
+	}
+	else{
+		cout << init_name << " is not implemented with multiple sets of initial parameters." 
+			 << endl;
+		init_info.multi_ini_para_num = 0;
+	}
+}
+
+string InitObj::Init_Para_String(const string& init_name, const InitInfo& init_info) const {
+	stringstream output;
+	if (init_name == "Leftmost Spin Z Value"){
+		output << "Leftmost_spin_z_index=" << initInfo.leftmost_spin_z_index;
+		return output.str();
+	}
+	else return "";
 }
 
