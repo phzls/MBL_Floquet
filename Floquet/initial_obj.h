@@ -32,8 +32,11 @@ struct InitInfo
 	MultipleInitPara multi_ini_para;
 	int multi_ini_para_num; // Number of sets of parameters for initial conditon
 
-	// A deep copy construct except for multi_ini_para
+	// A deep copy constructor except for multi_ini_para
 	InitInfo(const InitInfo&);
+
+	// Default constructor
+	InitInfo(){};
 
 	~InitInfo(){
 		// These vectors should not be used with new
@@ -72,7 +75,10 @@ class InitObj
 		void Multi_Num_Init(const string&, InitInfo&) const;
 
 		// Return possible strings for parameters of initial condition
-		string Init_Para_String(const string&, const InitInfo&) const
+		string Init_Para_String(const string&, const InitInfo&) const;
+
+		// Return possible strings for parameters of initial condition
+		string Init_Para_String(const string&, const AllPara&) const;
 
 		// Print out all init_func
 		void Print() const;

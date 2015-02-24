@@ -13,8 +13,8 @@ InitInfo::InitInfo(const InitInfo& init_info){
 	complex_eigen = init_info.complex_eigen;
 	real_eigen = init_info.real_eigen;
 	leftmost_spin_z_index = init_info.leftmost_spin_z_index;
-	multi_ini_para = init_info.multi_init_para;
-	multi_ini_para_num = init_info.multi_ini_para_num;s
+	multi_ini_para = init_info.multi_ini_para;
+	multi_ini_para_num = init_info.multi_ini_para_num;
 }
 
 init_func InitObj::Init_Func(const string& init_func_name) const {
@@ -137,9 +137,18 @@ void InitObj::Multi_Num_Init(const string& init_name, InitInfo& init_info) const
 string InitObj::Init_Para_String(const string& init_name, const InitInfo& init_info) const {
 	stringstream output;
 	if (init_name == "Leftmost Spin Z Value"){
-		output << "Leftmost_spin_z_index=" << initInfo.leftmost_spin_z_index;
+		output << "Leftmost_spin_z_index=" << init_info.leftmost_spin_z_index;
 		return output.str();
 	}
 	else return "";
 }
 
+
+string InitObj::Init_Para_String(const string& init_name, const AllPara& para) const {
+	stringstream output;
+	if (init_name == "Leftmost Spin Z Value"){
+		output << "Spin_z_index=" << para.evolution.leftmost_spin_z_index;
+		return output.str();
+	}
+	else return "";
+}
