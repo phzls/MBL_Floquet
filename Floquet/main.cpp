@@ -15,10 +15,10 @@ TasksModels tasks_models; // Record all the tasks and methods
 int main(){
 	AllPara parameters;
 	
-	parameters.generic.task = "Flo Simple Markov Evolution";
+	parameters.generic.task = "Flo Simple Markov Evolution One Model";
 	parameters.generic.model = "Markov Inter Random Both X Flo";
 
-	parameters.generic.size = 4; // System size
+	parameters.generic.size = 2; // System size
 	parameters.generic.num_realizations = 1; // Number of realizations
 	parameters.generic.threads_N = 1; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
@@ -45,7 +45,7 @@ int main(){
 
 	parameters.evolution.time_step = 10; // Number of time steps
 	parameters.evolution.step_size = parameters.floquet.tau; // Time step size
-	parameters.evolution.init_func_name = "Largest Leftmost Spin Z Value"; // Initial state name
+	parameters.evolution.init_func_name = "Leftmost Spin Z Value"; // Initial state name
 	parameters.evolution.evol_compute["Entropy Per Model"] = false;
 	parameters.evolution.evol_compute["Leftmost Spin Z Per Model"] = false;
 	parameters.evolution.evol_compute["Leftmost Spin Z One Run"] = true;
@@ -64,6 +64,9 @@ int main(){
 
 	parameters.evolution.log_time = false; // whehter time changes logarithmically
 	parameters.evolution.log_time_jump = 2; // The base for time change logarithmically
+
+	// The number gives the index of leftmost spin z value
+	parameters.evolution.leftmost_spin_z_index = 3;
 
 	Eigen::initParallel();
 
