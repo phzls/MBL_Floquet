@@ -24,8 +24,8 @@ struct InitInfo
 	int dim; // Total dimension of Hilbert space
 	double norm_delta; // A small number used to check whether norm is 1
 	bool debug; // Whether output debug information
-	vector<ComplexEigenSolver<MatrixXcd>* > complex_eigen; // Some complex eigensystems
-	vector<EigenSolver<MatrixXd>* > real_eigen; // Some real eigensystems
+	vector<const ComplexEigenSolver<MatrixXcd>* > complex_eigen; // Some complex eigensystems
+	vector<const EigenSolver<MatrixXd>* > real_eigen; // Some real eigensystems
 	int leftmost_spin_z_index; // The number gives the index of leftmost spin z value for 
 							   // eigenvectors
 
@@ -101,7 +101,8 @@ void random_product(const InitInfo&, MatrixXcd&);
 void random_pure(const InitInfo&, MatrixXcd&);
 
 void largest_leftmost_spin_z_complex_eigenstate(const InitInfo&, MatrixXcd&);
-void leftmost_spin_z_complex_eigenstate(const InitInfo& init_info, MatrixXcd& init_state_density);
+void leftmost_spin_z_complex_eigenstate(const InitInfo& init_info, 
+	MatrixXcd& init_state_density);
 
 
 /*
