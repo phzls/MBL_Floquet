@@ -23,7 +23,7 @@ MatrixXcd& init_state_density){
 	// Any number smaller than this has leftmost spin down
 	const int down = 1 << (init_info.size - 1);
 
-	const vector<ComplexEigenSolver<MatrixXcd>* > eigen = init_info.complex_eigen;
+	const vector<const ComplexEigenSolver<MatrixXcd>* > eigen = init_info.complex_eigen;
 
 	if (init_info.debug){
 		cout << "Eigenvectors and eigenvalues of init_model:" << endl;
