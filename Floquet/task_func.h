@@ -44,6 +44,11 @@ void flo_chain_end_sigma_z(const AllPara&);
  * Compute the simple Markov time evolution for a floquet system with only one model and 
  * possibly multiple sets of initial parameters
  */
-void flo_evolution_simple_markov_one_model(const AllPara& parameters);
+void flo_evolution_simple_markov_one_model(const AllPara&);
+
+/*
+ * Call other functions under a single model
+ */
+void single_model(const AllPara&);
 
 #endif

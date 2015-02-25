@@ -81,6 +81,16 @@ void TasksModels::Map_Construct_(){
 	task_function7 = &flo_evolution_simple_markov_one_model;
 	Task_Map_Insert(task_name7, task_type7, task_function7);
 
+	// Implement 
+	string task_name8;
+	string task_type8;
+	task_func task_function8;
+
+	task_name8 = "Single Model";
+	task_type8 = "All";
+	task_function8 = &single_model;
+	Task_Map_Insert(task_name8, task_type8, task_function8);
+
 	// Random Floquet Operator
 	string model_name1;
 	string model_type1;
