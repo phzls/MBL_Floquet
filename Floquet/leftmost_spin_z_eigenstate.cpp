@@ -33,7 +33,7 @@ MatrixXcd& init_state_density){
 		abort();
 	}
 
-	const vector<ComplexEigenSolver<MatrixXcd>* > eigen = init_info.complex_eigen;
+	const vector<const ComplexEigenSolver<MatrixXcd>* > eigen = init_info.complex_eigen;
 
 	if (init_info.debug){
 		cout << "Eigenvectors and eigenvalues of init_model:" << endl;
@@ -83,8 +83,16 @@ MatrixXcd& init_state_density){
 	sort(leftmost_spin_z_pos.begin(), leftmost_spin_z_pos.end(), 
 		Vec_Pair_Double_First_Sort<pair<int,int> >);
 
+	if (index - leftmost_spin_z_index < 0){
+		cout << "Leftmost_spin_z_index is too large." << endl;
+		cout << "Upper bound: " << index << endl;
+		cout << "Current index: " << leftmost_spin_z_index << endl;
+		abort();
+	}
+
 	// Sector of the eigenstate with the kth largest leftmost spin z value
 	const int sec = leftmost_spin_z_pos[index-leftmost_spin_z_index].second.first;
+
 	// Relative position in the sector for the eigenstate with the largest leftmost 
 	// spin z value
 	const int rel_pos = leftmost_spin_z_pos[index-leftmost_spin_z_index].second.second;
