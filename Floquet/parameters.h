@@ -27,6 +27,8 @@ struct GenericPara
 	bool debug; // Whether show debug information
 	string task; // String for the computation task
 	string model; // String for the model
+	bool iso_keep; // Whether keep the isolated part; so far only works for 
+				   // Flo_Evol_Markov_Inter_Random_Both_X
 };
 
 /*
@@ -119,6 +121,14 @@ struct MultipleInitPara
 };
 
 /*
+ * Parameters used for single model computation
+ */
+struct SingleModel
+{
+	map<string,bool> single_model_compute; // Determine which method to be computed
+};
+
+/*
  * All parameters.
  */
 struct AllPara
@@ -149,6 +159,9 @@ struct AllPara
 
 	// Multiple sets of initial conditions
 	MultipleInitPara multi_ini_para;
+
+	// Single model computation
+	SingleModel single_model;
 };
 
 #endif
