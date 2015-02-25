@@ -229,6 +229,6 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 	replace(task_string.begin(), task_string.end(),' ','_');
 
 	evol_data.Data_Output_Total(parameters, model_type + ",Task_" + task_string + ",Init_"
-	+ init_string + init_obj.Init_Para_String(init_func_name, init_info));
+	+ init_string + init_obj.Init_Para_String(init_func_name, parameters));
 
 }
