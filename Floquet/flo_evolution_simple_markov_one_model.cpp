@@ -48,11 +48,6 @@ void flo_evolution_simple_markov_one_model(const AllPara& parameters){
 	init_info.leftmost_spin_z_index = parameters.evolution.leftmost_spin_z_index;
 	init_info.multi_ini_para = parameters.multi_ini_para;
 
-	EvolData evol_data(parameters);
-
-	// A string used to record model for last output
-	string model_type;
-
 	EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet;
 
 	tasks_models.Model(model, parameters, floquet);
@@ -83,7 +78,38 @@ void flo_evolution_simple_markov_one_model(const AllPara& parameters){
 
 	const int sec_num = floquet -> Get_Sector_Dim().size();
 
-	init_info.Multi_Num_Init(init_func_name, init_info);
+	// A matrix used to advance density matrix if markov_time_jump > 1
+	vector<MatrixXcd> markov_adv(sec_num);
+
+	for (int j=0; j<sec_num; j++){
+		int row = floquet -> Get_U(j).rows();
+		int col = floquet -> Get_U(j).cols();
+
+		if (row != col){
+			cout << "Evolution Matrix in " << j <<"th"
+				 << " sector is not square." << endl;
+			abort(); 
+		}
+
+		if (floquet -> eigen_name[j] != "Isolated"){
+			markov_adv[j] = MatrixXcd::Zero(row,col);
+
+			for (int l=0; l<row; l++){
+				markov_adv[j](l,l) = pow(floquet -> eigen[j].eigenvalues()(l), markov_time_jump);
+			}
+
+			markov_adv[j] = floquet -> eigen[j].eigenvectors() * markov_adv[j] *
+				floquet -> eigen[j].eigenvectors().adjoint();
+		}
+		else markov_adv[j] = MatrixXcd::Zero(0,0);
+	}
+
+	// Find the number of set of initial conditions
+	init_obj.Multi_Num_Init(init_func_name, init_info);
+
+	// A local copy of parameters with model_num = 1
+	AllPara local_parameters(parameters);
+	local_parameters.evolution.model_num = 1;
 
 	// Parallelize multiple initial parameters part instead of realization part when 
 	// multi_ini_para_num > realization
@@ -104,6 +130,8 @@ void flo_evolution_simple_markov_one_model(const AllPara& parameters){
 				leftmost_spin_z_index_set[i];
 		}
 
+		EvolData evol_data(local_parameters);
+
 		// Parallel the initial states when time evolution is still serial
 		#pragma omp parallel for num_threads(threads_N) if (!multi_init_parallel)
 		for (int n=0; n<num_realization; n++){
@@ -114,7 +142,7 @@ void flo_evolution_simple_markov_one_model(const AllPara& parameters){
 
 			cout << "Construct Initial State." << endl;
 			state_density = MatrixXcd::Zero(floquet -> Get_Dim(), floquet -> Get_Dim());
-			init_obj.Init_Func_C(init_func_name)(init_info, state_density);
+			init_obj.Init_Func_C(init_func_name)(init_info_local, state_density);
 
 			if (state_density.rows() != floquet -> Get_Dim() || 
 				state_density.cols() != floquet -> Get_Dim()){
@@ -128,35 +156,8 @@ void flo_evolution_simple_markov_one_model(const AllPara& parameters){
 			// A temporary holder for density matrix
 			MatrixXcd temp_density;
 
-			// A matrix used to advance density matrix if markov_time_jump > 1
-			vector<MatrixXcd> markov_adv(sec_num);
-
-			for (int j=0; j<sec_num; j++){
-				int row = floquet -> Get_U(j).rows();
-				int col = floquet -> Get_U(j).cols();
-
-				if (row != col){
-					cout << "Evolution Matrix in " << j <<"th"
-						 << " sector is not square." << endl;
-					abort(); 
-				}
-
-				if (floquet -> eigen_name[j] != "Isolated"){
-					markov_adv[j] = MatrixXcd::Zero(row,col);
-
-					for (int l=0; l<row; l++){
-					markov_adv[j](l,l) = pow(floquet -> eigen[j].eigenvalues()(l),
-						markov_time_jump);
-					}
-
-					markov_adv[j] = floquet -> eigen[j].eigenvectors() * markov_adv[j] *
-						floquet -> eigen[j].eigenvectors().adjoint();
-				}
-				else markov_adv[j] = MatrixXcd::Zero(0,0);
-			}
-
 			StepInfo info;
-			info.model = i;
+			info.model = 0;
 			info.realization = n;
 			info.debug = debug;
 			info.delta = init_info.norm_delta;
@@ -222,10 +223,15 @@ void flo_evolution_simple_markov_one_model(const AllPara& parameters){
 		string task_string = parameters.generic.task;
 		replace(task_string.begin(), task_string.end(),' ','_');
 
-		evol_data.Data_Output(parameters, floquet -> Repr() + ",Task_" + task_string + ",Init_"
-		 + init_string + init_obj.Init_Para_String(init_func_name, init_info_local));
+
+		evol_data.Data_Output(local_parameters, floquet -> Repr() + ",Task_" + task_string +
+		 	",Init_" + init_string + "," + init_obj.Init_Para_String(init_func_name, 
+		 	init_info_local));
 
 		cout << endl;
 		cout << endl;
 	}
+
+	delete floquet;
+	floquet = NULL;
 }
