@@ -29,8 +29,8 @@ filename = []
 label = [] # General label for excuding when plotting
 
 # Obtain filenames
-#Label.name_read("spin_disorder_name", filename, label)
-Label.name_read("spin_thermal_name", filename, label)
+Label.name_read("spin_disorder_name", filename, label)
+#Label.name_read("spin_thermal_name", filename, label)
 
 legend = ['' for n in filename] # labels used as legends in plotting
 
@@ -198,11 +198,11 @@ for n in range(len(filename)):
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init(ymax = 1, ymin=0.001,logy = True, xmax  = 200)
+draw1.figure_init(ymax = 1, ymin=0.001,logy = True, xmax=10)
 draw1.figure_set()
 
 #in_range = ["3.14", "1.04", "1.57", "2.09", "2.61"] # Angles
-must_in_range = ["Markov Inter Random Both X Floquet","J=0.9","Model_Num=100"]
+must_in_range = ["Markov Inter Random Both X Floquet","J=0.3","Model_Num=1 "]
 must_not_range = []
 
 draw1.plot_range(label, must_in_range = must_in_range, must_not_range = must_not_range,
