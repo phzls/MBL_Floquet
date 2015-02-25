@@ -57,14 +57,13 @@ void FloEvolMarkovInterRandomBothX::Evol_Construct(){
 	floquet_iso -> Evol_Construct();
 
 	MatrixXcd U = floquet_iso -> Get_U();
+
 	evol_op_[2] = MatrixXcd::Zero(U.rows(), U.cols());
 
 	for (int i=0; i<U.cols();i++){
 		for (int j=0; j<U.rows();j++)
 			evol_op_[2](j,i) = U(j,i);
 	}
-
-	delete floquet_iso;
 
 	// In the debug mode, print out all matrices
 	if (debug_){
@@ -73,6 +72,9 @@ void FloEvolMarkovInterRandomBothX::Evol_Construct(){
 		complex_matrix_write(evol_op_[2]);
 		cout<<endl;
 	}
+
+	if (!iso_keep_) delete floquet_iso;
+	else model_iso_complex_ = floquet_iso;
 
 	MatrixXcd Bath = MatrixXcd::Zero(dim_, dim_);
 
