@@ -7,8 +7,16 @@ tau = 0.8;
 U_up = Ur * U_up;
 U_down = Ur * U_down;
 
+U_up
+
+U_down
+
 U_up_used = (U_up)^jump;
 U_down_used = (U_down)^jump;
+
+U_up_used
+
+U_down_used
 
 
 % Given initial state, compute density matrix
