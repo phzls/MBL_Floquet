@@ -161,9 +161,10 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const double h = parameters.floquet_xxz.h; // Longitude field strength
 	const double K = parameters.markov.K; // Coupling strength
 
+	const bool iso_keep = parameters.generic.iso_keep; // Keep isolated part
 	const bool debug = parameters.generic.debug;
 
-	model = new FloEvolMarkovInterRandomBothX(size, J, tau, g, h, K, debug);
+	model = new FloEvolMarkovInterRandomBothX(size, J, tau, g, h, K, iso_keep, debug);
 
 	string type = model -> Type();
 	replace(type.begin(), type.end(), '_', ' ');

@@ -22,7 +22,7 @@ class ModelFunc
  		virtual string operator() (const AllPara&, 
  			EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&) = 0;
 
- 		virtual string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&) = 0; 
+ 		virtual string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&) = 0;
 
  		virtual ~ModelFunc(){};
 };
