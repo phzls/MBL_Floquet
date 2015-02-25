@@ -7,7 +7,7 @@ using namespace std;
 using namespace Eigen;
 
 template<class T1, class T2>
-void evec_to_basic(EvolMatrix<T1>* const & evol, vector<vector<T2> >& evec){
+void evec_to_basic(const EvolMatrix<T1>* evol, vector<vector<T2> >& evec){
 	if (evol -> Eigen_Type() == "Basic"){
 		int index = 0;
 		for (int i=0; i<evol -> eigen.size(); i++){

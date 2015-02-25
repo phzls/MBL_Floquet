@@ -50,7 +50,7 @@ void rightmost_sigma_z_sum(Matrix<T1, Dynamic, Dynamic>&, const vector< vector<T
  * in passed in vectors. 
  */
 template <class T1, class T2>
-void evec_to_basic(EvolMatrix<T1>* const &, vector<vector<T2> >&);
+void evec_to_basic(const EvolMatrix<T1>*, vector<vector<T2> >&);
 
 /*
  * Construct a left reduced density matrix from a state vector for a spin chain where local
