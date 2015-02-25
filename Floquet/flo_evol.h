@@ -48,6 +48,7 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 				eigen[0].compute(evol_op_);
 				eigen_info_ = true;
 				eigen_name[0] = "Full";
+				eigen_computed_ = true;
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -62,6 +63,7 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 				eigen[0].compute(evol_op_, keep);
 				eigen_info_ = keep;
 				eigen_name[0] = "Full";
+				eigen_computed_ = true;
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -123,7 +125,18 @@ class FloEvolVanilla : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		virtual ~FloEvolVanilla() {};
 };
 
+
+
+
+
+
 //=========================================================================================
+
+
+
+
+
+
 
 /*
  * The evolution operator for Floquet system with parity symmetry to reduce
@@ -169,6 +182,7 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 				eigen_name[0] = "Even";
 				eigen_name[1] = "Odd";
 				eigen_info_ = true;
+				eigen_computed_ = true;
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -182,10 +196,11 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 			if (constructed_){
 				eigen[0].compute(evol_op_even_, keep);
 				// In case there is no odd sector for small chain
-			if (evol_op_odd_.rows()>0) eigen[1].compute(evol_op_odd_, keep);
-			eigen_name[0] = "Even";
-			eigen_name[1] = "Odd";
-			eigen_info_ = keep;
+				if (evol_op_odd_.rows()>0) eigen[1].compute(evol_op_odd_, keep);
+				eigen_name[0] = "Even";
+				eigen_name[1] = "Odd";
+				eigen_info_ = keep;
+				eigen_computed_ = true;
 			}
 			else{
 				cout << "The matrix for diagonalization does not exist." <<endl;
@@ -229,7 +244,17 @@ class FloEvolParity : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 		virtual ~FloEvolParity() {};
 };
 
+
+
+
+
 //======================================================================================
+
+
+
+
+
+
 
 /*
  * The general evolution operator for Floquet system with multiple sectors. It can also be 
@@ -253,14 +278,15 @@ class FloEvolMultiSec : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 
 	public:
 		// When local dimension is not given
-		FloEvolMultiSec(int size, int type_num): EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size),
+		FloEvolMultiSec(int size, int type_num, bool iso_keep = false): 
+			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, iso_keep),
 			constructed_(false), eigen_info_(false){evol_op_.resize(type_num); 
 				eigen.resize(type_num); eigen_info_.resize(type_num, false); 
 				eigen_name.resize(type_num, "");}
 
 		// When local dimension is given
-		FloEvolMultiSec(int size, int local_dim, int type_num): 
-			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, local_dim), 
+		FloEvolMultiSec(int size, int local_dim, int type_num, bool iso_keep = false): 
+			EvolMatrix< ComplexEigenSolver<MatrixXcd> >(size, local_dim, iso_keep), 
 			constructed_(false), eigen_info_(false){evol_op_.resize(type_num); 
 				eigen.resize(type_num);eigen_info_.resize(type_num, false);
 				eigen_name.resize(type_num, "");}
@@ -272,6 +298,7 @@ class FloEvolMultiSec : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 					eigen[i].compute(evol_op_[i]);
 					eigen_info_[i] = true;
 				}
+				eigen_computed_ = true;
 				Eigen_Name_Construct_();
 			}
 			else{
@@ -288,6 +315,7 @@ class FloEvolMultiSec : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 					eigen[i].compute(evol_op_[i], keep);
 					eigen_info_[i] = keep;
 				}
+				eigen_computed_ = true;
 				Eigen_Name_Construct_();
 			}
 			else{
@@ -311,6 +339,7 @@ class FloEvolMultiSec : public EvolMatrix< ComplexEigenSolver<MatrixXcd> >
 						eigen_info_[i] = true;
 					}
 				}
+				eigen_computed_ = true;
 				Eigen_Name_Construct_();
 			}
 			else{

@@ -24,16 +24,26 @@ class EvolMatrix
 		const int dim_; // Dimension of the space given size
 		const int local_dim_; // Local dimension of the Hilber space
 		int model_id_; // unique ID of this model
+		const bool iso_keep_; // Whether keep another EvolMatrix pointer which points
+							  // to the isolated part of a model coupled to the bath
+		bool eigen_computed_; // Whether eigensystems of this model have been solved
+		
+		// Pointers pointing to isolated part of a model coupling to the bath
+		EvolMatrix<ComplexEigenSolver<MatrixXcd> >* model_iso_complex_;
+		EvolMatrix<EigenSolver<MatrixXd> >* model_iso_real_;
 
 	public:
 		// When local dimension is not given
-		EvolMatrix(int size): 
-			size_(size), local_dim_(2), dim_(1 << size){model_num++; model_id_ = model_num;}
+		EvolMatrix(int size, bool iso_keep = false): 
+			size_(size), local_dim_(2), dim_(1 << size), iso_keep_(iso_keep), 
+			model_iso_complex_(NULL), model_iso_real_(NULL),eigen_computed_(false)
+			{model_num++; model_id_ = model_num;}
 
 		// When local dimension is explicitly given
-		EvolMatrix(int size, int local_dim):
-			size_(size), local_dim_(local_dim), dim_(int(pow(double(local_dim), double(size))))
-			{model_num++; model_id_ = model_num;}
+		EvolMatrix(int size, int local_dim, bool iso_keep = false):
+			size_(size), local_dim_(local_dim), dim_(int(pow(double(local_dim), double(size)))),
+			iso_keep_(iso_keep), model_iso_complex_(NULL), model_iso_real_(NULL),
+			eigen_computed_(false) {model_num++; model_id_ = model_num;}
 
 		//T eigen; // Eigenvalues and Eigenvectors
 
@@ -93,11 +103,24 @@ class EvolMatrix
 		// Return the real Hamiltonian operator according to an integer
 		virtual const MatrixXd& Get_real_H(int) const = 0;
 
+		// Get the pointer to the complex isolated matrix
+		void Get_Iso(EvolMatrix<ComplexEigenSolver<MatrixXcd> >*& model)
+		{model = model_iso_complex_;}
+
+		// Get the pointer to the real isolated matrix
+		void Get_Iso(EvolMatrix<EigenSolver<MatrixXd> >*& model) const {model = model_iso_real_;}
+
+		// Check whether eigensystems have been solved
+		bool Get_Eigen_Computed() const {return eigen_computed_;}
+
 		static int model_num;
 
 		int Model_ID() const {return model_id_;}
 
-		virtual ~EvolMatrix(){};
+		virtual ~EvolMatrix(){
+			if (model_iso_complex_ != NULL) delete model_iso_complex_;
+			if (model_iso_real_ != NULL) delete model_iso_real_;
+		};
 };
 
 template <class T>

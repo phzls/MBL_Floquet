@@ -63,7 +63,19 @@ class FloEvolRandom : public FloEvolVanilla
 };
 
 
+
+
+
+
+
 //===============================================================================================
+
+
+
+
+
+
+
 
 
 /*
@@ -135,7 +147,18 @@ class FloEvolRandomRotation : public FloEvolVanilla
 		virtual ~FloEvolRandomRotation() {};
 };
 
+
+
+
+
+
 //===============================================================================================
+
+
+
+
+
+
 /*
  * xxz floquet operator. The dimension at each site is 2. Its time evolutionary operator is 
  * Ux * Uz, where Ux is the exponential of the transverse external field in x direction, and 
@@ -199,7 +222,18 @@ class FloEvolRandomRotation : public FloEvolVanilla
 		virtual ~FloEvolXXZ() {};
 };
 
-//=================================================================================================
+
+
+
+
+
+//===============================================================================================
+
+
+
+
+
+
 
 /*
  * The random floquet operator which interpolates flo_evol_xxz (when J=1) and 
@@ -239,7 +273,17 @@ class FloEvolInterRandom : public FloEvolVanilla
 		virtual ~FloEvolInterRandom() {};
 };
 
-//=================================================================================================
+
+
+
+
+
+//===============================================================================================
+
+
+
+
+
 
 /*
  * The random floquet operator which interpolates flo_evol_xxz (when J=1) and 
@@ -307,7 +351,18 @@ class FloEvolMarkovInterRandom : public FloEvolMultiSec
 		virtual ~FloEvolMarkovInterRandom() {};
 };
 
-//=================================================================================================
+
+
+
+
+
+//==============================================================================================
+
+
+
+
+
+
 
 /*
  * This operator constructs both flo_evol_markov_inter_random and flo_evol_inter_random which
@@ -374,13 +429,25 @@ class FloEvolMarkovInterRandomBoth : public FloEvolMultiSec
 		virtual ~FloEvolMarkovInterRandomBoth() {}
 };
 
-//=================================================================================================
+
+
+
+
+
+
+//=============================================================================================
+
+
+
+
+
+
 
 /*
  * This operator constructs the flo_evol_markov_inter_random with interaction in x direction and * flo_evol_inter_random which shares the same flo_evol_random_rotation part. Therefore the 
  * latter is just the "isolated" part of the former. In the evol_op, 0 is for coupling to bath
- * of down spin in x direction, 1 for coupling to bath of up spin in x direction, 2 for the
- * isolated system. K allows tuning of coupling to the bath
+ * of down spin in x direction, 1 for coupling to bath of up spin in x direction. K allows
+ * tuning of coupling to the bath
  */
 class FloEvolMarkovInterRandomBothX : public FloEvolMultiSec
 {
@@ -412,8 +479,8 @@ class FloEvolMarkovInterRandomBothX : public FloEvolMultiSec
 
 	public:
 		FloEvolMarkovInterRandomBothX(int size, double J, double tau = 0.8, double g = 0.9045, 
-			double h = 0.8090, double K=1, bool debug = false):
-			FloEvolMultiSec(size, 3), param_(tau, J, g, h, K, size), debug_(debug) 
+			double h = 0.8090, double K=1, bool iso_keep = false, bool debug = false):
+			FloEvolMultiSec(size, 3, iso_keep), param_(tau, J, g, h, K, size), debug_(debug) 
 			{ Repr_Init_(); Op_Name_Init_();}
 
 		// No parameters to initialize
