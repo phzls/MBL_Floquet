@@ -7,6 +7,7 @@
 #include "parameters.h"
 #include "initial_obj.h"
 #include "evol_data.h"
+#include "evol_data_total.h"
 #include "tasks_models.h"
 #include "eigen_output.h"
 #include "flo_evol_model.h"
@@ -42,6 +43,7 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 	InitObj init_obj;
 
 	EvolData evol_data(parameters);
+	EvolDataTotal evol_data_total(parameters);
 
 	// Parallelize model part instead of realization part when model_num > realization
 	bool model_parallel = false;
@@ -157,6 +159,7 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 
 				// This comes first because we start with t=0	
 				evol_data.Data_Compute(state_density, info);
+				evol_data_total.Data_Compute(state_density, info);
 
 				// Evol the state to t+1
 				temp_density = MatrixXcd::Zero(init_info.dim, init_info.dim);
@@ -228,7 +231,7 @@ void flo_evolution_simple_markov(const AllPara& parameters){
 	string task_string = parameters.generic.task;
 	replace(task_string.begin(), task_string.end(),' ','_');
 
-	evol_data.Data_Output_Total(parameters, model_type + ",Task_" + task_string + ",Init_"
+	evol_data_total.Data_Total_Output(parameters, model_type + ",Task_" + task_string + ",Init_"
 	+ init_string + init_obj.Init_Para_String(init_func_name, parameters));
 
 }

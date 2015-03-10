@@ -4,12 +4,11 @@
 #include <algorithm>
 #include <omp.h>
 #include "evol_class.h"
+#include "evol_data_total.h"
 #include "parameters.h"
 #include "initial_obj.h"
 #include "evol_data.h"
-#include "tasks_models.h"
 #include "eigen_output.h"
-#include "flo_evol_model.h"
 
 using namespace std;
 
@@ -23,10 +22,9 @@ using namespace std;
  **/
 
 void flo_evolution_simple_markov_under_one_model(const AllPara& parameters, 
-EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet){ 
+EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet){
 	// Number of realizations.
 	const int num_realization = parameters.generic.num_realizations;
-	const string model = parameters.generic.model;
 	const bool debug = parameters.generic.debug; // Whether print debug information	
 	const int threads_N = parameters.generic.threads_N; // Number of threads for parallelization
 
@@ -113,7 +111,7 @@ EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet){
 	if (init_info.multi_ini_para_num > num_realization) multi_init_parallel = true;
 
 
-
+	EvolDataTotal evol_data_total(parameters);
 
 	// Parallel the models, assuming time evolution is still serial
 	#pragma omp parallel for num_threads(threads_N) if (multi_init_parallel)
@@ -130,8 +128,6 @@ EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet){
 		}
 
 		EvolData evol_data(parameters);
-
-
 
 		// Parallelize the initial states when time evolution is still serial
 		#pragma omp parallel for num_threads(threads_N) if (!multi_init_parallel)
@@ -162,6 +158,7 @@ EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet){
 			info.realization = n;
 			info.debug = debug;
 			info.delta = init_info.norm_delta;
+			info.init_condition = i;
 
 			cout << "Time evolution starts." << endl;
 
@@ -171,6 +168,7 @@ EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet){
 
 				// This comes first because we start with t=0	
 				evol_data.Data_Compute(state_density, info);
+				evol_data_total.Data_Compute(state_density, info);
 
 				// Evol the state to t+1
 				temp_density = MatrixXcd::Zero(init_info.dim, init_info.dim);
@@ -226,10 +224,20 @@ EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet){
 
 
 		evol_data.Data_Output(parameters, floquet -> Repr() + ",Task_" + 
-			"flo_evol_simple_markov_under_one_model" +",Init_" + init_string + "," 
+			"flo_evol_simple_markov_under_one_model" +",Init_" + init_string
 			+ init_obj.Init_Para_String(init_func_name, init_info_local));
 
 		cout << endl;
 		cout << endl;
 	}
+
+	string init_string = init_func_name;
+	replace(init_string.begin(), init_string.end(),' ','_');
+
+	string task_string = parameters.generic.task;
+	replace(task_string.begin(), task_string.end(),' ','_');
+
+	evol_data_total.Data_Total_Output(parameters, floquet -> Repr() + ",Task_" +
+			"flo_evol_simple_markov_under_one_model" + ",Init_"
+			+ init_string + init_obj.Init_Para_String(init_func_name, parameters));
 }
