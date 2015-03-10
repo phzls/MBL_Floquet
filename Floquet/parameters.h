@@ -88,6 +88,8 @@ struct Evolution
 	int jump; // jump of time points in evolution
 	string init_func_name; // Initial state construction function name
 	map<string,bool> evol_compute; // Determine which data to compute
+	map<string,bool> evol_total_compute; // Determine which data to compute which contains
+										 // results for all models
 	int left_size; // If partition the chain to two halves, the size of left part
 
 	bool log_time; // Determine whether time increases logarithmically
@@ -118,6 +120,13 @@ struct MultipleInitPara
 {
 	// The set of numbers which give indices of leftmost spin z value
 	vector<int> leftmost_spin_z_index_set;
+
+	// Whether output full evolution results or just some of them from leftmost_spin_z_index_set.
+	// If it is true, then only some are output, and whether they change signs are outputted
+	bool easy_full_leftmost_spin_z;
+
+	// A small value beyond which is considered as non-zero
+	double non_zero_threshold;
 };
 
 /*
