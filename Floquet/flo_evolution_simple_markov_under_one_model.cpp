@@ -223,7 +223,7 @@ EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet){
 		replace(task_string.begin(), task_string.end(),' ','_');
 
 
-		evol_data.Data_Output(parameters, floquet -> Repr() + ",Task_" + 
+		evol_data.Data_Output(parameters, floquet -> Repr() + ",Task_" +
 			"flo_evol_simple_markov_under_one_model" +",Init_" + init_string
 			+ init_obj.Init_Para_String(init_func_name, init_info_local));
 
@@ -237,7 +237,6 @@ EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet){
 	string task_string = parameters.generic.task;
 	replace(task_string.begin(), task_string.end(),' ','_');
 
-	evol_data_total.Data_Total_Output(parameters, floquet -> Repr() + ",Task_" +
-			"flo_evol_simple_markov_under_one_model" + ",Init_"
+	evol_data_total.Data_Total_Output(parameters, floquet -> Repr() + ",Task_" + "flo_evol_simple_markov_under_one_model" + ",Init_"
 			+ init_string + init_obj.Init_Para_String(init_func_name, parameters));
 }
