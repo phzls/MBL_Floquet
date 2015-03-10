@@ -48,8 +48,6 @@ void EvolDataTotal::Full_Leftmost_Spin_Z_Per_Model_Cal_C_(const MatrixXcd& densi
     const int eigenstate = info.init_condition;
     const int time = info.time;
 
-    cout << "eigenstate num: " << eigenstate << endl;
-
     // Check whether density_matrix is Hermitian
     if (density_matrix.rows() != density_matrix.cols()){
         cout << "Density matrix passed in entropy_per_model_cal_C is not square." << endl;
@@ -169,7 +167,14 @@ void EvolDataTotal::Full_Leftmost_Spin_Z_Per_Model_Out_(const AllPara& parameter
     if (easy_full_leftmost_spin_z){
         ofstream fout_easy( filename_easy.str().c_str() );
 
-        for (int i=0; i<num_eigenstates;i++) fout_easy << spin_z_sign[i] << endl;
+        for (int i=0; i<num_eigenstates;i++) fout_easy << full_leftmost_spin_z_per_model_[i][0]
+                                                       << setw(width) << spin_z_sign[i] << endl;
+
+        fout << setw(width) << -1;
+        for (int i=0; i<parameters.multi_ini_para.leftmost_spin_z_index_set.size(); i++){
+            fout << setw(width) << parameters.multi_ini_para.leftmost_spin_z_index_set[i]-1;
+        }
+        fout << endl;
     }
 
     for (int t=0; t<time_step; t++){
@@ -186,7 +191,7 @@ void EvolDataTotal::Full_Leftmost_Spin_Z_Per_Model_Out_(const AllPara& parameter
 
         if (easy_full_leftmost_spin_z){
             for (int i=0; i<parameters.multi_ini_para.leftmost_spin_z_index_set.size(); i++){
-                int state = parameters.multi_ini_para.leftmost_spin_z_index_set[i];
+                int state = parameters.multi_ini_para.leftmost_spin_z_index_set[i]-1;
 
                 fout << setw(width) << full_leftmost_spin_z_per_model_[state][t];
             }
