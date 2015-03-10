@@ -22,6 +22,7 @@ struct StepInfo{
 	int model; // The index of current model
 	int realization; // The index of current realization
 	int time; // The index of current time step
+	int init_condition; // The index of given initial condition
 	bool debug; // Whether output debug information
 
 	double delta; // A small number
@@ -44,10 +45,6 @@ typedef void (EvolData::*Data_Cal_C)(const MatrixXcd&, const StepInfo&);
 // the output file name
 typedef void (EvolData::*Data_Out)(const AllPara&, const string&);
 
-// Functions that output data for all models using parameters. The string is used as part of 
-// the output file name
-typedef void (EvolData::*Data_Out_Total)(const AllPara&, const string&);
-
 class EvolData
 {	
 	private:
@@ -58,7 +55,6 @@ class EvolData
 		map<string, Data_Cal> data_cal_; // Correlate name with data_cal function
 		map<string, Data_Cal_C> data_cal_C_; // Correlate name with data_cal_C function
 		map<string, Data_Out> data_out_; // Correlate name with data_out function
-		map<string, Data_Out_Total> data_out_total_; // Correlate name with data_out_total function
 
 		void Data_Func_Map_Init_(); // Initialize data_init_ and data_cal_;
 		void Name_Check_() const; // Check names in different maps are consistent
@@ -85,18 +81,6 @@ class EvolData
 		// Output leftmost_spin_z_per_model
 		void Leftmost_Spin_Z_Per_Model_Out_(const AllPara&, const string&);
 
-		// Average leftmost spin z for multiple models, each with one run. The outer index is
-		// for time; the inner index is for model
-		vector<vector<double> > leftmost_spin_z_one_run_;
-		// Initialize leftmost_spin_z_one_run
-		void Leftmost_Spin_Z_One_Run_Init_(const AllPara&);
-		// Compute leftmost_spin_z_one_run given state vector, not implemented yet
-		void Leftmost_Spin_Z_One_Run_Cal_(const VectorXcd&, const StepInfo&); 
-		// Compute leftmost_spin_z_one_run given complex density matrix
-		void Leftmost_Spin_Z_One_Run_Cal_C_(const MatrixXcd&, const StepInfo&);
-		// Output leftmost_spin_z_one_run
-		void Leftmost_Spin_Z_One_Run_Out_(const AllPara&, const string&);
-
 		const int size_; // Size of the system
 		
 	public:
@@ -116,9 +100,6 @@ class EvolData
 
 		// Output data to file. All the data that are computed will be outputted
 		void Data_Output(const AllPara&, const string&);
-
-		// Output data of all models to file. All the data that are computed will be outputted
-		void Data_Output_Total(const AllPara&, const string&);
 };
 
 #endif
