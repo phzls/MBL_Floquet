@@ -29,8 +29,8 @@ filename = []
 label = [] # General label for excuding when plotting
 
 # Obtain filenames
-Label.name_read("spin_disorder_name", filename, label)
-#Label.name_read("spin_thermal_name", filename, label)
+#Label.name_read("spin_disorder_name", filename, label)
+Label.name_read("spin_thermal_name", filename, label)
 
 legend = ['' for n in filename] # labels used as legends in plotting
 
@@ -198,27 +198,27 @@ for n in range(len(filename)):
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init(ymax = 1, ymin=0.001,logy = True, xmax=10)
+draw1.figure_init(ymax = 0.5, logy = True)
 draw1.figure_set()
 
-#in_range = ["3.14", "1.04", "1.57", "2.09", "2.61"] # Angles
-must_in_range = ["Markov Inter Random Both X Floquet","J=0.3","Model_Num=1 "]
+in_range = [] # Angles
+must_in_range = ["Markov Inter Random Both X Floquet","J=0.9", "K=0.3"]
 must_not_range = []
 
-draw1.plot_range(label, must_in_range = must_in_range, must_not_range = must_not_range,
+draw1.plot_range(label, in_range = in_range, must_in_range = must_in_range, must_not_range = must_not_range,
                  printout = True)
 
 
 
 # Do linear regression
-start = 3
+start = 30
+print time[0][start]
 fit_slope = []
 fit_length = []
 fit_slope_error = []
 for i in draw1._plot_range:
     fit_x = time[i][start:]
     fit_y = [log(n) for n in spin_ave[i][start:]]
-    start += 2
 
     slope, intercept, r_value, p_value, std_err = stats.linregress(fit_x,fit_y)
 
@@ -249,7 +249,7 @@ pylab.legend(loc='left', ncol=1, prop={'size':14})#, bbox_to_anchor=(1.1, 0.5))
 pylab.ylabel(r"$\sigma^{z,l}(t)$")
 pylab.xlabel("time")
 
-#pylab.savefig("Inter_Random_Floquet_Markov_J_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_markov_time_jump_10_compare_size_log.png",box_inches='tight')
+pylab.savefig("Inter_Random_Floquet_Markov_J_0_9_K_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_compare_size_log.png",box_inches='tight')
 
 pylab.figure(2)
 ax=pylab.subplot(111)
@@ -263,7 +263,7 @@ pylab.errorbar(fit_length, fit_rate, yerr = fit_slope_error, linewidth=0, marker
 pylab.ylabel("Decay Rate")
 pylab.xlabel(r"$L$")
 
-#pylab.savefig("Inter_Random_Floquet_Markov_J_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_markov_time_jump_10_decay_rate_size_compare.pdf",box_inches='tight')
+pylab.savefig("Inter_Random_Floquet_Markov_J_0_9_K_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_decay_rate_size_compare.pdf",box_inches='tight')
 
 """
 min_fit_rate = 0.08
@@ -295,25 +295,42 @@ print "R^2 for modified log fit rate: " + str(r_value**2)
 
 from math import exp
 log_fit_line = [exp(slope*n+intercept) for n in log_fit_x]
+"""
 
+# Do linear regression
+slope, intercept, r_value, p_value, std_err = stats.linregress(fit_length,fit_rate)
 
+print '\n'
+print "Fit for rate:"
+print "Fitted slope for fit rate: " + str(slope)
+print "Fitted intercept for fit rate: " + str(intercept)
+
+# Compute estimated error for slope
+mx = np.mean(fit_x)
+sx2 = np.sum((fit_x-mx)**2)
+slope_sd = std_err*sqrt(1.0/sx2)
+
+print "slope sd for fit of fit rate: " + str(slope_sd)
+print "R^2 for fit of fit rate: " + str(r_value**2)
+
+from math import exp
+fit_line = [slope * n + intercept for n in fit_length]
 
 pylab.figure(3)
 ax=pylab.subplot(111)
 ax.set_xlim(xmin=fit_length[sort_index[0]]-0.1, xmax=fit_length[sort_index[-1]]+0.1)
 #ax.set_ylim(ymax = max(fit_rate)+0.01, ymin = min(fit_rate)-0.01)
-ax.set_yscale("log", nonposy='clip')
+#ax.set_yscale("log", nonposy='clip')
 #pylab.gca().get_yaxis().get_major_formatter().set_powerlimits((0, 0))
 
-pylab.errorbar(fit_length, modified_fit_rate, yerr = fit_slope_error, linewidth=0, marker='o',markersize=6)
+pylab.errorbar(fit_length, fit_rate, yerr = fit_slope_error, linewidth=0, marker='o',markersize=6)
 
-pylab.plot(log_fit_x, log_fit_line, color='r', linewidth=3)
+pylab.plot(fit_length, fit_line, color='r', linewidth=3)
 
-pylab.ylabel("Modified Decay Rate")
+pylab.ylabel("Decay Rate")
 pylab.xlabel(r"$L$")
 
-#pylab.savefig("Inter_Random_Floquet_Markov_J_0_9_largest_left_spin_eigenstate_left_spin_model_num_400_log_decay_rate_subtract_0_08_size_compare.pdf",box_inches='tight')
+pylab.savefig("Inter_Random_Floquet_Markov_J_0_9_K_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_decay_rate_size_compare_with_fitted_line.pdf",box_inches='tight')
 
-"""
 
 pylab.show()
