@@ -27,13 +27,13 @@ int main(){
 	parameters.generic.task = "Single Model";
 	parameters.generic.model = "Markov Inter Random Both X Flo";
 
-	parameters.generic.size = 2; // System size
+	parameters.generic.size = 6; // System size
 	parameters.generic.num_realizations = 1; // Number of realizations
-	parameters.generic.threads_N = 1; // Number of threads in openmp
+	parameters.generic.threads_N = 4; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
 									 // level statistics calculation
 	parameters.generic.erase = true; // Whether erase matrix after diagonization
-	parameters.generic.debug = true; // Whether output debug information
+	parameters.generic.debug = false; // Whether output debug information
 	parameters.generic.iso_keep = true; // Whether isolated part is kept
 
 	parameters.output.width = 30; // Width for spacing in output files
@@ -61,7 +61,7 @@ int main(){
 
 
 
-	parameters.evolution.time_step = 2; // Number of time steps
+	parameters.evolution.time_step = 100; // Number of time steps
 	parameters.evolution.step_size = parameters.floquet.tau; // Time step size
 	parameters.evolution.init_func_name = "Full Leftmost Spin Z Value"; // Initial state name
 
@@ -92,7 +92,7 @@ int main(){
 	parameters.evolution.leftmost_spin_z_index = 3;
 
 	// Multiple sets of initial conditions
-	int leftmost_spin_z_index_set[] = {1,2};
+	int leftmost_spin_z_index_set[] = {1,2,3,4,5,63,64};
 	parameters.multi_ini_para.leftmost_spin_z_index_set.assign(leftmost_spin_z_index_set,
 	 leftmost_spin_z_index_set + sizeof(leftmost_spin_z_index_set) / sizeof(int));
 
@@ -100,7 +100,7 @@ int main(){
 	parameters.multi_ini_para.easy_full_leftmost_spin_z = true;
 
 	// Threshold in time evolution of leftmost spin z for non-zero values
-	parameters.multi_ini_para.non_zero_threshold = 0.01;
+	parameters.multi_ini_para.non_zero_threshold = 0.001;
 
 
 
