@@ -5,7 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-#include "evol_data.h"
+#include "evol_data_total.h"
 #include "methods.h"
 #include "generic_func.h"
 #include "eigen_output.h"
@@ -22,7 +22,7 @@ using namespace Eigen;
 /*
  * Initialize the leftmost_spin_z. The outer index is time; the inner index is model
  */
- void EvolData::Leftmost_Spin_Z_One_Run_Init_(const AllPara& parameters){
+ void EvolDataTotal::Leftmost_Spin_Z_One_Run_Init_(const AllPara& parameters){
 	const int model_num = parameters.evolution.model_num;
 	const int time_step = parameters.evolution.time_step;
 
@@ -41,7 +41,7 @@ using namespace Eigen;
  * Compute the leftmost_spin_z at a given time step and model number, given a complex density
  * matrix in basic binary basis, where 0 is the rightmost position
  */
- void EvolData::Leftmost_Spin_Z_One_Run_Cal_C_(const MatrixXcd& density_matrix, 
+ void EvolDataTotal::Leftmost_Spin_Z_One_Run_Cal_C_(const MatrixXcd& density_matrix,
  const StepInfo& info){
 	const int model = info.model;
 	const int time = info.time;
@@ -81,7 +81,7 @@ using namespace Eigen;
 	}
 }
 
-void EvolData::Leftmost_Spin_Z_One_Run_Out_(const AllPara& parameters, const string& name){
+void EvolDataTotal::Leftmost_Spin_Z_One_Run_Out_(const AllPara& parameters, const string& name){
 	const int time_step = parameters.evolution.time_step;
 	const int model_num = parameters.evolution.model_num;
 	const int jump = parameters.evolution.jump;
@@ -144,7 +144,7 @@ void EvolData::Leftmost_Spin_Z_One_Run_Out_(const AllPara& parameters, const str
  * Compute the leftmost_spin_z at a given time step and model number, given a state vector. 
  * Not implemented yet.
  */
- void EvolData::Leftmost_Spin_Z_One_Run_Cal_(const VectorXcd& init_state, 
+ void EvolDataTotal::Leftmost_Spin_Z_One_Run_Cal_(const VectorXcd& init_state,
  const StepInfo& info){
  	cout << "Leftmost_Spin_Z_One_Run_Cal_ Not Implemented Yet." << endl;
  	abort();
