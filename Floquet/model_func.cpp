@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <Tk/tk.h>
 #include "model_func.h"
 #include "flo_evol_model.h"
 
@@ -174,6 +175,30 @@ EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 
 string FloEvolMarkovInterRandomBothXFunc::operator() (const AllPara&, 
 EvolMatrix< EigenSolver<MatrixXd> >*&)
+{
+	cout << "Wrong pointers for model." << endl;
+	abort();
+}
+
+string FloEvolXXZRandomFunc::operator() (const AllPara& parameters,
+		EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
+	const int size = parameters.generic.size; // System Size
+	const double tau = parameters.floquet.tau; // Time step, which seems not used here
+	const double g = parameters.floquet_xxz.g; // Transverse field strength
+	const double h = parameters.floquet_xxz.h; // Longitude field strength
+	const double lambda = parameters.floquet_xxz.lambda; // Disorder strength
+
+	const bool debug = parameters.generic.debug;
+
+	model = new FloEvolXXZRandom(size, tau, g, h, lambda, debug);
+
+	string type = model -> Type();
+	replace(type.begin(), type.end(), '_', ' ');
+
+	return type;
+}
+
+string FloEvolXXZRandomFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
 {
 	cout << "Wrong pointers for model." << endl;
 	abort();
