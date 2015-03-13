@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
-#include <Tk/tk.h>
 #include "model_func.h"
 #include "flo_evol_model.h"
 

@@ -106,7 +106,7 @@ public:
 	string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
 	string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
 
-	virtual ~FloEvolMarkovInterRandomBothXFunc(){};
+	virtual ~FloEvolXXZRandomFunc(){};
 };
 
 #endif
