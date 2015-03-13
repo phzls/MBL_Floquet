@@ -27,7 +27,7 @@ filename = []
 label = [] # General label for excuding when plotting
 
 # Obtain filenames
-Label.name_read("spin_name", filename, label)
+Label.name_read("spin_thermal_name", filename, label)
 
 legend = ['' for n in filename] # labels used as legends in plotting
 
@@ -188,7 +188,7 @@ draw1.figure_init()
 draw1.figure_set()
 
 #in_range = ["3.14", "1.04", "1.57", "2.09", "2.61"] # Angles
-must_in_range = ["Markov Inter Random Both X Floquet", "Total=30000","J=0.3","time_jump=10"]
+must_in_range = ["Markov Inter Random Both X Floquet","J=0.9","K=0.3"]
 must_not_range = []
 
 draw1.plot_range(label, must_in_range = must_in_range, must_not_range = must_not_range,
@@ -200,6 +200,6 @@ pylab.legend(loc='left', ncol=1, prop={'size':14})#, bbox_to_anchor=(1.1, 0.5))
 pylab.ylabel(r"$\sigma^{z,l}(t)$")
 pylab.xlabel("time")
 
-pylab.savefig("Inter_Random_Floquet_Markov_8_J_0_3_largest_left_spin_eigenstate_left_spin_markov_time_jump_model_num_100_markov_time_jump_10_size_compare.png",box_inches='tight')
+#pylab.savefig("Inter_Random_Floquet_Markov_8_J_0_3_largest_left_spin_eigenstate_left_spin_markov_time_jump_model_num_100_markov_time_jump_10_size_compare.png",box_inches='tight')
 
 pylab.show()

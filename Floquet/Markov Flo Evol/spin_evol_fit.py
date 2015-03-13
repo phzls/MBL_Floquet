@@ -103,11 +103,16 @@ jump_label = "jump="
 Label.string_extract(filename, jump, start_string = jump_string, end_string = ',')
 
 # Markov time jump
-markov_time_jump = [[] for n in filename]
-markov_time_jump_string = "markov_time_jump="
+markov_time_jump1 = [[] for n in filename]
+markov_time_jump_string1 = "markov_time_jump="
+
+markov_time_jump2 = [[] for n in filename]
+markov_time_jump_string2 = "markov_jump="
+
 markov_time_jump_label = "time_jump="
 
-Label.string_extract(filename, markov_time_jump, start_string = markov_time_jump_string, end_string = ',')
+Label.string_extract(filename, markov_time_jump1, start_string = markov_time_jump_string1, end_string = ',')
+Label.string_extract(filename, markov_time_jump2, start_string = markov_time_jump_string2, end_string = ',')
 
 # minimum angle for rotation if exists
 angle_min = [[] for n in filename]
@@ -167,7 +172,8 @@ Label.label_build(label, realization_label, realization, end = True)
 Label.label_build(label, model_num_label, model_num, end = True)
 #Label.label_build(legend, model_num_label, model_num, end = True)
 
-Label.label_build(label, markov_time_jump_label, markov_time_jump, end = True)
+Label.label_build(label, markov_time_jump_label, markov_time_jump1, end = True)
+Label.label_build(label, markov_time_jump_label, markov_time_jump2, end = True)
 #Label.label_build(legend, markov_time_jump_label, markov_time_jump, end = True)
 
 Label.label_build(label, type_label, cal_type, end = True)
@@ -198,12 +204,12 @@ for n in range(len(filename)):
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init(ymax = 0.5, logy = True)
+draw1.figure_init(ymax = 1, xmax = 200, logy = True)
 draw1.figure_set()
 
 in_range = [] # Angles
-must_in_range = ["Markov Inter Random Both X Floquet","J=0.9", "K=0.3"]
-must_not_range = []
+must_in_range = ["Markov Inter Random Both X Floquet","J=0.9","K=0.4"]
+must_not_range = ["time_jump"]
 
 draw1.plot_range(label, in_range = in_range, must_in_range = must_in_range, must_not_range = must_not_range,
                  printout = True)
@@ -217,6 +223,7 @@ fit_slope = []
 fit_length = []
 fit_slope_error = []
 for i in draw1._plot_range:
+    print filename[i]
     fit_x = time[i][start:]
     fit_y = [log(n) for n in spin_ave[i][start:]]
 
@@ -249,7 +256,7 @@ pylab.legend(loc='left', ncol=1, prop={'size':14})#, bbox_to_anchor=(1.1, 0.5))
 pylab.ylabel(r"$\sigma^{z,l}(t)$")
 pylab.xlabel("time")
 
-pylab.savefig("Inter_Random_Floquet_Markov_J_0_9_K_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_compare_size_log.png",box_inches='tight')
+pylab.savefig("Inter_Random_Floquet_Markov_J_0_9_K_0_4_largest_left_spin_eigenstate_left_spin_model_num_100_compare_size_log.png",box_inches='tight')
 
 pylab.figure(2)
 ax=pylab.subplot(111)
@@ -263,7 +270,7 @@ pylab.errorbar(fit_length, fit_rate, yerr = fit_slope_error, linewidth=0, marker
 pylab.ylabel("Decay Rate")
 pylab.xlabel(r"$L$")
 
-pylab.savefig("Inter_Random_Floquet_Markov_J_0_9_K_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_decay_rate_size_compare.pdf",box_inches='tight')
+#pylab.savefig("Inter_Random_Floquet_Markov_J_0_9_K_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_decay_rate_size_compare.pdf",box_inches='tight')
 
 """
 min_fit_rate = 0.08
@@ -330,7 +337,7 @@ pylab.plot(fit_length, fit_line, color='r', linewidth=3)
 pylab.ylabel("Decay Rate")
 pylab.xlabel(r"$L$")
 
-pylab.savefig("Inter_Random_Floquet_Markov_J_0_9_K_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_decay_rate_size_compare_with_fitted_line.pdf",box_inches='tight')
+#ylab.savefig("Inter_Random_Floquet_Markov_J_0_9_K_0_3_largest_left_spin_eigenstate_left_spin_model_num_100_decay_rate_size_compare_with_fitted_line.pdf",box_inches='tight')
 
 
 pylab.show()
