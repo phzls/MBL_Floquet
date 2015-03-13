@@ -24,11 +24,11 @@ int main(){
 
 
 	
-	parameters.generic.task = "Single Model";
-	parameters.generic.model = "Markov Inter Random Both X Flo";
+	parameters.generic.task = "Flo Level";
+	parameters.generic.model = "XXZ Random Flo";
 
 	parameters.generic.size = 6; // System size
-	parameters.generic.num_realizations = 1; // Number of realizations
+	parameters.generic.num_realizations = 10; // Number of realizations
 	parameters.generic.threads_N = 4; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
 									 // level statistics calculation
@@ -39,7 +39,7 @@ int main(){
 	parameters.output.width = 30; // Width for spacing in output files
 	parameters.output.filename_output = true; // Whether print out file names
 
-	parameters.floquet.J_N = 11; // Number of points of coupling strength
+	parameters.floquet.J_N = 10; // Number of points of coupling strength
 	parameters.floquet.J_min = 0; // Minimum J
 	parameters.floquet.J_max = 1; // Maximum J
 	parameters.floquet.tau = 0.8; // Time step size
