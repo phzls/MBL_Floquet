@@ -15,29 +15,47 @@ name_index = 3
 # long time average number
 ave_num = 1000
 
-def read_spin(filename, t, spin_ave, spin_err, realization = 1, model = 1):
-    """  Read averages and standard deviation of average spin values from files
-         concerning time evolution of leftmost spin per mode. If realization number is
-         1, model number is used to calculate the sd of mean."""
+def read_sign(filename):
+    temp = np.loadtxt(filename+".txt")
+    initial_spin = []
+    sign = []
+
+    for n in range(len(temp)):
+        initial_spin.append(temp[n][0])
+        sign.append(temp[n][1])
+
+    return initial_spin, sign
+
+def read_spin(filename):
+    """  Read average spin values from files concerning time evolution of leftmost
+         spin per mode. It is assumed there is only 1 model or 1 realization, and
+         apart from the first column, which is time, each column gives averages
+         under different conditions. The column with -1 time gives the index."""
 
     temp = np.loadtxt(filename+".txt")
 
-    num = realization
-    if num == 1 or num == -1:
-        num = model
-    if num == 1 or num == -1:
-        num = 1
+    t = []
+    spin_ave = []
+
+    num_col = len(temp[0]) - 1
+    if num_col > 1:
+        spin_ave = [[] for i in range(num_col)]
 
     for n in range(len(temp)):
-        t.append(temp[n][0])
-        spin_ave.append(temp[n][1])
-        spin_err.append(temp[n][2] / (num**0.5) )
+        if temp[n][0] < 0:
+            spin_index = temp[n][1:]
+        else:
+            t.append(temp[n][0])
+            for l in range(num_col):
+                spin_ave[l].append(temp[n][l+1])
+    return t, spin_ave, spin_index
 
 filename = []
 label = [] # General label for excuding when plotting
 
 # Obtain filenames
-Label.name_read("single_model_name"+str(name_index), filename, label, include_s = "Markov")
+Label.name_read("single_model_name"+str(name_index), filename, label, include_s = "Markov",
+                exclude_s = "easy_full")
 
 legend = ['' for n in filename] # labels used as legends in plotting
 
@@ -162,7 +180,7 @@ Label.label_build(label, coupling_label, coupling, end = True)
 Label.label_build(legend, coupling_label, coupling, end = True)
 
 Label.label_build(label, bath_coupling_label, bath_coupling, end = True)
-Label.label_build(legend, bath_coupling_label, bath_coupling, end = True)
+#Label.label_build(legend, bath_coupling_label, bath_coupling, end = True)
 
 Label.label_build(label, angle_min_label, angle_min, end = True)
 
@@ -199,25 +217,32 @@ Label.label_build(legend, spin_z_index_label, spin_z_index, end = True)
 
 #print label
 print legend
+print label
 
+# Assume only 1 file to read
+for n in range(len(filename)):
+    t, spin_ave, spin_index = read_spin(filename[0])
+
+basic_label = label[0]
+basic_legend = legend[0]
 
 time = []
-spin_ave = []
-spin_err = []
-spin_z_index = []
-
-for n in range(len(filename)):
-    time.append([])
-    spin_ave.append([])
-    spin_err.append([])
-    read_spin(filename[n], time[-1], spin_ave[-1], spin_err[-1],float(realization[n]),
-        float(model_num[n]))
+for i in range(len(spin_index)):
+    time.append(t)
+    if i == 0:
+        label[0] += " Index=" + str(int(spin_index[i]))
+        legend[0] += " Index=" + str(int(spin_index[i]))
+    else:
+        label.append(basic_label + " Index=" + str(int(spin_index[i])))
+        legend.append(basic_legend + " Index=" + str(int(spin_index[i])))
 
 spin_ave_sub_abs = []
+spin_ave_abs = []
 
 for i in range(len(spin_ave)):
     long_time_ave = np.average(spin_ave[i][-ave_num:])
     spin_ave_sub_abs.append([abs(n - long_time_ave) for n in spin_ave[i]])
+    spin_ave_abs.append([abs(n) for n in spin_ave[i]])
 
 import pylab
 draw1 = Draw.Draw()
@@ -227,21 +252,23 @@ draw1.figure_set()
 
 #in_range = ["3.14", "1.04", "1.57", "2.09", "2.61"] # Angles
 must_in_range = ["Markov Inter Random Both X Floquet","J=0.3"]
-must_not_range = ["Index=146"]
+must_not_range = []
 
 draw1.plot_range(label, must_in_range = must_in_range, must_not_range = must_not_range,
                  printout = True)
 
 
-draw1.plot(time, spin_ave_sub_abs, label = legend)
+draw1.plot(time, spin_ave, label = legend)
 
-pylab.legend(loc='upper right', ncol=1, prop={'size':12})#, bbox_to_anchor=(0.7, 1.01))
-pylab.ylabel(r"$\|\sigma^{z,l}(t)-\sigma^{z,l}(\infty)\|$")
+pylab.legend(loc='upper right', ncol=2, prop={'size':12})#, bbox_to_anchor=(0.7, 1.01))
+pylab.ylabel(r"$\sigma^{z,l}(t)$")
 pylab.xlabel("time")
 
 #pylab.subplots_adjust(left=0.16)
 
-#pylab.savefig("Inter_Random_Floquet_Markov_Single_Model_J_0_3_left_spin_eigenstate_markov_time_jump_10_compare_index_long_"+ str(ave_num)+"_sub_abs,v1.png",box_inches='tight')
+#pylab.savefig("Inter_Random_Floquet_Markov_Single_Model_J_0_3_left_spin_eigenstate_markov"
+#              "_time_jump_10_compare_index_long_"+ str(ave_num)+",v" +
+#              str(name_index) + ".png",box_inches='tight')
 
 """
 # Do linear regression
@@ -347,5 +374,67 @@ pylab.xlabel(r"$L$")
 
 """
 
+# Process sign changes in evolution
+
+f = open("single_model_name"+str(name_index)+".txt",'r')
+include_s = "easy_full"
+exclude_s = None
+for line in f:
+    include = False
+    if include_s != None:
+        if line.find(include_s) != -1:
+            include = True
+    else:
+        include = True
+
+    if exclude_s != None:
+        if line.find(exclude_s) != -1:
+            include = False
+
+    if line.split()[0] != "#":
+        if include:
+            start = line.find(' ')
+            filename_sign = line[0:start]
+f.close()
+
+ini_spin, sign = read_sign(filename_sign)
+
+pylab.figure(3)
+ax=pylab.subplot(111)
+ax.set_ylim(ymin = -2, ymax = 2)
+pylab.plot(ini_spin, sign, linewidth = 0, marker = '^', markersize = 10,
+           markeredgecolor = 'b')
+pylab.xlabel("Initial spin")
+
+pos_change = 0
+neg_change = 0
+pos_num = 0
+neg_num = 0
+zero_pos = 0
+
+for i in range(len(ini_spin)):
+    if ini_spin[i] > 0 and sign[i] == -1:
+        pos_change += 1
+    elif ini_spin[i] < 0 and sign[i] == 1:
+        neg_change += 1
+    if sign[i] != 0:
+        if ini_spin[i] > 0:
+            pos_num += 1
+        else:
+            neg_num += 1
+    else:
+        zero_pos = i
+
+print "# of pos ini which change sign: ", pos_change
+print "# of neg ini which change sign: ", neg_change
+print "# of pos ini: ", pos_num
+print "# of neg ini: ", neg_num
+print "Position of zero: ", zero_pos
+
+pylab.savefig("Inter_Random_Floquet_Markov_Single_Model_J_0_3_left_spin_eigenstate_markov"
+              "_time_jump_10_spin_evolution_sign,v" +
+              str(name_index) + ".pdf",box_inches='tight')
+
 pylab.show()
+
 
