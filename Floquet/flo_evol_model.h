@@ -510,4 +510,63 @@ class FloEvolMarkovInterRandomBothX : public FloEvolMultiSec
 
 
 
+
+//=================================================================================================
+
+
+
+
+/*
+ * xxz floquet operator. The dimension at each site is 2. Its time evolutionary operator is
+ * Ux * Uz, where Ux is the exponential of the transverse external field in x direction, and
+ * Uz is constructed from Ising nearest neighbor interactions with interaction strength 1 and
+ * longitude field in z direction. This model takes parameters tau, g and h, where g is field
+ * strength in x direction and h is the field strength in z direction.
+ */
+
+class FloEvolXXZRandom : public FloEvolVanilla
+{
+	struct Param // The parameters used in the model
+	{
+		const double tau; // Time step size
+		const double g; // Transverse field strength
+		const double h; // Longitude field strength
+		const double lambda; // Disorder strength
+
+		Param(double tau, double g, double h, double lambda):
+				tau(tau), g(g), h(h), lambda(lambda) {};
+	};
+
+private:
+	const Param param_;
+
+	// Construct x part of time evolution operator
+	void Evol_X_Construct_(MatrixXcd&);
+
+	// Construct z part of time evolution operator
+	void Evol_Z_Construct_(MatrixXcd&);
+
+	void Repr_Init_(); // Initialize the representation string stream as well as type
+
+	const bool debug_; // Used for debug outputs
+
+	vector<double> random_g_; // Random longitude field part at each site
+
+public:
+	FloEvolXXZRandom(int size, double tau, double g, double h, double lambda, bool debug = false):
+			FloEvolVanilla(size), param_(tau, g, h, lambda), debug_(debug) { Repr_Init_();}
+
+	// Construct evolutionary operator
+	void Evol_Construct();
+
+	// No parameter to initialize
+	void Evol_Para_Init();
+
+	virtual ~FloEvolXXZRandom() {};
+};
+
+
+
+
+
 #endif
