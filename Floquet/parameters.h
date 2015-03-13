@@ -70,6 +70,7 @@ struct FloXXZPara
 {
 	double g; // Transverse field strength
 	double h; // Longitude field strength
+	double lambda; // Disorder strength for XXZ Random operator
 };
 
 struct MatrixPara
