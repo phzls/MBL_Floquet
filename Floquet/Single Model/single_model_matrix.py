@@ -15,7 +15,7 @@ import networkx as nx
 from math import sqrt, pi, floor, log
 
 # single_model file name index
-name_index = 2
+name_index = 3
 
 bin_num = 20
 
@@ -32,9 +32,9 @@ def read_phases(filename):
 filename = [] # norm or phases can be added to it
 label = []
 
-right_norm_string = ",rightmost_sigma_z_under_one_model_norm,v2"
-left_norm_string = ",leftmost_sigma_z_under_one_model_norm,v2"
-phase_string = ",eval_phases_under_one_model,v2"
+right_norm_string = ",rightmost_sigma_z_under_one_model_norm,v" + str(name_index)
+left_norm_string = ",leftmost_sigma_z_under_one_model_norm,v" + str(name_index)
+phase_string = ",eval_phases_under_one_model,v" + str(name_index)
 
 # Obtain filenames
 Label.name_read("single_model_name"+str(name_index), filename, label, exclude_s = "Markov")
@@ -187,8 +187,13 @@ for i in range(len(filename)):
     print "In the middle of prod matrix bin: ", prod_matrix_bin[i][10]
     print "Smallest in the prod matrix bin", min(prod_matrix_bin[i])
 
-# Construct an adjacency matrix with uniform weight 1 for largest off-diagonal 
-# element in each row
+
+# The maximum number of elements kept for each row. The numbers kept start from
+# the largest value
+edge_keep = 10
+
+# Construct an adjacency matrix with uniform weight 1 for largest edge_keep
+# off-diagonal element in each row
 
 adjacency = []
 max_value = []
@@ -196,38 +201,74 @@ max_value_phase_diff = []
 in_degrees = []
 for i in range(len(filename)):
     row = len(temp_prod_matrix[i])
-    adjacency.append(np.zeros((row,row)))
+    adjacency.append([np.zeros((row,row)) for x in range(edge_keep)])
     max_value.append([])
     max_value_phase_diff.append([])
-    in_degrees.append(np.zeros(row))
+    in_degrees.append([np.zeros(row) for x in range(edge_keep)])
 
     prod = 0.0
 
     np.fill_diagonal(temp_prod_matrix[i],0)
-    index_array = np.argmax(temp_prod_matrix[i], axis = 1)
 
-    for n in range(row):
-        m = index_array[n]
-        adjacency[-1][n][m] = 1
+    # The outer index is for each row. The inner index k is the position
+    # of (k+1)th largest value
+    index_array = \
+        np.fliplr( np.argsort(temp_prod_matrix[i], axis=1)[:,-edge_keep:] )
+    max_ind = np.argmax(temp_prod_matrix[i],axis=1)
+    for k in range(edge_keep):
+        for n in range(row):
+            for r in range(k+1):
+                m = index_array[n][r]
+                l = max_ind[n]
+                if k == 0 and m != l:
+                    print "Maximum wrong"
+                    print "m: ", m, " value: ", temp_prod_matrix[i][n][m]
+                    print "l: ", l, " value: ", temp_prod_matrix[i][n][l]
+                    raise Exception
+                adjacency[-1][k][n][m] = 1
 
-        max_value[-1].append(temp_prod_matrix[i][n][m])
+                in_degrees[-1][k][m] += 1
 
-        delta_phi = abs(temp_phase[i][m]-temp_phase[i][n])
-        if delta_phi > pi:
-            delta_phi = 2*pi - delta_phi
-        max_value_phase_diff[-1].append(delta_phi)
+                if k == 0:
+                    max_value[-1].append(temp_prod_matrix[i][n][m])
+                    delta_phi = abs(temp_phase[i][m]-temp_phase[i][n])
+                    if delta_phi > pi:
+                        delta_phi = 2*pi - delta_phi
+                    max_value_phase_diff[-1].append(delta_phi)
 
-        in_degrees[-1][m] += 1
+                    prod += log(temp_prod_matrix[i][n][m])
 
-        prod += log(temp_prod_matrix[i][n][m])
     print "Log Product of maximum values:", prod
     print "Maximum: ", max(max_value[-1])
 
 # Construct graphs
 G = []
 for i in range(len(filename)):
-    G.append( nx.from_numpy_matrix(adjacency[i],nx.DiGraph()) )
+    G.append([])
+    for k in range(edge_keep):
+        G[-1].append( nx.from_numpy_matrix(adjacency[i][k],nx.DiGraph()) )
 
+# Construct non-directed graphs
+G_nd = []
+for i in range(len(filename)):
+    G_nd.append([])
+    for k in range(edge_keep):
+        G_nd[-1].append( nx.from_numpy_matrix(adjacency[i][k], nx.Graph()))
+
+print "Check strong connectivity for directed graph:"
+for i in range(len(G)):
+    print "for file ", i
+    for k in range(edge_keep):
+        print "keep", k+1, "largest value: ", nx.is_strongly_connected(G[i][k])
+        print "# of strongly connected component:", \
+            nx.number_strongly_connected_components(G[i][k]), '\n'
+
+print '\n', "Check connectivity for undirected graph:"
+for i in range(len(G_nd)):
+    print "for file ", i
+    for k in range(edge_keep):
+        print "keep", k+1, "largest value: ", nx.is_connected(G_nd[i][k])
+        print "# of connected component:", nx.number_connected_components(G_nd[i][k]), '\n'
 
 import pylab
 
@@ -430,16 +471,20 @@ print print_label
 
 pylab.savefig(print_label + ",v2.pdf", box_inches='tight')
 
+"""
+k = 1
+data_index = 0
+
 pylab.figure(9)
-nx.draw(G[data_index])
+nx.draw(G[data_index][k-1])
 
 print_label = legend[data_index].replace('.', '_')
 print_label = print_label.replace(' ', '_')
-print_label = print_label + "_maximum_value_per_row_uniform_adjacency_graph"
+print_label = print_label + "_" + str(k) +"_largest_value_per_row_uniform_adjacency_graph"
 
 print print_label
 
-pylab.savefig(print_label + ",v2.pdf", box_inches='tight')
+pylab.savefig(print_label + ",v" +str(name_index) + ".pdf", box_inches='tight')
 
 
 
@@ -448,22 +493,27 @@ draw10 = Draw.Draw()
 draw10.figure_init()
 draw10.figure_set(fig_num = 10)
 
-hist, bin_edges = np.histogram(in_degrees[0])
+pylab.figure(draw10._figure_num)
+
+print max(in_degrees[data_index][k-1])
+
+bins = range(int(max(in_degrees[data_index][k-1]))+2)
+bins = [n-0.5 for n in bins]
+hist, bin_edges = np.histogram(in_degrees[data_index][k-1], bins = bins)
 
 print bin_edges
 print hist
+print sum(hist)
 
-draw10.hist(in_degrees[0], label = "In Degrees")
+pylab.hist(in_degrees[data_index][k-1], bins = bins, label = "In Degrees")
 pylab.legend(loc='upper right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.1, 1))
 
-print_label = legend[0].replace('.', '_')
+print_label = legend[data_index].replace('.', '_')
 print_label = print_label.replace(' ', '_')
-print_label = print_label + "_maximum_value_per_row_in_degree_hist"
+print_label = print_label + "_" + str(k) + "_largest_value_per_row_in_degree_hist"
 
 print print_label
 
-pylab.savefig(print_label + ",v1.pdf", box_inches='tight')
+pylab.savefig(print_label + ",v" +str(name_index) + ".pdf", box_inches='tight')
 
 pylab.show()
-
-"""
