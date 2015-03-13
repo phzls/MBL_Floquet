@@ -5,11 +5,14 @@ import fnmatch
 single_file = []
 
 # Whether increase single_model_name index
-name_next = True
+name_next = False
+
+ver_num = 3
 
 # This is not included in the file name
-txt_suffix = ".txt"
-eval_phase_suffix = ",eval_phases_under_one_model,v2.txt"
+version = ",v" + str(ver_num)
+txt_suffix = version + ".txt"
+eval_phase_suffix = ",eval_phases_under_one_model" + version + ".txt"
 
 def find_between( s, first, last ):
     try:
@@ -30,19 +33,23 @@ inc = 0
 if name_next:
 	inc += 1
 
-try: 
+try:
 	num = max(single_num) + inc
 except ValueError:
 	num = 1
 
-print num
+if num != ver_num:
+    print "Version number is not consistent with file number"
+    print "Version number: ", ver_num
+    print "File number: ", num
+    raise Exception
 
 # Read all files starting with Markov
 # Find one file with eval which generates the series of files about matrices
 for n in os.listdir('.'):
-    if fnmatch.fnmatch(n, "Markov*Total=120000*.txt"):
+    if fnmatch.fnmatch(n, "Markov*Total=30000*"+ txt_suffix):
 #        print n[:-len(suffix)]
-        single_file.append(n[:-len(txt_suffix)])
+        single_file.append(n[:-len(".txt")])
     elif fnmatch.fnmatch(n, "*"+eval_phase_suffix):
     	single_file.append(n[:-len(eval_phase_suffix)])
 
