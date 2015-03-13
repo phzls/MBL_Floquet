@@ -30,18 +30,18 @@ void FloEvolXXZRandom::Repr_Init_(){
  * Initialize random numbers
  */
 void FloEvolXXZRandom::Evol_Para_Init() {
-    random_g_.resize(size_);
+    random_h_.resize(size_);
 
-    // Assume the random fields are gaussin with sd=g
+    // Assume the random fields are gaussin with sd=h
     for (int i=0; i<size_;i++){
         double u1 = RanGen_mersenne.Random();
         double u2 = RanGen_mersenne.Random();
-        random_g_[i] = param_.g * sqrt(-2*log(1-u1))*cos(2*Pi*u2);
+        random_h_[i] = param_.h * sqrt(-2*log(1-u1))*cos(2*Pi*u2);
     }
 
     if (debug_){
         cout << "Random longitude field part:" << endl;
-        for (int i=0; i<size_;i++) cout << random_g_[i] << endl;
+        for (int i=0; i<size_;i++) cout << random_h_[i] << endl;
     }
 }
 
@@ -74,9 +74,11 @@ void FloEvolXXZRandom::Evol_Construct() {
 
         cout << "Z part of evolution matrix:" << endl;
         complex_matrix_write(evol_z);
+        cout << endl;
 
         cout << "Evolution matrix:" << endl;
         complex_matrix_write(evol_op_);
+        cout << endl;
     }
 }
 
@@ -88,7 +90,7 @@ void FloEvolXXZRandom::Evol_X_Construct_(MatrixXcd & evol_x) {
         int flip_spin = 1;
         for (int j=0;j<size_;j++){
             int pos = i ^ flip_spin;
-            evol_x(pos,i) += param_.h * (1 - param_.lambda) * param_.tau;
+            evol_x(pos,i) += param_.g * (1 - param_.lambda) * param_.tau;
             flip_spin = flip_spin << 1;
         }
     }
@@ -96,8 +98,8 @@ void FloEvolXXZRandom::Evol_X_Construct_(MatrixXcd & evol_x) {
     // Check if the matrix is Hermitian
     for (int i=0; i<evol_x.cols(); i++){
         for (int j=i+1; j< evol_x.rows();j++){
-            if (abs(evol_x(j,i) - evol_x(i,j)) < 1.0e-10){
-                cout << "x part is not Hermitian at row " << j <<" and col" << i << endl;
+            if (abs(evol_x(j,i) - evol_x(i,j)) > 1.0e-10){
+                cout << "x part is not Hermitian at row " << j <<" and col " << i << endl;
                 cout << "(i,j): " << evol_x(i,j) << endl;
                 cout << "(j,i): " << evol_x(j,i) << endl;
                 abort();
@@ -119,6 +121,8 @@ void FloEvolXXZRandom::Evol_X_Construct_(MatrixXcd & evol_x) {
             }
         }
     }
+
+    evol_x = x_eigen.eigenvectors() * evol_x * x_eigen.eigenvectors().adjoint();
 }
 
 /*
@@ -136,7 +140,7 @@ void FloEvolXXZRandom::Evol_Z_Construct_(MatrixXcd & evol_z) {
             spin = 2*(state & 1) - 1;
             state = state >> 1;
 
-            value += ( param_.g + param_.lambda * random_g_[j] ) * spin;
+            value += ( param_.h + param_.lambda * random_h_[j] ) * spin;
 
             if (j>0) value += spin * prev_spin;
         }

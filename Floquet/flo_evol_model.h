@@ -550,7 +550,7 @@ private:
 
 	const bool debug_; // Used for debug outputs
 
-	vector<double> random_g_; // Random longitude field part at each site
+	vector<double> random_h_; // Random longitude field part at each site
 
 public:
 	FloEvolXXZRandom(int size, double tau, double g, double h, double lambda, bool debug = false):
