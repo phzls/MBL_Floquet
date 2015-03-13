@@ -185,7 +185,7 @@ string FloEvolXXZRandomFunc::operator() (const AllPara& parameters,
 	const double tau = parameters.floquet.tau; // Time step, which seems not used here
 	const double g = parameters.floquet_xxz.g; // Transverse field strength
 	const double h = parameters.floquet_xxz.h; // Longitude field strength
-	const double lambda = parameters.floquet_xxz.lambda; // Disorder strength
+	const double lambda = parameters.floquet.J; // Disorder strength
 
 	const bool debug = parameters.generic.debug;
 
