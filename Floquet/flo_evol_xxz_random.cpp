@@ -38,6 +38,11 @@ void FloEvolXXZRandom::Evol_Para_Init() {
         double u2 = RanGen_mersenne.Random();
         random_g_[i] = param_.g * sqrt(-2*log(1-u1))*cos(2*Pi*u2);
     }
+
+    if (debug_){
+        cout << "Random longitude field part:" << endl;
+        for (int i=0; i<size_;i++) cout << random_g_[i] << endl;
+    }
 }
 
 /*
