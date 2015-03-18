@@ -67,6 +67,8 @@ int main(){
 
 	parameters.evolution.evol_compute["Entropy Per Model"] = false;
 	parameters.evolution.evol_compute["Leftmost Spin Z Per Model"] = false;
+	parameters.evolution.evol_compute["Leftmost Spin X Per Model"] = false;
+	parameters.evolution.evol_compute["Leftmost Spin Y Per Model"] = false;
 
 	parameters.evolution.evol_total_compute["Leftmost Spin Z One Run"] = false;
 	parameters.evolution.evol_total_compute["Full Leftmost Spin Z Per Model"] = true;
