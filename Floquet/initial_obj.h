@@ -101,8 +101,9 @@ void random_product(const InitInfo&, MatrixXcd&);
 void random_pure(const InitInfo&, MatrixXcd&);
 
 void largest_leftmost_spin_z_complex_eigenstate(const InitInfo&, MatrixXcd&);
-void leftmost_spin_z_complex_eigenstate(const InitInfo& init_info, 
-	MatrixXcd& init_state_density);
+void leftmost_spin_z_complex_eigenstate(const InitInfo&, MatrixXcd&);
+
+void leftmost_spin_random_state(const InitInfo&, MatrixXcd&);
 
 
 /*
