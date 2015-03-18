@@ -28,7 +28,7 @@ void TasksModels::Map_Construct_(){
 	task_function2 = &flo_rightmost_sigma_z;
 	Task_Map_Insert(task_name2, task_type2, task_function2);
 
-	// Compute time evolution for a Floquet system
+	// Compute time evolution for a Floquet system of pure states
 	string task_name3;
 	string task_type3;
 	task_func task_function3;
@@ -81,7 +81,8 @@ void TasksModels::Map_Construct_(){
 	task_function7 = &flo_evolution_simple_markov_one_model;
 	Task_Map_Insert(task_name7, task_type7, task_function7);
 
-	// Implement 
+	// Implement single model calculations, in which all calculations use one
+	// realization of the model
 	string task_name8;
 	string task_type8;
 	task_func task_function8;
@@ -90,6 +91,16 @@ void TasksModels::Map_Construct_(){
 	task_type8 = "All";
 	task_function8 = &single_model;
 	Task_Map_Insert(task_name8, task_type8, task_function8);
+
+	// Compute time evolution for a Floquet system of density matrices
+	string task_name9;
+	string task_type9;
+	task_func task_function9;
+
+	task_name9 = "Flo Evolution Density";
+	task_type9 = "Floquet";
+	task_function9 = &flo_evolution_density;
+	Task_Map_Insert(task_name9, task_type9, task_function9);
 
 	// Random Floquet Operator
 	string model_name1;
@@ -171,6 +182,17 @@ void TasksModels::Map_Construct_(){
 	model_type8 = "XXZ Random Floquet";
 	model_function8 = new FloEvolXXZRandomFunc();
 	Model_Map_Insert(model_name8, model_type8, model_function8);
+
+	// Markov XXZ Random Both Floquet Operator which couples to the bath through a
+	// sigma_x term
+	string model_name9;
+	string model_type9;
+	ModelFunc* model_function9;
+
+	model_name9 = "Markov XXZ Random Both X Flo";
+	model_type9 = "Markov XXZ Random Both X Floquet";
+	model_function9 = new FloEvolMarkovXXZRandomBothXFunc();
+	Model_Map_Insert(model_name9, model_type9, model_function9);
 }
 
 void TasksModels::Task_Map_Insert(const string& task_name, const string& task_type, 
