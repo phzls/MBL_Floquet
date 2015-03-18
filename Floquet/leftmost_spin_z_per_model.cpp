@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <Python/Python.h>
 #include "evol_data.h"
 #include "methods.h"
 #include "generic_func.h"
@@ -75,6 +76,7 @@ using namespace Eigen;
 void EvolData::Leftmost_Spin_Z_Per_Model_Out_(const AllPara& parameters, const string& name){
 	const int time_step = parameters.evolution.time_step;
 	const int num_realizations = parameters.generic.num_realizations;
+	const int version = parameters.generic.version;
 	const int jump = parameters.evolution.jump;
 	const bool output = parameters.output.filename_output;
 	const int width = parameters.output.width;
@@ -110,7 +112,9 @@ void EvolData::Leftmost_Spin_Z_Per_Model_Out_(const AllPara& parameters, const s
 
 	if (markov_jump) filename <<",markov_jump=" << markov_time_jump;
 
-	filename << ",jump=" << jump << ",left_spin_z_per_model.txt";
+	filename << ",jump=" << jump << ",left_spin_z_per_model";
+	if (version > 0) filename <<",v" << version;
+	filename << ".txt";
 
 	if (output) cout << filename.str() <<endl;
 
