@@ -81,6 +81,31 @@ class EvolData
 		// Output leftmost_spin_z_per_model
 		void Leftmost_Spin_Z_Per_Model_Out_(const AllPara&, const string&);
 
+		// Average leftmost spin x per model. The outer index is for time; the inner index is for
+		// realization
+		vector<vector<double> > leftmost_spin_x_per_model_;
+		// Initialize leftmost_spin_x_per_model
+		void Leftmost_Spin_X_Per_Model_Init_(const AllPara&);
+		// Compute leftmost_spin_x_per_model given state vector, not implemented yet
+		void Leftmost_Spin_X_Per_Model_Cal_(const VectorXcd&, const StepInfo&);
+		// Compute leftmost_spin_x_per_model given complex density matrix
+		void Leftmost_Spin_X_Per_Model_Cal_C_(const MatrixXcd&, const StepInfo&);
+		// Output leftmost_spin_x_per_model
+		void Leftmost_Spin_X_Per_Model_Out_(const AllPara&, const string&);
+
+		// Average leftmost spin y per model. The outer index is for time; the inner index is for
+		// realization
+		vector<vector<double> > leftmost_spin_y_per_model_;
+		// Initialize leftmost_spin_y_per_model
+		void Leftmost_Spin_Y_Per_Model_Init_(const AllPara&);
+		// Compute leftmost_spin_y_per_model given state vector, not implemented yet
+		void Leftmost_Spin_Y_Per_Model_Cal_(const VectorXcd&, const StepInfo&);
+		// Compute leftmost_spin_y_per_model given complex density matrix
+		void Leftmost_Spin_Y_Per_Model_Cal_C_(const MatrixXcd&, const StepInfo&);
+		// Output leftmost_spin_y_per_model
+		void Leftmost_Spin_Y_Per_Model_Out_(const AllPara&, const string&);
+
+
 		const int size_; // Size of the system
 		
 	public:

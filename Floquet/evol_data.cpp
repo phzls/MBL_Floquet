@@ -150,6 +150,48 @@ void EvolData::Data_Func_Map_Init_(){
 	data_cal_C_[name2] = cal_C_func2;
 	data_out_[name2] = out_func2;
 
+	// Leftmost Spin X Per Model data
+	string name3 = "Leftmost Spin X Per Model";
+	Data_Init init_func3 = &EvolData::Leftmost_Spin_X_Per_Model_Init_;
+	Data_Cal cal_func3 = &EvolData::Leftmost_Spin_X_Per_Model_Cal_;
+	Data_Cal_C cal_C_func3 = &EvolData::Leftmost_Spin_X_Per_Model_Cal_C_;
+	Data_Out out_func3 = &EvolData::Leftmost_Spin_X_Per_Model_Out_;
+
+	// Make sure the name has not been used before
+	init_it = data_init_.find(name3);
+	cal_it = data_cal_.find(name3);
+	out_it = data_out_.find(name3);
+	if (init_it != data_init_.end() || cal_it != data_cal_.end() || out_it != data_out_.end()){
+		cout << name3 << " for evolution has appeared before." << endl;
+		abort();
+	}
+
+	data_init_[name3] = init_func3;
+	data_cal_[name3] = cal_func3;
+	data_cal_C_[name3] = cal_C_func3;
+	data_out_[name3] = out_func3;
+
+	// Leftmost Spin Y Per Model data
+	string name4 = "Leftmost Spin Y Per Model";
+	Data_Init init_func4 = &EvolData::Leftmost_Spin_Y_Per_Model_Init_;
+	Data_Cal cal_func4 = &EvolData::Leftmost_Spin_Y_Per_Model_Cal_;
+	Data_Cal_C cal_C_func4 = &EvolData::Leftmost_Spin_Y_Per_Model_Cal_C_;
+	Data_Out out_func4 = &EvolData::Leftmost_Spin_Y_Per_Model_Out_;
+
+	// Make sure the name has not been used before
+	init_it = data_init_.find(name4);
+	cal_it = data_cal_.find(name4);
+	out_it = data_out_.find(name4);
+	if (init_it != data_init_.end() || cal_it != data_cal_.end() || out_it != data_out_.end()){
+		cout << name4 << " for evolution has appeared before." << endl;
+		abort();
+	}
+
+	data_init_[name4] = init_func4;
+	data_cal_[name4] = cal_func4;
+	data_cal_C_[name4] = cal_C_func4;
+	data_out_[name4] = out_func4;
+
 	// Check data_init_ and data_cal_ have the same size
 	if (data_init_.size() != data_cal_.size()){
 		cout << "Number of initializations in evolution is not the same as number of calculations."
