@@ -15,7 +15,7 @@ using namespace std;
 /**
  ** This file implements the time evolution of a floquet system. There will be only one initial
  ** state in any case. If the operator has multi-sector, then the states of different sectors
- ** stored in the initial state in an order consisten with the order of sectors in eigen vector
+ ** stored in the initial state in an order consistent with the order of sectors in eigen vector
  ** of evol_class.
  **/
 
@@ -85,7 +85,7 @@ void flo_evolution(const AllPara& parameters){
 		floquet -> Transition_Compute(transition, "Basic_Full");
 
 		if (debug){
-			cout << "Basic to Full transtion matrix:" << endl;
+			cout << "Full to Basic transtion matrix:" << endl;
 			complex_matrix_write(transition.Matrix("Basic_Full"));
 			cout << endl;
 		}
