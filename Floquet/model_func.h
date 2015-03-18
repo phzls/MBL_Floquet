@@ -109,4 +109,14 @@ public:
 	virtual ~FloEvolXXZRandomFunc(){};
 };
 
+// For Markov XXZ random both floquet operator which couples to bath through a sigma_x term
+class FloEvolMarkovXXZRandomBothXFunc: public ModelFunc
+{
+public:
+	string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+	string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+
+	virtual ~FloEvolMarkovXXZRandomBothXFunc(){};
+};
+
 #endif

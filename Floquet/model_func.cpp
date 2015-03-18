@@ -202,3 +202,30 @@ string FloEvolXXZRandomFunc::operator() (const AllPara&, EvolMatrix< EigenSolver
 	cout << "Wrong pointers for model." << endl;
 	abort();
 }
+
+string FloEvolMarkovXXZRandomBothXFunc::operator() (const AllPara& parameters,
+		EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
+	const int size = parameters.generic.size; // System Size
+	const double lambda = parameters.floquet.J; // Disorder strength
+	const double tau = parameters.floquet.tau; // Time step, which seems not used here
+	const double g = parameters.floquet_xxz.g; // Transverse field strength
+	const double h = parameters.floquet_xxz.h; // Longitude field strength
+	const double K = parameters.markov.K; // Coupling strength
+
+	const bool iso_keep = parameters.generic.iso_keep; // Keep isolated part
+	const bool debug = parameters.generic.debug;
+
+	model = new FloEvolMarkovXXZRandomBothX(size, tau, g, h, lambda, K, iso_keep, debug);
+
+	string type = model -> Type();
+	replace(type.begin(), type.end(), '_', ' ');
+
+	return type;
+}
+
+string FloEvolMarkovXXZRandomBothXFunc::operator() (const AllPara&,
+		EvolMatrix< EigenSolver<MatrixXd> >*&)
+{
+	cout << "Wrong pointers for model." << endl;
+	abort();
+}
