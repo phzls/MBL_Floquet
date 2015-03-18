@@ -19,7 +19,7 @@ void flo_level(const AllPara&);
 void flo_rightmost_sigma_z(const AllPara&);
 
 /*
- * Compute the time evolution for a floquet system
+ * Compute the time evolution for a floquet system of pure states
  */
 void flo_evolution(const AllPara&);
 
@@ -50,5 +50,10 @@ void flo_evolution_simple_markov_one_model(const AllPara&);
  * Call other functions under a single model
  */
 void single_model(const AllPara&);
+
+/*
+ * Compute the time evolution for a floquet system of density matrices
+ */
+void flo_evolution_density(const AllPara&);
 
 #endif
