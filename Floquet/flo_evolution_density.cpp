@@ -131,14 +131,28 @@ void flo_evolution_density(const AllPara& parameters){
 					MatrixXcd density_basic(init_density.rows(), init_density.cols());
 
 					int row_index = 0;
-					int col_index = 0;
 					for (int j=0; j<floquet -> eigen.size(); j++){
 						for (int k=0; k<floquet -> eigen[j].eigenvalues().rows(); k++){
-							complex<double> row_eval = conj( floquet -> eigen[j].eigenvalues()[k] );
+							complex<double> row_eval = floquet -> eigen[j].eigenvalues()[k];
 
+							if (row_index >= init_density.rows()){
+								cout << "Too many eigenvalues for rows" << endl;
+								cout << "Current row index of eigenvalues: " << row_index << endl;
+								cout << "Total rows: " << init_density.rows() << endl;
+								abort();
+							}
+
+							int col_index = 0;
 							for (int l=0; l<floquet -> eigen.size(); l++){
-								for (int m = 0; m < floquet -> eigen[l].eigenvalues().rows(); l++){
-									complex<double> col_eval = floquet -> eigen[l].eigenvalues()[m];
+								for (int m = 0; m < floquet -> eigen[l].eigenvalues().rows(); m++){
+									complex<double> col_eval = conj(floquet -> eigen[l].eigenvalues()[m]);
+
+									if (col_index >= init_density.cols()){
+										cout << "Too many eigenvalues for cols" << endl;
+										cout << "Current col index of eigenvalues: " << col_index << endl;
+										cout << "Total cols: " << init_density.cols() << endl;
+										abort();
+									}
 
 									density_evec(row_index, col_index) = pow(row_eval, power)
 											* init_density(row_index, col_index) * pow(col_eval, power);
@@ -168,7 +182,7 @@ void flo_evolution_density(const AllPara& parameters){
 
 					for (int l=0; l<density_basic.rows();l++){
 						for (int m=l; m<density_basic.cols();m++){
-							if(abs( conj(density_basic(l,m)) - density_basic(m,l) )<init_info.norm_delta){
+							if(abs( conj(density_basic(l,m)) - density_basic(m,l) )>init_info.norm_delta){
 								cout << "At row " << l <<" and col " << m << " density matrix in basic"
 									<<	" basis is not Hermitian" << endl;
 								cout << "(l,m): " << density_basic(l,m) << endl;
