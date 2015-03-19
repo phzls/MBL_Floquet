@@ -62,11 +62,12 @@ using namespace Eigen;
 	leftmost_spin_x_per_model_[time][realization] = 0;
 
 	for (int i=0; i<row_num; i++){
-		leftmost_spin_x_per_model_[time][realization] += real(density_matrix(i,row_num-i-1));
+		int j = (i + row_num/2) % row_num;
+		leftmost_spin_x_per_model_[time][realization] += real(density_matrix(i,j));
 	}
 
 	if (info.debug){
-		cout << "Average leftmost spin z per model:" << endl;
+		cout << "Average leftmost spin x per model:" << endl;
 		cout << leftmost_spin_x_per_model_[time][realization] << endl;
 		cout << endl;
 	}
