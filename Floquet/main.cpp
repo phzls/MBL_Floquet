@@ -24,17 +24,18 @@ int main(){
 
 
 	
-	parameters.generic.task = "Flo Level";
+	parameters.generic.task = "Flo Evolution Density";
 	parameters.generic.model = "XXZ Random Flo";
 
-	parameters.generic.size = 6; // System size
-	parameters.generic.num_realizations = 10; // Number of realizations
+	parameters.generic.size = 4; // System size
+	parameters.generic.num_realizations = 100; // Number of realizations
 	parameters.generic.threads_N = 4; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
 									 // level statistics calculation
 	parameters.generic.erase = true; // Whether erase matrix after diagonization
 	parameters.generic.debug = false; // Whether output debug information
 	parameters.generic.iso_keep = true; // Whether isolated part is kept
+	parameters.generic.version = 1; // Version of the output
 
 	parameters.output.width = 30; // Width for spacing in output files
 	parameters.output.filename_output = true; // Whether print out file names
@@ -43,7 +44,7 @@ int main(){
 	parameters.floquet.J_min = 0; // Minimum J
 	parameters.floquet.J_max = 1; // Maximum J
 	parameters.floquet.tau = 0.8; // Time step size
-	parameters.floquet.J = 0.3;
+	parameters.floquet.J = 0.5;
 
 	parameters.markov.K = 0.8; // Coupling strength to the bath in markov models
 
@@ -61,17 +62,17 @@ int main(){
 
 
 
-	parameters.evolution.time_step = 100; // Number of time steps
+	parameters.evolution.time_step = 20; // Number of time steps
 	parameters.evolution.step_size = parameters.floquet.tau; // Time step size
-	parameters.evolution.init_func_name = "Full Leftmost Spin Z Value"; // Initial state name
+	parameters.evolution.init_func_name = "Leftmost Spin Random State"; // Initial state name
 
 	parameters.evolution.evol_compute["Entropy Per Model"] = false;
-	parameters.evolution.evol_compute["Leftmost Spin Z Per Model"] = false;
-	parameters.evolution.evol_compute["Leftmost Spin X Per Model"] = false;
-	parameters.evolution.evol_compute["Leftmost Spin Y Per Model"] = false;
+	parameters.evolution.evol_compute["Leftmost Spin Z Per Model"] = true;
+	parameters.evolution.evol_compute["Leftmost Spin X Per Model"] = true;
+	parameters.evolution.evol_compute["Leftmost Spin Y Per Model"] = true;
 
 	parameters.evolution.evol_total_compute["Leftmost Spin Z One Run"] = false;
-	parameters.evolution.evol_total_compute["Full Leftmost Spin Z Per Model"] = true;
+	parameters.evolution.evol_total_compute["Full Leftmost Spin Z Per Model"] = false;
 
 	parameters.evolution.model_num = 1; // Number of models for evolution
 	// If partition the chain to two halves, the size of left part
@@ -87,7 +88,7 @@ int main(){
 		parameters.evolution.markov_jump = false;
 	}
 
-	parameters.evolution.log_time = false; // whehter time changes logarithmically
+	parameters.evolution.log_time = true; // whehter time changes logarithmically
 	parameters.evolution.log_time_jump = 2; // The base for time change logarithmically
 
 	// The number gives the index of leftmost spin z value
@@ -99,7 +100,7 @@ int main(){
 	 leftmost_spin_z_index_set + sizeof(leftmost_spin_z_index_set) / sizeof(int));
 
 	// Whether output the evolution of leftmot spin z for all eigenstates in full_leftmost_spin_z
-	parameters.multi_ini_para.easy_full_leftmost_spin_z = true;
+	parameters.multi_ini_para.easy_full_leftmost_spin_z = false;
 
 	// Threshold in time evolution of leftmost spin z for non-zero values
 	parameters.multi_ini_para.non_zero_threshold = 0.001;
