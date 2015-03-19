@@ -5,7 +5,6 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-#include <Python/Python.h>
 #include "evol_data.h"
 #include "methods.h"
 #include "generic_func.h"
