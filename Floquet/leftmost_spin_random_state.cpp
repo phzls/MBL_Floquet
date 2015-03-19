@@ -37,11 +37,11 @@ void leftmost_spin_random_state(const InitInfo& init_info, MatrixXcd& init_state
 	for (int i=0; i<rest_dim; i++){
 		for (int j=0; j<init_info.dim; j++){
 			if ( j<rest_dim ){
-				init_state_density(i,j) = (1+cos(theta)) / double(init_info.dim) * rest_id(i,j);
+				init_state_density(i,j) = (1-cos(theta)) / double(init_info.dim) * rest_id(i,j);
 			}
 			else{
-				init_state_density(i,j) = (1+sin(theta)) / double(init_info.dim) *
-						exp(-Complex_I * phi) * rest_id(i, j-rest_dim);
+				init_state_density(i,j) = sin(theta) / double(init_info.dim) * exp(Complex_I * phi)
+						* rest_id(i, j-rest_dim);
 			}
 		}
 	}
@@ -52,15 +52,16 @@ void leftmost_spin_random_state(const InitInfo& init_info, MatrixXcd& init_state
 				init_state_density(i,j) = conj(init_state_density(j,i));
 			}
 			else{
-				init_state_density(i,j) = (1-cos(theta)) / double(init_info.dim) *
+				init_state_density(i,j) = (1+cos(theta)) / double(init_info.dim) *
 						rest_id(i-rest_dim, j-rest_dim);
 			}
 		}
 	}
 
-	if ( abs(init_state_density.trace() - 1.0) < 1.0e-8 ){
+	if ( abs(init_state_density.trace() - complex<double>(1.0,0)) > 1.0e-8 ){
 		cout << "Initial density matrix has trace not equal to 1." << endl;
 		cout << "Obtained trace: " << init_state_density.trace() << endl;
+		cout << "Difference: " << abs(init_state_density.trace() - complex<double>(1.0,0)) << endl;
 		abort();
 	}
 
