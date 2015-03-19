@@ -67,13 +67,18 @@ using namespace Eigen;
 	leftmost_spin_y_per_model_[time][realization] = 0;
 
 	for (int i=0; i<row_num; i++){
-		if (i < row_num/2)
-			leftmost_spin_y_per_model_[time][realization] += imag(density_matrix(i,row_num-i-1));
-		else leftmost_spin_y_per_model_[time][realization] -= imag(density_matrix(i,row_num-i-1));
+		if (i < row_num/2){
+			int j = i + row_num / 2;
+			leftmost_spin_y_per_model_[time][realization] += imag(density_matrix(i,j));
+		}
+		else{
+			int j = i - row_num/2;
+			leftmost_spin_y_per_model_[time][realization] -= imag(density_matrix(i,j));
+		}
 	}
 
 	if (info.debug){
-		cout << "Average leftmost spin z per model:" << endl;
+		cout << "Average leftmost spin y per model:" << endl;
 		cout << leftmost_spin_y_per_model_[time][realization] << endl;
 		cout << endl;
 	}
