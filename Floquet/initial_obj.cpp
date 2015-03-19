@@ -131,6 +131,16 @@ void InitObj::map_init_(){
 	}
 	init_func_C_map_[name6] = func_C6;
 
+	string name7 = "Leftmost Spin Random State";
+	init_func_C func_C7 = leftmost_spin_random_state;
+
+	it_C = init_func_C_map_.find(name7);
+	if (it_C != init_func_C_map_.end()){
+		cout << "init_func " << name7 << " already exists." << endl;
+		abort();
+	}
+	init_func_C_map_[name7] = func_C7;
+
 }
 
 void InitObj::Multi_Num_Init(const string& init_name, InitInfo& init_info) const {
