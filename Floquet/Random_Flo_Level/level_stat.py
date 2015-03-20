@@ -135,8 +135,8 @@ draw1 = Draw.Draw()
 draw1.figure_init(ymax = 2.1, ymin = 1.2)
 draw1.figure_set()
 
-in_range = ["L=11"] # Angles or length
-must_in_range = ["square", "runs=100"]
+in_range = ["L=10"] # Angles or length
+must_in_range = ["square", "runs=100", "XXZ"]
 
 extra_index= [] # The original two scenarios
 """
@@ -159,11 +159,11 @@ draw1.plot_range(label, in_range = in_range, must_in_range = must_in_range,
 
 draw1.errorbar(data[0], data[1], yerr = data[2], label = plot_label)
 
-pylab.legend(loc='upper right', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.15, 0.8))
+pylab.legend(loc='upper left', ncol=1, prop={'size':15})#, bbox_to_anchor=(1.15, 0.8))
 pylab.ylabel(r"$\langle(\Delta\phi)^2\rangle$")
 pylab.xlabel(r"$j$")
 
-#pylab.savefig("Inter_Floquet_12_level_spacing_mean_square_compare_v1.pdf",box_inches='tight')
+#pylab.savefig("XXZ_Random_Floquet_10_level_spacing_mean_square_compare_v1.pdf",box_inches='tight')
 
 
 draw2 = Draw.Draw()
@@ -173,7 +173,7 @@ draw2.figure_set()
 
 index = 0
 for n in filename:
-    if n.find("mean") == -1 and n.find("Inter") > -1:
+    if n.find("mean") == -1 and n.find("XXZ") > -1:
         break
     else:
         index += 1
@@ -185,7 +185,7 @@ print min(data[1][index][9]), max(data[1][index][9])
 
 bin_width = 0.05
 
-instance = 1
+instance = 3`
 
 label = ( general[index] + " L=" + length[index]+" "+"J="+str(data[0][index][instance])
           )
@@ -206,7 +206,7 @@ print print_label
 
 pylab.subplots_adjust(bottom=0.12)
 
-#pylab.savefig(print_label+".pdf", box_inches='tight')
+pylab.savefig(print_label+".pdf", box_inches='tight')
 
 pylab.show()
 
