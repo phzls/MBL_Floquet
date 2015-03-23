@@ -233,7 +233,7 @@ string FloEvolMarkovXXZRandomBothXFunc::operator() (const AllPara&,
 string FloEvolXXZRandomSimpFunc::operator() (const AllPara& parameters,
 		EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
 	const int size = parameters.generic.size; // System Size
-	const double W = parameters.floquet.W; // Disorder strength
+	const double W = parameters.floquet.J; // Disorder strength
 
 	const bool debug = parameters.generic.debug;
 

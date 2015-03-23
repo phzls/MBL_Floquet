@@ -52,7 +52,6 @@ struct FloPara
 	int J_N; // Number points for different coupling strength J, including J_min
 			 // and J_max
 	double J; // Coupling strength J
-	double W; // Disorder strength
 	double tau; // Time step
 };
 
