@@ -158,13 +158,13 @@ for n in range(len(filename)):
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init()
+draw1.figure_init(xmin = 20000, xmax = 20600)
 draw1.figure_set()
 
-s = "_y"
+s = "_x"
 spin = "spin" + s
-version = "v1"
-run = 100
+version = "v2"
+run = 1
 J = 0.9
 L = 8
 
@@ -195,7 +195,7 @@ J_out = list(str(J))
 J_out[str(J).find('.')] = "_"
 J_out = "".join(J_out)
 
-save_name = "XXZ_Random_Floquet_" + str(L) + "_" + spin + "_J_" + J_out + "_run_" + str(run) + "," + version
+save_name = "XXZ_Random_Floquet_" + str(L) + "_" + spin + "_J_" + J_out + "_run_" + str(run) + "_short," + version
 
 print save_name
 
