@@ -119,4 +119,14 @@ public:
 	virtual ~FloEvolMarkovXXZRandomBothXFunc(){};
 };
 
+// For xxz random simple floquet operator
+class FloEvolXXZRandomSimpFunc: public ModelFunc
+{
+public:
+	string operator() (const AllPara&, EvolMatrix< ComplexEigenSolver<MatrixXcd> >*&);
+	string operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&);
+
+	virtual ~FloEvolXXZRandomSimpFunc(){};
+};
+
 #endif
