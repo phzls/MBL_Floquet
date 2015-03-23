@@ -24,8 +24,8 @@ int main(){
 
 
 	
-	parameters.generic.task = "Flo Evolution Density";
-	parameters.generic.model = "XXZ Random Flo";
+	parameters.generic.task = "Flo Level";
+	parameters.generic.model = "XXZ Random Simple Flo";
 
 	parameters.generic.size = 4; // System size
 	parameters.generic.num_realizations = 100; // Number of realizations
@@ -40,7 +40,7 @@ int main(){
 	parameters.output.width = 30; // Width for spacing in output files
 	parameters.output.filename_output = true; // Whether print out file names
 
-	parameters.floquet.J_N = 10; // Number of points of coupling strength
+	parameters.floquet.J_N = 11; // Number of points of coupling strength
 	parameters.floquet.J_min = 0; // Minimum J
 	parameters.floquet.J_max = 1; // Maximum J
 	parameters.floquet.tau = 0.8; // Time step size
@@ -88,7 +88,7 @@ int main(){
 		parameters.evolution.markov_jump = false;
 	}
 
-	parameters.evolution.log_time = true; // whehter time changes logarithmically
+	parameters.evolution.log_time = false; // whehter time changes logarithmically
 	parameters.evolution.log_time_jump = 2; // The base for time change logarithmically
 
 	// The number gives the index of leftmost spin z value
