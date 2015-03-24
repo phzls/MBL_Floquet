@@ -102,6 +102,16 @@ void TasksModels::Map_Construct_(){
 	task_function9 = &flo_evolution_density;
 	Task_Map_Insert(task_name9, task_type9, task_function9);
 
+	// Study transition property of a floquet model
+	string task_name10;
+	string task_type10;
+	task_func task_function10;
+
+	task_name10 = "Flo Transition";
+	task_type10 = "Floquet";
+	task_function10 = &flo_transition;
+	Task_Map_Insert(task_name10, task_type10, task_function10);
+
 	// Random Floquet Operator
 	string model_name1;
 	string model_type1;
