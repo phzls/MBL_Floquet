@@ -127,8 +127,9 @@ int main(){
 
 
 
-	// Methods to be called under single model
-	parameters.transition.flo_transition_compute["ZZ Correlation Square"] = true;
+	// Methods to be called for studying transition of floquet systems from thermal to localization
+	parameters.transition.flo_transition_compute["ZZ Correlation Square"] = true; // End-to-end sigma_z X sigma_z
+																				  // correlation square
 
 
 
