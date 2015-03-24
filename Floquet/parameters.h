@@ -140,6 +140,15 @@ struct SingleModel
 };
 
 /*
+ * Parameters used for studying transition of models
+ */
+struct Transition
+{
+	map<string,bool> flo_transition_compute; // Determine which method to be computed for floquet systems
+};
+
+
+/*
  * All parameters.
  */
 struct AllPara
@@ -173,6 +182,9 @@ struct AllPara
 
 	// Single model computation
 	SingleModel single_model;
+
+	// Model transition computation
+	Transition transition;
 };
 
 #endif
