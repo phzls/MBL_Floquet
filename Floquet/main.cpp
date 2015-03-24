@@ -1,7 +1,6 @@
 #include <iostream>
 #include <ctime>
 #include <string>
-#include <Python/Python.h>
 #include "constants.h"
 #include "parameters.h"
 #include "tasks_models.h"
@@ -25,24 +24,24 @@ int main(){
 
 
 	
-	parameters.generic.task = "Flo Level";
+	parameters.generic.task = "Flo Transition";
 	parameters.generic.model = "XXZ Random Simple Flo";
 
-	parameters.generic.size = 2; // System size
-	parameters.generic.num_realizations = 1; // Number of realizations
-	parameters.generic.threads_N = 1; // Number of threads in openmp
+	parameters.generic.size = 6; // System size
+	parameters.generic.num_realizations = 100; // Number of realizations
+	parameters.generic.threads_N = 4; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
 									 // level statistics calculation
 	parameters.generic.erase = true; // Whether erase matrix after diagonization
-	parameters.generic.debug = true; // Whether output debug information
+	parameters.generic.debug = false; // Whether output debug information
 	parameters.generic.iso_keep = true; // Whether isolated part is kept
 	parameters.generic.version = 1; // Version of the output
 
 	parameters.output.width = 30; // Width for spacing in output files
 	parameters.output.filename_output = true; // Whether print out file names
 
-	parameters.floquet.J_N = 11; // Number of points of coupling strength
-	parameters.floquet.J_min = 0; // Minimum J
+	parameters.floquet.J_N = 10; // Number of points of coupling strength
+	parameters.floquet.J_min = 0.1; // Minimum J
 	parameters.floquet.J_max = 1; // Maximum J
 	parameters.floquet.tau = 0.8; // Time step size
 	parameters.floquet.J = 0.5;
