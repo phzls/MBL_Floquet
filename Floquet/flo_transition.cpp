@@ -20,6 +20,7 @@ void flo_transition(const AllPara& parameters){
     const double J_max = parameters.floquet.J_max; // Maximum J
     const double J_min = parameters.floquet.J_min; // Minimum J
     const int num_realization = parameters.generic.num_realizations;
+    const int threads_N = parameters.generic.threads_N;
     const string model = parameters.generic.model;
     string name;
 
