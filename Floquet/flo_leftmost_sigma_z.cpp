@@ -106,7 +106,7 @@ void flo_leftmost_sigma_z(const AllPara& parameters){
 		int index = 0;
 		for (int j=0; j < floquet -> eigen.size(); j++){
 			for (int k=0; k<floquet -> eigen[j].eigenvalues().rows(); k++){
-				eval_pos[index].first = arg(floquet -> eigen[j].eigenvalues()(k));
+				eval_pos[index].first = arg(floquet -> eigen[j].eigenvalues()[k]);
 				eval_pos[index].second.first = j;
 				eval_pos[index].second.second = k;
 				index ++;
