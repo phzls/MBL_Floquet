@@ -51,7 +51,7 @@ void evec_to_basic(const EvolMatrix<T1>* evol, vector<vector<T2> >& evec){
 			single_evec = transition.Matrix("Basic_Even") * evol -> eigen[0].eigenvectors().col(i);
 
 			for (int j=0; j< single_evec.size();j++)
-				evec[index][j] = single_evec(j);
+				evec[index][j] = single_evec[j];
 
 			index ++;
 		}
@@ -59,7 +59,7 @@ void evec_to_basic(const EvolMatrix<T1>* evol, vector<vector<T2> >& evec){
 		for (int i=0; i< evol -> eigen[1].eigenvectors().cols(); i++){
 			single_evec = transition.Matrix("Basic_Odd") * evol -> eigen[1].eigenvectors().col(i);
 			for (int j=0; j< single_evec.size();j++)
-				evec[index][j] = single_evec(j);
+				evec[index][j] = single_evec[j];
 
 			index ++;
 		}
