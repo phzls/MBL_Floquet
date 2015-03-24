@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include "parameters.h"
 #include "evol_class.h"
 
@@ -38,7 +39,7 @@ typedef  void (FloModelTransition::*Flo_init)(const AllPara&);
 
 // Pointer to functions studying propertieso of a given floquet system
 typedef void (FloModelTransition::*Flo_func)(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
-        LocalInfo&);
+        const LocalInfo&);
 
 // Pointer to functions outputting data. The string gives the first part of filename
 typedef void (FloModelTransition::*Flo_out)(const AllPara&, const string&);
@@ -68,12 +69,12 @@ private:
 
     // For end to end zz correlation square
     void ZZ_corr_square_init_(const AllPara&);
-    void ZZ_corr_square_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, LocalInfo&);
+    void ZZ_corr_square_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
     void ZZ_corr_square_out_(const AllPara&, const string&);
 
 public:
     FloModelTransition(const AllPara& parameters) : flo_func_bool_map_(parameters.transition.flo_transition_compute) {
-        map_initialize_(const AllPara&);
+        map_initialize_(parameters);
     }
 
     void Compute(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
