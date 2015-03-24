@@ -36,12 +36,12 @@ void FloModelTransition::ZZ_corr_square_init_(AllPara const & parameters) {
  * Compute zz_corr_square given J index and realization index
  */
 void FloModelTransition::ZZ_corr_square_compute_(AllPara const & parameters,
-        const EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet, LocalInfo& local_info) {
+        const EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet, const LocalInfo& local_info) {
 
     const bool debug = parameters.generic.debug;
 
     // Vector for eigenvectors in basic binary basis
-    vector<vector<complex> > evec_basic;
+    vector<vector<complex<double> > > evec_basic;
     const int dim = floquet -> Get_Dim();
     const int half_dim = dim / 2; // Below which leftmost spin is -1
 
