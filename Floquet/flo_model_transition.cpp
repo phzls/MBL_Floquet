@@ -99,9 +99,7 @@ void FloModelTransition::map_initialize_(const AllPara& parameters) {
 
     // Initialize data structures
     for (map<string, bool>::iterator it = flo_func_bool_map_.begin(); it != flo_func_bool_map_.end(); it++){
-        if (it -> second){
-            flo_init_map_[it -> first](parameters);
-        }
+        if (it -> second) ( this ->*(flo_init_map_[it -> first]) ) (parameters);
     }
 }
 
@@ -110,17 +108,13 @@ void FloModelTransition::Compute(AllPara const & parameters,
         LocalInfo const & local_info) {
 
     for (map<string, bool>::iterator it = flo_func_bool_map_.begin(); it != flo_func_bool_map_.end(); it++){
-        if (it -> second){
-            flo_func_map_[it -> first](parameters, floquet, local_info);
-        }
+        if (it -> second) ( this ->*(flo_func_map_[it -> first]) )(parameters, floquet, local_info);
     }
 }
 
 void FloModelTransition::Output(AllPara const & parameters, const string& name) {
     for (map<string, bool>::iterator it = flo_func_bool_map_.begin(); it != flo_func_bool_map_.end(); it++){
-        if (it -> second){
-            flo_out_map_[it -> first](parameters, name);
-        }
+        if (it -> second) ( this ->*(flo_out_map_[it -> first]) )(parameters, name);
     }
 }
 
