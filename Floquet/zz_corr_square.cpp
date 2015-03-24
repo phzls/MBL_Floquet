@@ -46,7 +46,7 @@ void FloModelTransition::ZZ_corr_square_compute_(AllPara const & parameters,
     const int half_dim = dim / 2; // Below which leftmost spin is -1
 
     evec_basic.resize(dim);
-    for (int i=0; i<dim;i++) evec_basic.resize(dim);
+    for (int i=0; i<dim;i++) evec_basic[i].resize(dim);
 
     // Convert eigenvectors in basic basis
     evec_to_basic(floquet, evec_basic);
@@ -63,8 +63,8 @@ void FloModelTransition::ZZ_corr_square_compute_(AllPara const & parameters,
         for (int j=0; j<evec_basic[i].size(); j++){
             int right_spin = -1;
             int left_spin = 1;
-            if (i & 1 == 1) right_spin = 1;
-            if (i < half_dim ) left_spin = -1;
+            if (j & 1 == 1) right_spin = 1;
+            if (j < half_dim ) left_spin = -1;
 
             left_temp += left_spin * norm(evec_basic[i][j]);
             right_temp += right_spin * norm(evec_basic[i][j]);
@@ -74,9 +74,9 @@ void FloModelTransition::ZZ_corr_square_compute_(AllPara const & parameters,
         zz_square += (left_right_temp - left_temp*right_temp ) * (left_right_temp - left_temp*right_temp );
         if (debug){
             cout << "Realization " << local_info.realization_index << " eigenstate " << i << ":" << endl;
-            cout << "Average left spin: " << left_temp;
-            cout << "Average right spin: " << right_temp;
-            cout << "Average left X right: " << left_right_temp;
+            cout << "Average left spin: " << left_temp << endl;
+            cout << "Average right spin: " << right_temp << endl;
+            cout << "Average left X right: " << left_right_temp << endl;
         }
     }
 
@@ -111,7 +111,7 @@ void FloModelTransition::ZZ_corr_square_out_(AllPara const & parameters, const s
 
     for (int i=0; i< J_N; i++){
         if (model_data_.zz_corr_square[i].size() != num_realizations){
-            cout << "Not enough number of realizations at " << i <<"th J fpr zz correlation square." << endl;
+            cout << "Not enough number of realizations at " << i <<"th J for zz correlation square." << endl;
             cout << "Expected Number: " << num_realizations << endl;
             cout << "Actual Number: " << model_data_.zz_corr_square[i].size() << endl;
             abort();
@@ -132,6 +132,7 @@ void FloModelTransition::ZZ_corr_square_out_(AllPara const & parameters, const s
         double J;
         double mean,sd;
         if (J_N > 1) J = J_min + i * (J_max - J_min)/(J_N-1);
+        else J = J_min;
 
         generic_mean_sd(model_data_.zz_corr_square[i], mean, sd);
         fout << setw(10) << J << setw(width) << mean << setw(width) << sd << endl;
