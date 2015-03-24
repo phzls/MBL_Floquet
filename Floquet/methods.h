@@ -47,7 +47,7 @@ void rightmost_sigma_z_sum(Matrix<T1, Dynamic, Dynamic>&, const vector< vector<T
 
 /*
  * Write eigenstates of an evolutionary operator in basic binary basis, and output the result
- * in passed in vectors. 
+ * in passed in vectors. The components of each eigenvector is stored in the inner index
  */
 template <class T1, class T2>
 void evec_to_basic(const EvolMatrix<T1>*, vector<vector<T2> >&);
