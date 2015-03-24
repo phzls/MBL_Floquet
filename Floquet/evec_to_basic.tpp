@@ -13,6 +13,8 @@ void evec_to_basic(const EvolMatrix<T1>* evol, vector<vector<T2> >& evec){
 		for (int i=0; i<evol -> eigen.size(); i++){
 			if (evol -> eigen[i].eigenvectors().rows() != evec[0].size()){
 				cout << "The length of eigenvector in sector " << i << " is incompatible." << endl;
+				cout << "Length from eigenvector: " << evol -> eigen[i].eigenvectors().rows() << endl;
+				cout << "Length from vector: " << evec[0].size() << endl;
 				abort();
 			}
 
