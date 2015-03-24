@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <string>
+#include <Python/Python.h>
 #include "constants.h"
 #include "parameters.h"
 #include "tasks_models.h"
@@ -27,13 +28,13 @@ int main(){
 	parameters.generic.task = "Flo Level";
 	parameters.generic.model = "XXZ Random Simple Flo";
 
-	parameters.generic.size = 4; // System size
-	parameters.generic.num_realizations = 100; // Number of realizations
-	parameters.generic.threads_N = 4; // Number of threads in openmp
+	parameters.generic.size = 2; // System size
+	parameters.generic.num_realizations = 1; // Number of realizations
+	parameters.generic.threads_N = 1; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
 									 // level statistics calculation
 	parameters.generic.erase = true; // Whether erase matrix after diagonization
-	parameters.generic.debug = false; // Whether output debug information
+	parameters.generic.debug = true; // Whether output debug information
 	parameters.generic.iso_keep = true; // Whether isolated part is kept
 	parameters.generic.version = 1; // Version of the output
 
@@ -122,6 +123,16 @@ int main(){
 
 
 //===================================================================================
+
+
+
+
+	// Methods to be called under single model
+	parameters.transition.flo_transition_compute["ZZ Correlation Square"] = true;
+
+
+
+//=======================================================================================
 
 
 
