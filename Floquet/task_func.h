@@ -56,4 +56,9 @@ void single_model(const AllPara&);
  */
 void flo_evolution_density(const AllPara&);
 
+/*
+ * Study transition properties of a floquet model
+ */
+void flo_transition(const AllPara&);
+
 #endif
