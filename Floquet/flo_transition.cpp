@@ -6,6 +6,7 @@
 #include "parameters.h"
 #include "tasks_models.h"
 #include "flo_model_transition.h"
+#include "eigen_output.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ void flo_transition(const AllPara& parameters){
     const int num_realization = parameters.generic.num_realizations;
     const int threads_N = parameters.generic.threads_N;
     const string model = parameters.generic.model;
+    const bool debug = parameters.generic.debug;
     string name;
 
     FloModelTransition flo_model_transition(parameters);
@@ -47,13 +49,30 @@ void flo_transition(const AllPara& parameters){
             #pragma omp for
             for (int k=0; k < num_realization; k++){
                 EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet;
-                tasks_models.Model(model, parameters, floquet);
+                tasks_models.Model(model, local_parameters, floquet);
                 floquet -> Evol_Para_Init();
                 floquet -> Evol_Construct();
                 floquet -> Evol_Diag();
                 floquet -> Evol_Erase(); // Time evolution operator is not kept
 
-                if (i == 1 && k == 0) name = floquet -> Type();
+                if (debug){
+                    cout << "Realization " << k << endl;
+                    cout << "Eigenvalues:" << endl;
+                    for (int i=0; i<floquet -> eigen.size(); i++){
+                        cout << "Sector " << i << endl;
+                        complex_matrix_write(floquet -> eigen[i].eigenvalues());
+                        cout << endl;
+                    }
+
+                    cout << "Eigenvectors:" << endl;
+                    for (int i=0; i<floquet -> eigen.size(); i++){
+                        cout << "Sector " << i << endl;
+                        complex_matrix_write(floquet -> eigen[i].eigenvectors());
+                        cout << endl;
+                    }
+                }
+
+                if (i == 0 && k == 0) name = floquet -> Type();
 
                 LocalInfo local_info;
                 local_info.J_index = i;
