@@ -21,6 +21,9 @@ struct ModelData
 {
     // End-to-end sigma_z-sigma_z correlation square averaged over all eigenstates and realizations
     vector< vector<double> > zz_corr_square;
+
+    // Entropy varaince for all eigenstates
+    vector< vector<double> > ent_var;
 };
 
 /*
@@ -71,6 +74,11 @@ private:
     void ZZ_corr_square_init_(const AllPara&);
     void ZZ_corr_square_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
     void ZZ_corr_square_out_(const AllPara&, const string&);
+
+    // For variance of entropy among eigenstates
+    void Ent_var_init_(const AllPara&);
+    void Ent_var_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
+    void Ent_var_out_(const AllPara&, const string&);
 
 public:
     FloModelTransition(const AllPara& parameters) : flo_func_bool_map_(parameters.transition.flo_transition_compute) {
