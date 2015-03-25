@@ -14,7 +14,7 @@ void FloModelTransition::map_initialize_(const AllPara& parameters) {
     map<string, Flo_func >::iterator cal_it;
     map<string, Flo_out >::iterator out_it;
 
-    // Entropy Per Model data
+    // end-to-end z-z correlation square
     string name1 = "ZZ Correlation Square";
     Flo_init init_func1 = &FloModelTransition::ZZ_corr_square_init_;
     Flo_func cal_func1 = &FloModelTransition::ZZ_corr_square_compute_;
@@ -32,6 +32,25 @@ void FloModelTransition::map_initialize_(const AllPara& parameters) {
     flo_init_map_[name1] = init_func1;
     flo_func_map_[name1] = cal_func1;
     flo_out_map_[name1] = out_func1;
+
+    // entropy variance
+    string name2 = "Entropy Variance";
+    Flo_init init_func2 = &FloModelTransition::Ent_var_init_;
+    Flo_func cal_func2 = &FloModelTransition::Ent_var_compute_;
+    Flo_out out_func2 = &FloModelTransition::Ent_var_out_;
+
+    // Make sure the name has not been used before
+    init_it = flo_init_map_.find(name2);
+    cal_it = flo_func_map_.find(name2);
+    out_it = flo_out_map_.find(name2);
+    if (init_it != flo_init_map_.end() || cal_it != flo_func_map_.end() || out_it != flo_out_map_.end()){
+        cout << name2 << " for floquet transition has appeared before." << endl;
+        abort();
+    }
+
+    flo_init_map_[name2] = init_func2;
+    flo_func_map_[name2] = cal_func2;
+    flo_out_map_[name2] = out_func2;
 
     // Check the number of function
     if ( flo_init_map_.size() != flo_func_map_.size() ){
