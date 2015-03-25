@@ -136,7 +136,7 @@ draw1.figure_init(ymax = 2.1, ymin = 1.2)
 draw1.figure_set()
 
 in_range = ["L=10"] # Angles or length
-must_in_range = ["square", "runs=100", "XXZ"]
+must_in_range = ["square", "runs=100", "XXZ", "Simple"]
 
 extra_index= [] # The original two scenarios
 """
@@ -185,7 +185,7 @@ print min(data[1][index][9]), max(data[1][index][9])
 
 bin_width = 0.05
 
-instance = 3`
+instance = 25
 
 label = ( general[index] + " L=" + length[index]+" "+"J="+str(data[0][index][instance])
           )
@@ -206,7 +206,7 @@ print print_label
 
 pylab.subplots_adjust(bottom=0.12)
 
-pylab.savefig(print_label+".pdf", box_inches='tight')
+#pylab.savefig(print_label+".pdf", box_inches='tight')
 
 pylab.show()
 
