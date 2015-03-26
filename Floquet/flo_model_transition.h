@@ -24,6 +24,9 @@ struct ModelData
 
     // Entropy varaince for all eigenstates
     vector< vector<double> > ent_var;
+
+    // Entropy variance for the eigenstate with smallest energy magnitude among different realizations
+    vector< vector<double> > ent_smallest_var;
 };
 
 /*
@@ -79,6 +82,11 @@ private:
     void Ent_var_init_(const AllPara&);
     void Ent_var_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
     void Ent_var_out_(const AllPara&, const string&);
+
+    // For variance of entropy for eigenstate with smallest energy magnitude among different realizations
+    void Ent_smallest_var_init_(const AllPara&);
+    void Ent_smallest_var_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
+    void Ent_smallest_var_out_(const AllPara&, const string&);
 
 public:
     FloModelTransition(const AllPara& parameters) : flo_func_bool_map_(parameters.transition.flo_transition_compute) {
