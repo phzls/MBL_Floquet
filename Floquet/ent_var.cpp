@@ -10,6 +10,7 @@
 #include "flo_model_transition.h"
 #include "methods.h"
 #include "generic_func.h"
+#include "eigen_output.h"
 
 using namespace std;
 using namespace Eigen;
@@ -26,7 +27,7 @@ void FloModelTransition::Ent_var_init_(AllPara const & parameters) {
     const int J_N = parameters.floquet.J_N; // Number of points for J
     const int num_realization = parameters.generic.num_realizations;
 
-    model_data_.zz_corr_square.resize(J_N);
+    model_data_.ent_var.resize(J_N);
 
     for (int i=0; i<J_N; i++){
         model_data_.ent_var[i].resize(num_realization);
@@ -90,6 +91,8 @@ void FloModelTransition::Ent_var_compute_(AllPara const & parameters,
 
         if (debug){
             cout << "Realization " << local_info.realization_index << " eigenstate " << i << ":" << endl;
+            cout << "Reduced Density Matrix: " << endl;
+            complex_matrix_write(reduced_d);
             cout << "Entropy: " << ent[i] << endl;
         }
     }
