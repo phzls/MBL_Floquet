@@ -27,7 +27,7 @@ int main(){
 	parameters.generic.task = "Flo Transition";
 	parameters.generic.model = "XXZ Random Simple Flo";
 
-	parameters.generic.size = 6; // System size
+	parameters.generic.size = 4; // System size
 	parameters.generic.num_realizations = 100; // Number of realizations
 	parameters.generic.threads_N = 4; // Number of threads in openmp
 	parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
@@ -129,7 +129,12 @@ int main(){
 	// Methods to be called for studying transition of floquet systems from thermal to localization
 	parameters.transition.flo_transition_compute["ZZ Correlation Square"] = false; // End-to-end sigma_z X sigma_z
 																				  // correlation square
-	parameters.transition.flo_transition_compute["Entropy Variance"] = true; // Entropy variance for all eigenstates
+
+	parameters.transition.flo_transition_compute["Entropy Variance"] = false; // Entropy variance for all eigenstates
+
+	parameters.transition.flo_transition_compute["Entropy Variance Smallest"] = true; // Entropy variance eigenstates with
+													                         // smallest phase magnitude among all
+													                         // realizations
 
 
 
