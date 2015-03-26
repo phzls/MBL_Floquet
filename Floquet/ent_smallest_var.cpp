@@ -100,7 +100,7 @@ void FloModelTransition::Ent_smallest_var_compute_(AllPara const & parameters,
     // Compute entropy for this state
     for (int j=0; j<density_eigen.eigenvalues().rows();j++){
         double eval = density_eigen.eigenvalues()(j);
-        if (abs(eval)>1.0e-15)
+        if (abs(eval)>1.0e-12)
         {
             if (eval<0){
                 cout << "Density matrix has significant negative eigenvalues." << endl;
