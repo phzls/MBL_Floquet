@@ -25,7 +25,7 @@ struct ModelData
     // Entropy varaince for all eigenstates
     vector< vector<double> > ent_var;
 
-    // Entropy variance for the eigenstate with smallest energy magnitude among different realizations
+    // Entropy variance for the eigenstate with smallest phase magnitude among different realizations
     vector< vector<double> > ent_smallest_var;
 };
 
