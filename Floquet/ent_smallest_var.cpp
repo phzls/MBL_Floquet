@@ -19,14 +19,14 @@ using namespace Eigen;
 
 /**
  ** This file contains functions related to ent_smallest_var, which is the entropy variance for
- ** the eigenstate with smallest energy magnitude among all realizations. The entropy is half chain entanglement
+ ** the eigenstate with smallest phase magnitude among all realizations. The entropy is half chain entanglement
  ** entropy, so the spin chain must have even length.
  **/
 
 /*
  * Initialize ent_smallest_var in model_data_. The outer index is for J, and the inner index is for realization
  */
-void FloModelTransition::Ent_var_init_(AllPara const & parameters) {
+void FloModelTransition::Ent_smallest_var_init_(AllPara const & parameters) {
     const int J_N = parameters.floquet.J_N; // Number of points for J
     const int num_realization = parameters.generic.num_realizations;
 
@@ -42,7 +42,7 @@ void FloModelTransition::Ent_var_init_(AllPara const & parameters) {
 /*
  * Compute ent_smallest_var given J index and realization index
  */
-void FloModelTransition::Ent_var_compute_(AllPara const & parameters,
+void FloModelTransition::Ent_smallest_var_compute_(AllPara const & parameters,
         const EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet, const LocalInfo& local_info) {
 
     const bool debug = parameters.generic.debug;
@@ -72,10 +72,16 @@ void FloModelTransition::Ent_var_compute_(AllPara const & parameters,
     int index = 0;
     for (int i=0; i<floquet -> eigen.size(); i++){
         for (int j=0; j<floquet -> eigen[i].eigenvalues().rows(); j++){
-            eigen_mag[index].first = abs(floquet -> eigen[i].eigenvalues()[j]);
+            eigen_mag[index].first = abs( arg(floquet -> eigen[i].eigenvalues()[j]) );
             eigen_mag[index].second = index;
             index ++;
         }
+    }
+
+    if (index != dim){
+        cout << "Total dimension of eigenenergy is not correct." << endl;
+        cout << "Expected number: " << dim << endl;
+        cout << "Actual number: " << index << endl;
     }
 
     // Sort according to the energy magnitude in ascending order
@@ -112,14 +118,14 @@ void FloModelTransition::Ent_var_compute_(AllPara const & parameters,
         cout << "Entropy: " << ent << endl;
     }
 
-    model_data_.ent_var[local_info.J_index][local_info.realization_index] = ent;
+    model_data_.ent_smallest_var[local_info.J_index][local_info.realization_index] = ent;
 }
 
 /*
- * Output averages of mean entropy variance for eigenstate with smallest energy magnitude among all
+ * Output averages of mean entropy variance for eigenstate with smallest phase magnitude among all
  * realizations for each J
  */
-void FloModelTransition::Ent_var_out_(AllPara const & parameters, const string& name) {
+void FloModelTransition::Ent_smallest_var_out_(AllPara const & parameters, const string& name) {
     const double J_min = parameters.floquet.J_min;
     const double J_max = parameters.floquet.J_max;
     const int J_N = parameters.floquet.J_N;
