@@ -52,7 +52,7 @@ void FloModelTransition::map_initialize_(const AllPara& parameters) {
     flo_func_map_[name2] = cal_func2;
     flo_out_map_[name2] = out_func2;
 
-    // entropy variance
+    // entropy variance for eigenstate with smallest phase magnitude among all realizations
     string name3 = "Entropy Variance Smallest";
     Flo_init init_func3 = &FloModelTransition::Ent_smallest_var_init_;
     Flo_func cal_func3 = &FloModelTransition::Ent_smallest_var_compute_;
