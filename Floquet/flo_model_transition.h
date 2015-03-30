@@ -27,6 +27,10 @@ struct ModelData
 
     // Entropy variance for the eigenstate with smallest phase magnitude among different realizations
     vector< vector<double> > ent_smallest_var;
+
+    // End-to-end sigma_z-sigma_z time four-point correlation square
+    vector< vector<double> > zz_time_corr_square;
+
 };
 
 /*
@@ -87,6 +91,12 @@ private:
     void Ent_smallest_var_init_(const AllPara&);
     void Ent_smallest_var_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
     void Ent_smallest_var_out_(const AllPara&, const string&);
+
+    // For end to end zz time four-point correlation square
+    void ZZ_time_corr_square_init_(const AllPara&);
+    void ZZ_time_corr_square_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
+                                      const LocalInfo&);
+    void ZZ_time_corr_square_out_(const AllPara&, const string&);
 
 public:
     FloModelTransition(const AllPara& parameters) : flo_func_bool_map_(parameters.transition.flo_transition_compute) {

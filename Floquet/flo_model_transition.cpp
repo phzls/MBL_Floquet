@@ -71,6 +71,25 @@ void FloModelTransition::map_initialize_(const AllPara& parameters) {
     flo_func_map_[name3] = cal_func3;
     flo_out_map_[name3] = out_func3;
 
+    // end-to-end z-z time correlation square
+    string name4 = "ZZ Time Correlation Square";
+    Flo_init init_func4 = &FloModelTransition::ZZ_time_corr_square_init_;
+    Flo_func cal_func4 = &FloModelTransition::ZZ_time_corr_square_compute_;
+    Flo_out out_func4 = &FloModelTransition::ZZ_time_corr_square_out_;
+
+    // Make sure the name has not been used before
+    init_it = flo_init_map_.find(name4);
+    cal_it = flo_func_map_.find(name4);
+    out_it = flo_out_map_.find(name4);
+    if (init_it != flo_init_map_.end() || cal_it != flo_func_map_.end() || out_it != flo_out_map_.end()){
+        cout << name4 << " for floquet transition has appeared before." << endl;
+        abort();
+    }
+
+    flo_init_map_[name4] = init_func4;
+    flo_func_map_[name4] = cal_func4;
+    flo_out_map_[name4] = out_func4;
+
     // Check the number of function
     if ( flo_init_map_.size() != flo_func_map_.size() ){
 
