@@ -204,7 +204,7 @@ void TasksModels::Map_Construct_(){
 	model_function9 = new FloEvolMarkovXXZRandomBothXFunc();
 	Model_Map_Insert(model_name9, model_type9, model_function9);
 
-	// Random XXZ Floquet Operator
+	// Random Simple XXZ Floquet Operator
 	string model_name10;
 	string model_type10;
 	ModelFunc* model_function10;
@@ -213,6 +213,16 @@ void TasksModels::Map_Construct_(){
 	model_type10 = "XXZ Random Simple Floquet";
 	model_function10 = new FloEvolXXZRandomSimpFunc();
 	Model_Map_Insert(model_name10, model_type10, model_function10);
+
+	// Random Simple Shift XXZ Floquet Operator
+	string model_name11;
+	string model_type11;
+	ModelFunc* model_function11;
+
+	model_name11 = "XXZ Random Simple Shift Flo";
+	model_type11 = "XXZ Random Simple Shift Floquet";
+	model_function11 = new FloEvolXXZRandomSimpShiftFunc();
+	Model_Map_Insert(model_name11, model_type11, model_function11);
 }
 
 void TasksModels::Task_Map_Insert(const string& task_name, const string& task_type, 
