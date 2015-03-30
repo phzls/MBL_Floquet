@@ -21,7 +21,7 @@ using namespace std;
  * Construct the representation string and abstract type of the class.
  */
 void FloEvolXXZRandomSimp::Repr_Init_(){
-    repr_ << "XXZ_Random_Floquet_L=" << size_ << ",W=" << W_;
+    repr_ << "XXZ_Random_Simple_Floquet_L=" << size_ << ",W=" << W_;
     type_ = "XXZ_Random_Simple_Floquet";
 }
 
