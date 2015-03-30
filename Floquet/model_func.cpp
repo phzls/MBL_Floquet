@@ -250,3 +250,24 @@ string FloEvolXXZRandomSimpFunc::operator() (const AllPara&, EvolMatrix< EigenSo
 	cout << "Wrong pointers for model." << endl;
 	abort();
 }
+
+string FloEvolXXZRandomSimpShiftFunc::operator() (const AllPara& parameters,
+											 EvolMatrix< ComplexEigenSolver<MatrixXcd> >*& model){
+	const int size = parameters.generic.size; // System Size
+	const double W = parameters.floquet.J; // Disorder strength
+
+	const bool debug = parameters.generic.debug;
+
+	model = new FloEvolXXZRandomSimpShift(size, W, debug);
+
+	string type = model -> Type();
+	replace(type.begin(), type.end(), '_', ' ');
+
+	return type;
+}
+
+string FloEvolXXZRandomSimpShiftFunc::operator() (const AllPara&, EvolMatrix< EigenSolver<MatrixXd> >*&)
+{
+	cout << "Wrong pointers for model." << endl;
+	abort();
+}
