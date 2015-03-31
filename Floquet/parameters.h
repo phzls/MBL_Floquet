@@ -31,6 +31,7 @@ struct GenericPara
 				   // Flo_Evol_Markov_Inter_Random_Both_X
 	int version; // Version number of the output file. If it is smaller than 1,
 				 // then no version number is outputted
+	bool time; // Whether various parts of the program is timed
 };
 
 /*
