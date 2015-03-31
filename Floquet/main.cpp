@@ -25,22 +25,23 @@ int main() {
 
 
     parameters.generic.task = "Flo Transition";
-    parameters.generic.model = "XXZ Random Simple Shift Flo";
+    parameters.generic.model = "XXZ Random Simple Flo";
 
-    parameters.generic.size = 4; // System size
-    parameters.generic.num_realizations = 100; // Number of realizations
-    parameters.generic.threads_N = 4; // Number of threads in openmp
+    parameters.generic.size = 10; // System size
+    parameters.generic.num_realizations = 1; // Number of realizations
+    parameters.generic.threads_N = 1; // Number of threads in openmp
     parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
     // level statistics calculation
     parameters.generic.erase = true; // Whether erase matrix after diagonization
     parameters.generic.debug = false; // Whether output debug information
     parameters.generic.iso_keep = true; // Whether isolated part is kept
     parameters.generic.version = 1; // Version of the output
+    parameters.generic.time = true; // Whether the program is timed
 
     parameters.output.width = 30; // Width for spacing in output files
     parameters.output.filename_output = true; // Whether print out file names
 
-    parameters.floquet.J_N = 30; // Number of points of coupling strength
+    parameters.floquet.J_N = 1; // Number of points of coupling strength
     parameters.floquet.J_min = 0.1; // Minimum J
     parameters.floquet.J_max = 0.9; // Maximum J
     parameters.floquet.tau = 0.8; // Time step size
@@ -128,7 +129,7 @@ int main() {
 
 
     // Methods to be called for studying transition of floquet systems from thermal to localization
-    parameters.transition.flo_transition_compute["ZZ Correlation Square"] = true; // End-to-end sigma_z X sigma_z
+    parameters.transition.flo_transition_compute["ZZ Correlation Square"] = false; // End-to-end sigma_z X sigma_z
     // correlation square
 
     parameters.transition.flo_transition_compute["Entropy Variance"] = false; // Entropy variance for all eigenstates
@@ -137,7 +138,7 @@ int main() {
     // smallest phase magnitude among all
     // realizations
 
-    parameters.transition.flo_transition_compute["ZZ Time Correlation Square"] = false; // End-to-end sigma_z X sigma_z
+    parameters.transition.flo_transition_compute["ZZ Time Correlation Square"] = true; // End-to-end sigma_z X sigma_z
     // time correlation square
 
 
