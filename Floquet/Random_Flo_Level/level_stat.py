@@ -145,9 +145,8 @@ for n in xrange(len(label)):
         extra_index.append(n)
 """
 
-plot_label = ['' for n in filename]
+plot_label = ['Floquet ' for n in filename]
 print general
-Label.label_build(plot_label, '', general, end = True, concat = '')
 Label.label_build(plot_label, length_label, length, end = True)
 Label.label_build(plot_label, "angle=", angle_min, end = True)
 Label.label_build(plot_label, "runs=", realization, end = True)
@@ -165,6 +164,24 @@ pylab.xlabel(r"$j$")
 
 #pylab.savefig("XXZ_Random_Floquet_10_level_spacing_mean_square_compare_v1.pdf",box_inches='tight')
 
+# Interpolated Poisson distribution
+import math
+def Poisson(x,mean=1):
+    try:
+        len(x)
+    except:
+        return math.exp(-x)
+    else:
+        return [math.exp(-n) for n in x]
+
+# Distribution of GOE with mean 1
+def GOE(x):
+    try:
+        len(x)
+    except:
+        return math.pi/2.0 * x * math.exp(-math.pi/4.0 * x *x)
+    else:
+        return [math.pi/2.0 * n * math.exp(-math.pi/4.0 * n *n) for n in x]
 
 draw2 = Draw.Draw()
 
@@ -185,13 +202,17 @@ print min(data[1][index][9]), max(data[1][index][9])
 
 bin_width = 0.05
 
-instance = 25
+instance = 3
 
-label = ( general[index] + " L=" + length[index]+" "+"J="+str(data[0][index][instance])
+label = ( "Floquet L=" + length[index]+" "+"J="+str(data[0][index][instance])
           )
 print label
 
-draw2.hist(data[1][index][instance], bin_width = bin_width, label = label)
+step = max(data[1][index][instance])/1000
+data_x = np.arange(0, max(data[1][index][instance]), step)
+
+draw2.hist(data[1][index][instance], bin_width = bin_width, label = label, normed=True)
+pylab.plot(data_x, GOE(data_x), linewidth=3, label = "Poisson Distribution", color = 'r')
 pylab.legend(loc='upper right', ncol=1, prop={'size':15} )
 
 J_s = str(data[0][index][instance]).replace('.','_')
@@ -200,13 +221,13 @@ pylab.xlabel(r"$\langle\Delta \phi_i \rangle$")
 
 print_label = label.replace('.', '_')
 print_label = print_label.replace(' ', '_')
-print_label = print_label + "_level_spacing"
+print_label = print_label + "_level_spacing_fitted"
 
 print print_label
 
 pylab.subplots_adjust(bottom=0.12)
 
-#pylab.savefig(print_label+".pdf", box_inches='tight')
+pylab.savefig(print_label+".pdf", box_inches='tight')
 
 pylab.show()
 
