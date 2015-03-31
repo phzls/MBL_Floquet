@@ -9,9 +9,11 @@ import drawing as Draw
 import label_build as Label
 import numpy as np
 
-include_s = "entropy_variance," # A string that must be included in filename construct
+include_s = "zz_time_corr_square," # A string that must be included in filename construct
+exclude_s = "Shift" # A string that must be excluded in filename construct
 ver_num = 1
-scale = False
+scale = True
+scale_target = 0.399
 
 def read_file(filename, W, ave, err, realization = 1):
     """  Read averages and standard deviation (if exist) from files
@@ -25,11 +27,28 @@ def read_file(filename, W, ave, err, realization = 1):
         if len(temp[n]) > 2:
             err.append(temp[n][2] / (realization**0.5) )
 
+def scale_point(data, target):
+    """
+    This function finds the point where the data first becomes no less than the target.
+    The data is assumed to be in ascending order. If not found, none will be returned.
+    :param data: the data file
+    :param target: the target value to be not less than
+    :return: the position in the data. If not found, none will be returned
+    """
+    L =len(data)
+    pos = 0
+    while data[pos] < target:
+        pos += 1
+        if pos >= L:
+            pos = None
+            break
+    return pos
+
 filename = []
 label = [] # General label for excuding when plotting
 
 # Obtain filenames
-Label.name_read("name", filename, label, include_s = include_s)
+Label.name_read("name", filename, label, include_s = include_s, exclude_s=exclude_s)
 
 legend = ['' for n in filename] # labels used as legends in plotting
 
@@ -81,6 +100,17 @@ Label.label_build(label, version_label, version, end = True)
 #print label
 #print legend
 
+# Remove XXZ part from legends
+remove_string = "XXZ "
+for n in range(len(legend)):
+    s = legend[n]
+    start = s.find(remove_string)
+    if start > 0:
+        legend[n] = s[:start-1]
+    else:
+        legend[n] = ''
+    legend[n] += s[start+len(remove_string):]
+
 data = [[],[],[]]
 
 index = 0
@@ -93,7 +123,8 @@ for n in filename:
 
 scaled_data = [[],[],[]]
 for n in range(len(data[0])):
-    scale_factor = data[1][n][0] # Use average at W=0 as scaling factor
+    scale_pos = scale_point(data[0][n], scale_target)
+    scale_factor = data[1][n][scale_pos]
     scaled_data[0].append([x for x in data[0][n]])
     scaled_data[1].append([x for x in data[1][n]/scale_factor])
     scaled_data[2].append([x for x in data[2][n]/scale_factor])
@@ -101,7 +132,7 @@ for n in range(len(data[0])):
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init(ymax=1)
+draw1.figure_init()
 draw1.figure_set()
 
 must_in_range = ["v"+str(ver_num)]
@@ -119,20 +150,24 @@ if len(data[2][0]) > 0:
 else:
     draw1.plot(plot_data[0], plot_data[1], label=legend)
 
-pylab.legend(loc='upper left', ncol=1, prop={'size':14})#, bbox_to_anchor=(1.1, 0.5))
-pylab.ylabel("Ent SD within Evec")
+pylab.legend(loc='upper left', ncol=1, prop={'size':12})#, bbox_to_anchor=(1.1, 0.5))
+pylab.ylabel("ZZ Time Correlation")
 pylab.xlabel("W")
 
 num_pts = J_N[draw1._plot_range[0]]
 num_run = realization[draw1._plot_range[0]]
 
-save_name = "XXZ_Random_Simple_Floquet_" + "J_N_" + str(num_pts) + "_Run_" + str(num_run) + "_" + "ent_var_eigenstates"
+#save_name = "Random_Simple_Floquet_" + "J_N_" + str(num_pts) + "_Run_" + str(num_run) + "_" + "zz_corr"
+save_name = "Random_Simple_Floquet_zz_time_corr"
 
 if scale:
-    save_name += "_scaled"
+    save_name += "_scaled_target_" + str(scale_target).replace('.','_')
+if draw1._xmax < max(plot_data[1]) and draw1._xmax > 0:
+    save_name += "_zoom"
 
 print save_name
 
+#pylab.subplots_adjust(left=0.16)
 pylab.savefig(save_name + "_v" + str(ver_num) + ".pdf",box_inches='tight')
 
 pylab.show()
