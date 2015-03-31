@@ -25,7 +25,7 @@ int main() {
 
 
     parameters.generic.task = "Flo Transition";
-    parameters.generic.model = "XXZ Random Simple Flo";
+    parameters.generic.model = "XXZ Random Simple Shift Flo";
 
     parameters.generic.size = 4; // System size
     parameters.generic.num_realizations = 100; // Number of realizations
@@ -128,7 +128,7 @@ int main() {
 
 
     // Methods to be called for studying transition of floquet systems from thermal to localization
-    parameters.transition.flo_transition_compute["ZZ Correlation Square"] = false; // End-to-end sigma_z X sigma_z
+    parameters.transition.flo_transition_compute["ZZ Correlation Square"] = true; // End-to-end sigma_z X sigma_z
     // correlation square
 
     parameters.transition.flo_transition_compute["Entropy Variance"] = false; // Entropy variance for all eigenstates
@@ -137,7 +137,7 @@ int main() {
     // smallest phase magnitude among all
     // realizations
 
-    parameters.transition.flo_transition_compute["ZZ Time Correlation Square"] = true; // End-to-end sigma_z X sigma_z
+    parameters.transition.flo_transition_compute["ZZ Time Correlation Square"] = false; // End-to-end sigma_z X sigma_z
     // time correlation square
 
 
