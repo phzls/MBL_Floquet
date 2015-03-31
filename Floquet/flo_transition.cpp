@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <ctime>
 #include "parameters.h"
 #include "tasks_models.h"
 #include "flo_model_transition.h"
@@ -24,7 +25,9 @@ void flo_transition(const AllPara& parameters){
     const int threads_N = parameters.generic.threads_N;
     const string model = parameters.generic.model;
     const bool debug = parameters.generic.debug;
+    const bool time = parameters.generic.time;
     string name;
+    clock_t time_begin = clock();
 
     FloModelTransition flo_model_transition(parameters);
 
@@ -41,6 +44,13 @@ void flo_transition(const AllPara& parameters){
 
         local_parameters.floquet.J = J;
 
+        clock_t init_end = clock();
+
+        if (time && i == 0){
+            cout << "Various initialization time: " << double(init_end - time_begin) / CLOCKS_PER_SEC << "s" << endl;
+            cout << endl;
+        }
+
         cout << "J: " << local_parameters.floquet.J << endl;
         cout << "Start computation." << endl;
 
@@ -48,6 +58,8 @@ void flo_transition(const AllPara& parameters){
         {
             #pragma omp for
             for (int k=0; k < num_realization; k++){
+                time_begin = clock();
+
                 EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet;
                 tasks_models.Model(model, local_parameters, floquet);
                 floquet -> Evol_Para_Init();
@@ -74,11 +86,26 @@ void flo_transition(const AllPara& parameters){
 
                 if (i == 0 && k == 0) name = floquet -> Type();
 
+                clock_t diag_end = clock();
+
+                if (time && i == 0 && k == 0){
+                    cout << "Diagonalization time: " << double(diag_end - time_begin) / CLOCKS_PER_SEC << "s" << endl;
+                    cout << endl;
+                }
+                time_begin = clock();
+
                 LocalInfo local_info;
                 local_info.J_index = i;
                 local_info.realization_index = k;
 
                 flo_model_transition.Compute(parameters, floquet, local_info);
+
+                clock_t comp_end = clock();
+
+                if (time && i == 0 && k == 0){
+                    cout << "Transition computation time: " << double(comp_end - time_begin) / CLOCKS_PER_SEC << "s" << endl;
+                    cout << endl;
+                }
 
                 delete floquet;
                 floquet = NULL;
@@ -87,6 +114,13 @@ void flo_transition(const AllPara& parameters){
     }
 
     cout << "Output data." << endl;
+    time_begin = clock();
     flo_model_transition.Output(parameters, name);
+    clock_t out_end = clock();
+
+    if (time){
+        cout << "Output time: " << double(out_end - time_begin) / CLOCKS_PER_SEC << "s" << endl;
+        cout << endl;
+    }
 }
 
