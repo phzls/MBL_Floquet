@@ -11,7 +11,7 @@ suffix = ".txt"
 
 # Read all files starting with Markov
 for file in os.listdir('.'):
-    if fnmatch.fnmatch(file, "*.txt"):
+    if fnmatch.fnmatch(file, "*size*.txt"):
 #        print file[:-len(suffix)]
         markov_file.append(file[:-len(suffix)])
 
