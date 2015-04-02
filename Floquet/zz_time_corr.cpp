@@ -18,25 +18,25 @@ using namespace std;
  **/
 
 /*
- * Initialize zz_time_corr_square in model_data_. The outer index is for J, and the inner index is for realization
+ * Initialize zz_time_corr in model_data_. The outer index is for J, and the inner index is for realization
  */
-void FloModelTransition::ZZ_time_corr_square_init_(AllPara const & parameters) {
+void FloModelTransition::ZZ_time_corr_init_(AllPara const & parameters) {
     const int J_N = parameters.floquet.J_N; // Number of points for J
     const int num_realization = parameters.generic.num_realizations;
 
-    model_data_.zz_time_corr_square.resize(J_N);
+    model_data_.zz_time_corr.resize(J_N);
 
     for (int i=0; i<J_N; i++){
-        model_data_.zz_time_corr_square[i].resize(num_realization);
+        model_data_.zz_time_corr[i].resize(num_realization);
 
-        for (int j=0; j<num_realization;j++) model_data_.zz_time_corr_square[i][j] = 0;
+        for (int j=0; j<num_realization;j++) model_data_.zz_time_corr[i][j] = 0;
     }
 }
 
 /*
- * Compute zz_time_corr_square given J index and realization index
+ * Compute zz_time_corr given J index and realization index
  */
-void FloModelTransition::ZZ_time_corr_square_compute_(AllPara const & parameters,
+void FloModelTransition::ZZ_time_corr_compute_(AllPara const & parameters,
                                                       const EvolMatrix<ComplexEigenSolver<MatrixXcd> >* floquet,
                                                       const LocalInfo& local_info) {
 
@@ -54,9 +54,9 @@ void FloModelTransition::ZZ_time_corr_square_compute_(AllPara const & parameters
     evec_to_basic(floquet, evec_basic);
 
     // Record values for all eigenstate
-    double zz_square = 0;
-    double z_left_square = 0;
-    double z_right_square = 0;
+    double zz = 0;
+    double z_left = 0;
+    double z_right = 0;
     double z_left_ave_right_ave = 0;
 
     for (int i=0; i<evec_basic.size(); i++){
@@ -76,9 +76,9 @@ void FloModelTransition::ZZ_time_corr_square_compute_(AllPara const & parameters
             left_right_temp += left_spin * right_spin * norm(evec_basic[i][j]);
         }
 
-        zz_square += left_right_temp * left_right_temp;
-        z_left_square += left_temp * left_temp;
-        z_right_square += right_temp * right_temp;
+        zz += left_right_temp * left_right_temp;
+        z_left += left_temp * left_temp;
+        z_right += right_temp * right_temp;
         z_left_ave_right_ave += left_temp * right_temp;
 
         if (debug){
@@ -89,19 +89,17 @@ void FloModelTransition::ZZ_time_corr_square_compute_(AllPara const & parameters
         }
     }
 
-    zz_square /= double(dim);
-    z_left_square /= double(dim);
-    z_right_square /= double(dim);
+    zz /= double(dim);
+    z_left /= double(dim);
+    z_right /= double(dim);
     z_left_ave_right_ave /= double(dim);
 
-    double zz_time_corr = zz_square - z_left_square * z_right_square - z_left_ave_right_ave * z_left_ave_right_ave;
+    double zz_time_corr = zz - z_left * z_right - z_left_ave_right_ave * z_left_ave_right_ave;
 
-    model_data_.zz_time_corr_square[local_info.J_index][local_info.realization_index] += zz_time_corr * zz_time_corr;
+    model_data_.zz_time_corr[local_info.J_index][local_info.realization_index] += zz_time_corr;
     if (debug){
         cout << "Realization " << local_info.realization_index << " average time correlation: "
         << zz_time_corr << endl;
-        cout << "Realization " << local_info.realization_index << " average time correlation square: "
-        << zz_time_corr * zz_time_corr << endl;
         cout << endl;
     }
 }
@@ -110,7 +108,7 @@ void FloModelTransition::ZZ_time_corr_square_compute_(AllPara const & parameters
  * Output averages of mean end-to-end zz time four-point correlation squares and their standard deviations among all
  * realizations for each J
  */
-void FloModelTransition::ZZ_time_corr_square_out_(AllPara const & parameters, const string& name) {
+void FloModelTransition::ZZ_time_corr_out_(AllPara const & parameters, const string& name) {
     const double J_min = parameters.floquet.J_min;
     const double J_max = parameters.floquet.J_max;
     const int J_N = parameters.floquet.J_N;
@@ -120,25 +118,25 @@ void FloModelTransition::ZZ_time_corr_square_out_(AllPara const & parameters, co
     const bool output = parameters.output.filename_output;
     const int size = parameters.generic.size;
 
-    if (model_data_.zz_time_corr_square.size() != J_N){
+    if (model_data_.zz_time_corr.size() != J_N){
         cout << "Not enough number of J for zz correlation square." << endl;
         cout << "Expected Number: " << J_N << endl;
-        cout << "Actual number: " << model_data_.zz_time_corr_square.size() << endl;
+        cout << "Actual number: " << model_data_.zz_time_corr.size() << endl;
         abort();
     }
 
     for (int i=0; i< J_N; i++){
-        if (model_data_.zz_time_corr_square[i].size() != num_realizations){
+        if (model_data_.zz_time_corr[i].size() != num_realizations){
             cout << "Not enough number of realizations at " << i <<"th J for zz correlation square." << endl;
             cout << "Expected Number: " << num_realizations << endl;
-            cout << "Actual Number: " << model_data_.zz_time_corr_square[i].size() << endl;
+            cout << "Actual Number: " << model_data_.zz_time_corr[i].size() << endl;
             abort();
         }
     }
 
     stringstream filename;
     filename << name << ",size=" << size << ",Run=" << num_realizations << ",J_N=" << J_N << ",J_min=" << J_min
-    << ",J_max=" << J_max << ",zz_time_corr_square";
+    << ",J_max=" << J_max << ",zz_time_corr";
     if (version > 0) filename <<",v" << version;
     filename << ".txt";
 
@@ -152,7 +150,7 @@ void FloModelTransition::ZZ_time_corr_square_out_(AllPara const & parameters, co
         if (J_N > 1) J = J_min + i * (J_max - J_min)/(J_N-1);
         else J = J_min;
 
-        generic_mean_sd(model_data_.zz_time_corr_square[i], mean, sd);
+        generic_mean_sd(model_data_.zz_time_corr[i], mean, sd);
         fout << setw(10) << J << setw(width) << mean << setw(width) << sd << endl;
     }
 }
