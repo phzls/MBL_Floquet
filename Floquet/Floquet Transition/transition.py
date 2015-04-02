@@ -9,11 +9,11 @@ import drawing as Draw
 import label_build as Label
 import numpy as np
 
-include_s = "zz_time_corr_square," # A string that must be included in filename construct
+include_s = "zz_corre_square," # A string that must be included in filename construct
 exclude_s = "Shift" # A string that must be excluded in filename construct
 ver_num = 1
 scale = True
-scale_target = 0.399
+scale_target = 0.48
 
 def read_file(filename, W, ave, err, realization = 1):
     """  Read averages and standard deviation (if exist) from files
@@ -132,7 +132,7 @@ for n in range(len(data[0])):
 import pylab
 draw1 = Draw.Draw()
 
-draw1.figure_init()
+draw1.figure_init(ymax=4)
 draw1.figure_set()
 
 must_in_range = ["v"+str(ver_num)]
@@ -151,14 +151,14 @@ else:
     draw1.plot(plot_data[0], plot_data[1], label=legend)
 
 pylab.legend(loc='upper left', ncol=1, prop={'size':12})#, bbox_to_anchor=(1.1, 0.5))
-pylab.ylabel("ZZ Time Correlation")
+pylab.ylabel("ZZ Correlation")
 pylab.xlabel("W")
 
 num_pts = J_N[draw1._plot_range[0]]
 num_run = realization[draw1._plot_range[0]]
 
 #save_name = "Random_Simple_Floquet_" + "J_N_" + str(num_pts) + "_Run_" + str(num_run) + "_" + "zz_corr"
-save_name = "Random_Simple_Floquet_zz_time_corr"
+save_name = "Random_Simple_Floquet_zz_corr"
 
 if scale:
     save_name += "_scaled_target_" + str(scale_target).replace('.','_')
@@ -167,7 +167,7 @@ if draw1._xmax < max(plot_data[1]) and draw1._xmax > 0:
 
 print save_name
 
-#pylab.subplots_adjust(left=0.16)
+#pylab.subplots_adjust(left=0.14)
 pylab.savefig(save_name + "_v" + str(ver_num) + ".pdf",box_inches='tight')
 
 pylab.show()
