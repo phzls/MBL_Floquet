@@ -72,10 +72,10 @@ void FloModelTransition::map_initialize_(const AllPara& parameters) {
     flo_out_map_[name3] = out_func3;
 
     // end-to-end z-z time correlation square
-    string name4 = "ZZ Time Correlation Square";
-    Flo_init init_func4 = &FloModelTransition::ZZ_time_corr_square_init_;
-    Flo_func cal_func4 = &FloModelTransition::ZZ_time_corr_square_compute_;
-    Flo_out out_func4 = &FloModelTransition::ZZ_time_corr_square_out_;
+    string name4 = "ZZ Time Correlation";
+    Flo_init init_func4 = &FloModelTransition::ZZ_time_corr_init_;
+    Flo_func cal_func4 = &FloModelTransition::ZZ_time_corr_compute_;
+    Flo_out out_func4 = &FloModelTransition::ZZ_time_corr_out_;
 
     // Make sure the name has not been used before
     init_it = flo_init_map_.find(name4);
