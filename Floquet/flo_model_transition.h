@@ -31,6 +31,9 @@ struct ModelData
     // End-to-end sigma_z-sigma_z time four-point correlation
     vector< vector<double> > zz_time_corr;
 
+    // Various components of zz time correlation
+    vector< vector<vector<double> > > zz_time_corr_component;
+
 };
 
 /*
@@ -47,7 +50,7 @@ class FloModelTransition;
 // Pointer to functions initializing data
 typedef  void (FloModelTransition::*Flo_init)(const AllPara&);
 
-// Pointer to functions studying propertieso of a given floquet system
+// Pointer to functions studying properties of a given floquet system
 typedef void (FloModelTransition::*Flo_func)(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
         const LocalInfo&);
 
@@ -92,11 +95,17 @@ private:
     void Ent_smallest_var_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
     void Ent_smallest_var_out_(const AllPara&, const string&);
 
-    // For end to end zz time four-point correlation square
+    // For end to end zz time four-point correlation
     void ZZ_time_corr_init_(const AllPara&);
     void ZZ_time_corr_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
                                       const LocalInfo&);
     void ZZ_time_corr_out_(const AllPara&, const string&);
+
+    // For end to end zz time four-point correlation components
+    void ZZ_time_corr_component_init_(const AllPara&);
+    void ZZ_time_corr_component_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
+                               const LocalInfo&);
+    void ZZ_time_corr_component_out_(const AllPara&, const string&);
 
 public:
     FloModelTransition(const AllPara& parameters) : flo_func_bool_map_(parameters.transition.flo_transition_compute) {
