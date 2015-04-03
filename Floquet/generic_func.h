@@ -49,4 +49,5 @@ void generic_mean_sd(const vector<T> data, T& mean, T& sd){
 	mean /= double(N);
 	sd = sqrt( double(N) / double(N-1) * (sd/double(N) - mean*mean) );
 }
+
 #endif
