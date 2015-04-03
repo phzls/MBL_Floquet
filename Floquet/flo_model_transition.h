@@ -14,7 +14,7 @@
 using namespace std;
 
 /*
- * The data class used in flo_model_transition. It contains all possible outputs.
+ * The data class used in flo_transition. It contains all possible outputs.
  */
 
 struct ModelData
