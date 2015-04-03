@@ -148,6 +148,13 @@ struct Transition
 	map<string,bool> flo_transition_compute; // Determine which method to be computed for floquet systems
 };
 
+/*
+ * Parameters used for studying eigenstates related quantities
+ */
+struct Eigenvec
+{
+	map<string, bool> flo_eigen_compute; // Determine which method to be computed for floquet systems
+};
 
 /*
  * All parameters.
