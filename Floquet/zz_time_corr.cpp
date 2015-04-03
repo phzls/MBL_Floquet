@@ -12,7 +12,7 @@
 using namespace std;
 
 /**
- ** This file contains functions related to zz_time_corr, which is the end-to-end zz time four point correlation square
+ ** This file contains functions related to zz_time_corr, which is the end-to-end zz time four point correlation
  ** used in studying floquet model transition from thermalization to localization. The initial system is given a
  ** density matrix of identity matrix
  **/
@@ -119,7 +119,7 @@ void FloModelTransition::ZZ_time_corr_out_(AllPara const & parameters, const str
     const int size = parameters.generic.size;
 
     if (model_data_.zz_time_corr.size() != J_N){
-        cout << "Not enough number of J for zz correlation square." << endl;
+        cout << "Not enough number of J for zz time correlation." << endl;
         cout << "Expected Number: " << J_N << endl;
         cout << "Actual number: " << model_data_.zz_time_corr.size() << endl;
         abort();
@@ -127,7 +127,7 @@ void FloModelTransition::ZZ_time_corr_out_(AllPara const & parameters, const str
 
     for (int i=0; i< J_N; i++){
         if (model_data_.zz_time_corr[i].size() != num_realizations){
-            cout << "Not enough number of realizations at " << i <<"th J for zz correlation square." << endl;
+            cout << "Not enough number of realizations at " << i <<"th J for zz time correlation." << endl;
             cout << "Expected Number: " << num_realizations << endl;
             cout << "Actual Number: " << model_data_.zz_time_corr[i].size() << endl;
             abort();
