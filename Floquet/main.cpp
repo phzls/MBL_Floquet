@@ -146,7 +146,17 @@ int main() {
 
 
 
-//=======================================================================================
+//============================================================================================
+
+
+
+    // Methods to be called for studying eigenstate properties of floquet systems
+    parameters.eigenvec.flo_eigen_compute["ZZ Correlation Square"] = true; // End-to-end sigma_z sigma_z correlation
+                                                                           // square
+
+
+
+//============================================================================================
 
 
 
