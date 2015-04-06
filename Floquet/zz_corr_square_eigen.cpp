@@ -75,6 +75,7 @@ void FloEigenFunc::ZZ_corr_square_eigen_compute_(AllPara const & parameters,
             cout << "Average left spin: " << left_temp << endl;
             cout << "Average right spin: " << right_temp << endl;
             cout << "Average left X right: " << left_right_temp << endl;
+            cout << "ZZ square: " << zz_square << endl;
         }
 
         eigen_data_.zz_corr_square[local_info.realization_index][i] += zz_square;
