@@ -25,19 +25,6 @@ struct EigenData
 {
     // End-to-end sigma_z-sigma_z correlation square for all eigenstates in all realizations
     vector< vector<double> > zz_corr_square;
-
-    // Entropy varaince for all eigenstates
-    vector< vector<double> > ent_var;
-
-    // Entropy variance for the eigenstate with smallest phase magnitude among different realizations
-    vector< vector<double> > ent_smallest_var;
-
-    // End-to-end sigma_z-sigma_z time four-point correlation
-    vector< vector<double> > zz_time_corr;
-
-    // Various components of zz time correlation
-    vector< vector<vector<double> > > zz_time_corr_component;
-
 };
 
 /*
@@ -91,7 +78,7 @@ private:
     void ZZ_corr_square_eigen_out_(const AllPara&, const string&);
 
 public:
-    FloEigenFunc(const AllPara& parameters) : flo_func_bool_map_(parameters.transition.flo_transition_compute) {
+    FloEigenFunc(const AllPara& parameters) : flo_func_bool_map_(parameters.eigenvec.flo_eigen_compute) {
         map_initialize_(parameters);
     }
 
