@@ -45,14 +45,14 @@ struct EigenData
  */
 struct LocalInfo
 {
-    int J_index; // The index of J
     int realization_index; // The index of realization
+    int dim; // The dimension of the system
 };
 
 class FloEigenFunc;
 
 // Pointer to functions initializing data
-typedef  void (FloEigenFunc::*Flo_init)(const AllPara&);
+typedef  void (FloEigenFunc::*Flo_init)(const AllPara&, const LocalInfo& local_info);
 
 // Pointer to functions studying properties of a given floquet system
 typedef void (FloEigenFunc::*Flo_func)(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
@@ -82,14 +82,12 @@ private:
     // Initialize all maps
     void map_initialize_(const AllPara&);
 
-    EigenData model_data_;
+    EigenData eigen_data_;
 
     // For end to end zz correlation square statistics
-    void ZZ_corr_square_init_(const AllPara&);
-    void ZZ_corr_square_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
-    void ZZ_corr_square_out_(const AllPara&, const string&);
-
-
+    void ZZ_corr_square_eigen_init_(const AllPara&, const LocalInfo&);
+    void ZZ_corr_square_eigen_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
+    void ZZ_corr_square_eigen_out_(const AllPara&, const string&);
 
 public:
     FloEigenFunc(const AllPara& parameters) : flo_func_bool_map_(parameters.transition.flo_transition_compute) {
