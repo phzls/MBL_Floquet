@@ -2,7 +2,7 @@
 
 models = flo_evol_random.o flo_evol_random_rotation.o flo_evol_xxz.o flo_evol.o flo_evol_inter_random.o flo_evol_markov_inter_random.o flo_evol_markov_inter_random_both.o flo_evol_markov_inter_random_both_x.o flo_evol_xxz_random.o flo_evol_markov_xxz_random_both_x.o flo_evol_xxz_random_simp.o flo_evol_xxz_random_simp_shift.o
 
-evolutions = mersenne.o flo_level.o flo_rightmost_sigma_z.o evol_data.o entropy_per_model.o flo_evolution.o flo_evolution_simple_markov.o leftmost_spin_z_per_model.o leftmost_spin_z_one_run.o flo_leftmost_sigma_z.o flo_chain_end_sigma_z.o flo_evolution_simple_markov_one_model.o single_model_func.o full_leftmost_spin_z_per_model.o evol_data_total.o flo_evolution_density.o leftmost_spin_x_per_model.o leftmost_spin_y_per_model.o zz_corr_square.o flo_transition.o flo_model_transition.o ent_var.o ent_smallest_var.o zz_time_corr.o zz_time_corr_component.o
+evolutions = mersenne.o flo_level.o flo_rightmost_sigma_z.o evol_data.o entropy_per_model.o flo_evolution.o flo_evolution_simple_markov.o leftmost_spin_z_per_model.o leftmost_spin_z_one_run.o flo_leftmost_sigma_z.o flo_chain_end_sigma_z.o flo_evolution_simple_markov_one_model.o single_model_func.o full_leftmost_spin_z_per_model.o evol_data_total.o flo_evolution_density.o leftmost_spin_x_per_model.o leftmost_spin_y_per_model.o zz_corr_square.o flo_transition.o flo_model_transition.o ent_var.o ent_smallest_var.o zz_time_corr.o zz_time_corr_component.o flo_eigen.o flo_eigen_func.o zz_corr_square_eigen.o
 
 functions = generic_func.o update.o tasks_models.o model_func.o sort.o reduced_density_left_2.o
 
