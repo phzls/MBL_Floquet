@@ -112,6 +112,16 @@ void TasksModels::Map_Construct_(){
 	task_function10 = &flo_transition;
 	Task_Map_Insert(task_name10, task_type10, task_function10);
 
+	// Eigenstates related properties of a floquet model
+	string task_name11;
+	string task_type11;
+	task_func task_function11;
+
+	task_name11 = "Flo Eigen";
+	task_type11 = "Floquet";
+	task_function11 = &flo_eigen;
+	Task_Map_Insert(task_name11, task_type11, task_function11);
+
 	// Random Floquet Operator
 	string model_name1;
 	string model_type1;

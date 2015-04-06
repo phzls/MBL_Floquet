@@ -61,4 +61,9 @@ void flo_evolution_density(const AllPara&);
  */
 void flo_transition(const AllPara&);
 
+/*
+ * Eigenstates related properties of a floquet model
+ */
+void flo_eigen(const AllPara&);
+
 #endif
