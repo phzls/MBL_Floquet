@@ -19,10 +19,10 @@ int main(){
 
     AllPara parameters;
 
-    parameters.generic.task = "Flo Transition";
+    parameters.generic.task = "Flo Eigen";
     parameters.generic.model = "XXZ Random Simple Shift Flo";
 
-    parameters.generic.size = 4; // System size
+    parameters.generic.size = 2; // System size
     parameters.generic.evec = true; // Whether compute eigenvectors, so far only called in
     // level statistics calculation
     parameters.generic.erase = true; // Whether erase matrix after diagonization

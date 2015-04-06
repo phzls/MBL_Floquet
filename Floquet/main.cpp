@@ -24,7 +24,7 @@ int main() {
 
 
 
-    parameters.generic.task = "Flo Transition";
+    parameters.generic.task = "Flo Eigen";
     parameters.generic.model = "XXZ Random Simple Flo";
 
     parameters.generic.size = 4; // System size
@@ -45,7 +45,7 @@ int main() {
     parameters.floquet.J_min = 0.1; // Minimum J
     parameters.floquet.J_max = 0.9; // Maximum J
     parameters.floquet.tau = 0.8; // Time step size
-    parameters.floquet.J = 0.5;
+    parameters.floquet.J = 0.6;
 
     parameters.markov.K = 0.8; // Coupling strength to the bath in markov models
 
