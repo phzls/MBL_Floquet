@@ -52,7 +52,7 @@ struct LocalInfo
 class FloEigenFunc;
 
 // Pointer to functions initializing data
-typedef  void (FloEigenFunc::*Flo_init)(const AllPara&, const LocalInfo& local_info);
+typedef  void (FloEigenFunc::*Flo_init)(const AllPara&);
 
 // Pointer to functions studying properties of a given floquet system
 typedef void (FloEigenFunc::*Flo_func)(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
@@ -85,8 +85,9 @@ private:
     EigenData eigen_data_;
 
     // For end to end zz correlation square statistics
-    void ZZ_corr_square_eigen_init_(const AllPara&, const LocalInfo&);
-    void ZZ_corr_square_eigen_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*, const LocalInfo&);
+    void ZZ_corr_square_eigen_init_(const AllPara&);
+    void ZZ_corr_square_eigen_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
+                                       const LocalInfo&);
     void ZZ_corr_square_eigen_out_(const AllPara&, const string&);
 
 public:
