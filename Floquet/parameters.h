@@ -193,6 +193,9 @@ struct AllPara
 
 	// Model transition computation
 	Transition transition;
+
+	// Eigenstates related properties
+	Eigenvec eigenvec;
 };
 
 #endif
