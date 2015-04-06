@@ -36,8 +36,8 @@ void FloEigenFunc::map_initialize_(const AllPara& parameters) {
     // Check the number of function
     if ( flo_init_map_.size() != flo_func_map_.size() ){
 
-        cout << "Number of initializing functions in flo_transition is not the same as number of registered functions"
-        << "that can be called." << endl;
+        cout << "Number of initializing functions in flo_eigen is not the same as number of registered functions"
+             << "that can be called." << endl;
         cout << "Functions in parameters:" << endl;
         for (map<string, Flo_init >::iterator it = flo_init_map_.begin();
              it != flo_init_map_.end(); it++){
@@ -57,8 +57,8 @@ void FloEigenFunc::map_initialize_(const AllPara& parameters) {
 
     if ( flo_out_map_.size() != flo_func_map_.size() ){
 
-        cout << "Number of output functions in flo_transition is not the same as number of registered functions"
-        << "that can be called." << endl;
+        cout << "Number of output functions in flo_eigen is not the same as number of registered functions"
+             << "that can be called." << endl;
         cout << "Functions in parameters:" << endl;
         for (map<string, Flo_out>::iterator it = flo_out_map_.begin();
              it != flo_out_map_.end(); it++){
@@ -76,9 +76,9 @@ void FloEigenFunc::map_initialize_(const AllPara& parameters) {
         abort();
     }
 
-    if ( flo_func_bool_map_.size() > flo_func_map_.size() ){
+    if ( flo_func_bool_map_.size() != flo_func_map_.size() ){
 
-        cout << "Number of registered functions in flo_transition is larger than the number of registered functions"
+        cout << "Number of registered functions in flo_eigen is different from the number of registered functions"
         << "that can be called." << endl;
         cout << "Functions in parameters:" << endl;
         for (map<string, bool>::iterator it = flo_func_bool_map_.begin();
@@ -87,7 +87,7 @@ void FloEigenFunc::map_initialize_(const AllPara& parameters) {
         }
         cout << "Total Number: " << flo_func_bool_map_.size() << endl;
 
-        cout << "Functions that can be calledt:" << endl;
+        cout << "Functions that can be called:" << endl;
         for (map<string, Flo_func>::iterator it = flo_func_map_.begin();
              it != flo_func_map_.end(); it ++){
             cout << it -> first << endl;
