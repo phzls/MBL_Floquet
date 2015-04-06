@@ -19,9 +19,9 @@ using namespace std;
  * Initialize zz_corr_square in eigen_data_. The outer index is for realization, and the inner index is for
  * different eigenstates under the same realization. Here assume the model is binary
  */
-void FloEigenFunc::ZZ_corr_square_eigen_init_(AllPara const & parameters, const LocalInfo& local_info) {
+void FloEigenFunc::ZZ_corr_square_eigen_init_(AllPara const & parameters) {
     const int num_realization = parameters.generic.num_realizations;
-    const int dim = local_info.dim;
+    const int dim = 1 << parameters.generic.size;
 
     eigen_data_.zz_corr_square.resize(num_realization);
 
