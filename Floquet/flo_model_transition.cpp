@@ -110,7 +110,7 @@ void FloModelTransition::map_initialize_(const AllPara& parameters) {
     flo_out_map_[name5] = out_func5;
 
     // z-z correlation square at all distances
-    string name6 = "All ZZ Correlation Square";
+    string name6 = "ZZ All Correlation Square";
     Flo_init init_func6 = &FloModelTransition::ZZ_all_corr_square_init_;
     Flo_func cal_func6 = &FloModelTransition::ZZ_all_corr_square_compute_;
     Flo_out out_func6 = &FloModelTransition::ZZ_all_corr_square_out_;
