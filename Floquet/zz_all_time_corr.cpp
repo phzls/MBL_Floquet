@@ -26,14 +26,15 @@ void FloModelTransition::ZZ_all_corr_square_init_(AllPara const & parameters) {
 
     model_data_.zz_all_corr_square.resize(J_N);
 
-    for (int i=0; i<size/2; i++){
+    for (int i=0; i<J_N; i++){
         model_data_.zz_all_corr_square[i].resize(size/2);
 
         for (int j=0; j<size/2;j++){
             model_data_.zz_all_corr_square[i][j].resize(num_realization);
 
-            for (int k=0; k<num_realization; k++)
+            for (int k=0; k<num_realization; k++){
                 model_data_.zz_all_corr_square[i][j][k] = 0;
+            }
         }
     }
 }
@@ -71,15 +72,15 @@ void FloModelTransition::ZZ_all_corr_square_compute_(AllPara const & parameters,
             double right_temp = 0;
             double left_right_temp = 0;
 
-            for (int k=0; k<evec_basic[i].size(); k++){
+            for (int k=0; k<evec_basic[j].size(); k++){
                 int right_spin = -1;
                 int left_spin = -1;
-                if (k & right_up == right_up) right_spin = 1;
-                if (k & left_up == left_up ) left_spin = 1;
+                if ( (k & right_up) == right_up) right_spin = 1;
+                if ( (k & left_up) == left_up ) left_spin = 1;
 
-                left_temp += left_spin * norm(evec_basic[i][j]);
-                right_temp += right_spin * norm(evec_basic[i][j]);
-                left_right_temp += left_spin * right_spin * norm(evec_basic[i][j]);
+                left_temp += left_spin * norm(evec_basic[j][k]);
+                right_temp += right_spin * norm(evec_basic[j][k]);
+                left_right_temp += left_spin * right_spin * norm(evec_basic[j][k]);
             }
 
             zz_square += (left_right_temp - left_temp*right_temp ) * (left_right_temp - left_temp*right_temp );
@@ -120,18 +121,28 @@ void FloModelTransition::ZZ_all_corr_square_out_(AllPara const & parameters, con
     const int size = parameters.generic.size;
 
     if (model_data_.zz_all_corr_square.size() != J_N){
-        cout << "Not enough number of J for zz correlation square." << endl;
+        cout << "Different number of J for zz all correlation square." << endl;
         cout << "Expected Number: " << J_N << endl;
         cout << "Actual number: " << model_data_.zz_all_corr_square.size() << endl;
         abort();
     }
 
-    for (int i=0; i< J_N; i++){
-        if (model_data_.zz_all_corr_square[i].size() != num_realizations){
-            cout << "Not enough number of realizations at " << i <<"th J for zz correlation square." << endl;
-            cout << "Expected Number: " << num_realizations << endl;
+    for (int i=0; i<J_N; i++){
+        if (model_data_.zz_all_corr_square[i].size() != size/2){
+            cout << "Different number of configurations at " << i <<"th J for zz all correlation square." << endl;
+            cout << "Expected Number: " << size/2 << endl;
             cout << "Actual Number: " << model_data_.zz_all_corr_square[i].size() << endl;
             abort();
+        }
+
+        for (int j=0; j<size/2;j++){
+            if (model_data_.zz_all_corr_square[i][j].size() != num_realizations){
+                cout << "Different number of realizations at " << i <<"th J and " << j << "th configuration"
+                    << " for zz all correlation square." << endl;
+                cout << "Expected Number: " << num_realizations << endl;
+                cout << "Actual Number: " << model_data_.zz_all_corr_square[i][j].size() << endl;
+                abort();
+            }
         }
     }
 
@@ -142,20 +153,20 @@ void FloModelTransition::ZZ_all_corr_square_out_(AllPara const & parameters, con
     suffix << ".txt";
 
     for (int i=0; i<J_N;i++){
+        double J;
+        double mean,sd;
+        stringstream filename;
+
+        if (J_N > 1) J = J_min + i * (J_max - J_min)/(J_N-1);
+        else J = J_min;
+
+        filename << prefix.str() << J << suffix.str();
+
+        if (output) cout << filename.str() <<endl;
+
+        ofstream fout( filename.str().c_str() );
 
         for (int j=0; j<model_data_.zz_all_corr_square[i].size(); j++){
-            double J;
-            double mean,sd;
-            stringstream filename;
-
-            if (J_N > 1) J = J_min + i * (J_max - J_min)/(J_N-1);
-            else J = J_min;
-
-            filename << prefix.str() << J << suffix.str();
-
-            if (output) cout << filename.str() <<endl;
-
-            ofstream fout( filename.str().c_str() );
 
             generic_mean_sd(model_data_.zz_all_corr_square[i][j], mean, sd);
             fout << setw(10) << j << setw(width) << mean << setw(width) << sd << endl;
