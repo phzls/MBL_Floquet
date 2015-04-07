@@ -24,7 +24,7 @@ int main() {
 
 
 
-    parameters.generic.task = "Flo Eigen";
+    parameters.generic.task = "Flo Transition";
     parameters.generic.model = "XXZ Random Simple Flo";
 
     parameters.generic.size = 4; // System size
@@ -138,11 +138,14 @@ int main() {
     // smallest phase magnitude among all
     // realizations
 
-    parameters.transition.flo_transition_compute["ZZ Time Correlation"] = true; // End-to-end sigma_z X sigma_z
+    parameters.transition.flo_transition_compute["ZZ Time Correlation"] = false; // End-to-end sigma_z X sigma_z
     // time correlation
 
-    parameters.transition.flo_transition_compute["ZZ Time Correlation Components"] = true; // End-to-end
+    parameters.transition.flo_transition_compute["ZZ Time Correlation Components"] = false; // End-to-end
     // sigma_z X sigma_z time correlation components. The first row in output is text header
+
+    parameters.transition.flo_transition_compute["ZZ All Correlation Square"] = true; // zz correlation square
+                                                                                      // at all distances
 
 
 
@@ -151,8 +154,10 @@ int main() {
 
 
     // Methods to be called for studying eigenstate properties of floquet systems
-    parameters.eigenvec.flo_eigen_compute["ZZ Correlation Square"] = true; // End-to-end sigma_z sigma_z correlation
-                                                                           // square
+    parameters.eigenvec.flo_eigen_compute["ZZ Correlation Square"] = false; // End-to-end sigma_z sigma_z correlation
+                                                                            // square
+    parameters.eigenvec.flo_eigen_compute["Eigenvectors"] = true; // End-to-end sigma_z sigma_z correlation
+                                                                            // square
 
 
 
