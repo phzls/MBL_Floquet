@@ -27,7 +27,7 @@ int main() {
     parameters.generic.task = "Flo Transition";
     parameters.generic.model = "XXZ Random Simple Flo";
 
-    parameters.generic.size = 4; // System size
+    parameters.generic.size = 6; // System size
     parameters.generic.num_realizations = 100; // Number of realizations
     parameters.generic.threads_N = 4; // Number of threads in openmp
     parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
@@ -41,8 +41,8 @@ int main() {
     parameters.output.width = 30; // Width for spacing in output files
     parameters.output.filename_output = true; // Whether print out file names
 
-    parameters.floquet.J_N = 30; // Number of points of coupling strength
-    parameters.floquet.J_min = 0.1; // Minimum J
+    parameters.floquet.J_N = 1; // Number of points of coupling strength
+    parameters.floquet.J_min = 0.6; // Minimum J
     parameters.floquet.J_max = 0.9; // Maximum J
     parameters.floquet.tau = 0.8; // Time step size
     parameters.floquet.J = 0.6;
