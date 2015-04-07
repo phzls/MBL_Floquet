@@ -33,6 +33,25 @@ void FloEigenFunc::map_initialize_(const AllPara& parameters) {
     flo_func_map_[name1] = cal_func1;
     flo_out_map_[name1] = out_func1;
 
+    // Eigenvectors
+    string name2 = "Eigenvectors";
+    Flo_init init_func2 = &FloEigenFunc::Evec_eigen_init_;
+    Flo_func cal_func2 = &FloEigenFunc::Evec_eigen_compute_;
+    Flo_out out_func2 = &FloEigenFunc::Evec_eigen_out_;
+
+    // Make sure the name has not been used before
+    init_it = flo_init_map_.find(name2);
+    cal_it = flo_func_map_.find(name2);
+    out_it = flo_out_map_.find(name2);
+    if (init_it != flo_init_map_.end() || cal_it != flo_func_map_.end() || out_it != flo_out_map_.end()){
+        cout << name2 << " for floquet transition has appeared before." << endl;
+        abort();
+    }
+
+    flo_init_map_[name2] = init_func2;
+    flo_func_map_[name2] = cal_func2;
+    flo_out_map_[name2] = out_func2;
+
     // Check the number of function
     if ( flo_init_map_.size() != flo_func_map_.size() ){
 
@@ -101,6 +120,7 @@ void FloEigenFunc::map_initialize_(const AllPara& parameters) {
     for (map<string, bool>::iterator it = flo_func_bool_map_.begin(); it != flo_func_bool_map_.end(); it++){
         if (it -> second) ( this ->*(flo_init_map_[it -> first]) ) (parameters);
     }
+
 }
 
 void FloEigenFunc::Compute(AllPara const & parameters,

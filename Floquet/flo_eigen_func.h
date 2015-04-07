@@ -25,6 +25,9 @@ struct EigenData
 {
     // End-to-end sigma_z-sigma_z correlation square for all eigenstates in all realizations
     vector< vector<double> > zz_corr_square;
+
+    // Eigenvectors
+    vector< vector< vector<complex<double> > > > evec;
 };
 
 /*
@@ -76,6 +79,12 @@ private:
     void ZZ_corr_square_eigen_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
                                        const LocalInfo&);
     void ZZ_corr_square_eigen_out_(const AllPara&, const string&);
+
+    // Display eigenvectors
+    void Evec_eigen_init_(const AllPara&);
+    void Evec_eigen_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
+                                       const LocalInfo&);
+    void Evec_eigen_out_(const AllPara&, const string&);
 
 public:
     FloEigenFunc(const AllPara& parameters) : flo_func_bool_map_(parameters.eigenvec.flo_eigen_compute) {
