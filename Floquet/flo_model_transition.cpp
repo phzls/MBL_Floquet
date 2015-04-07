@@ -109,6 +109,25 @@ void FloModelTransition::map_initialize_(const AllPara& parameters) {
     flo_func_map_[name5] = cal_func5;
     flo_out_map_[name5] = out_func5;
 
+    // z-z correlation square at all distances
+    string name6 = "All ZZ Correlation Square";
+    Flo_init init_func6 = &FloModelTransition::ZZ_all_corr_square_init_;
+    Flo_func cal_func6 = &FloModelTransition::ZZ_all_corr_square_compute_;
+    Flo_out out_func6 = &FloModelTransition::ZZ_all_corr_square_out_;
+
+    // Make sure the name has not been used before
+    init_it = flo_init_map_.find(name6);
+    cal_it = flo_func_map_.find(name6);
+    out_it = flo_out_map_.find(name6);
+    if (init_it != flo_init_map_.end() || cal_it != flo_func_map_.end() || out_it != flo_out_map_.end()){
+        cout << name6 << " for floquet transition has appeared before." << endl;
+        abort();
+    }
+
+    flo_init_map_[name6] = init_func6;
+    flo_func_map_[name6] = cal_func6;
+    flo_out_map_[name6] = out_func6;
+
     // Check the number of function
     if ( flo_init_map_.size() != flo_func_map_.size() ){
 

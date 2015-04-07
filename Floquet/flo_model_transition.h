@@ -34,6 +34,8 @@ struct ModelData
     // Various components of zz time correlation
     vector< vector<vector<double> > > zz_time_corr_component;
 
+    // zz correlation at different distances with configuration symmetric w.r.t the center
+    vector< vector<vector<double> > > zz_all_corr_square;
 };
 
 /*
@@ -104,8 +106,14 @@ private:
     // For end to end zz time four-point correlation components
     void ZZ_time_corr_component_init_(const AllPara&);
     void ZZ_time_corr_component_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
-                               const LocalInfo&);
+                                         const LocalInfo&);
     void ZZ_time_corr_component_out_(const AllPara&, const string&);
+
+    // For zz correlation square at all distances
+    void ZZ_all_corr_square_init_(const AllPara&);
+    void ZZ_all_corr_square_compute_(const AllPara&, const EvolMatrix<ComplexEigenSolver<MatrixXcd> >*,
+                                     const LocalInfo&);
+    void ZZ_all_corr_square_out_(const AllPara&, const string&);
 
 public:
     FloModelTransition(const AllPara& parameters) : flo_func_bool_map_(parameters.transition.flo_transition_compute) {
