@@ -24,19 +24,19 @@ int main() {
 
 
 
-    parameters.generic.task = "Flo Transition";
-    parameters.generic.model = "XXZ Random Simple Flo";
+    parameters.generic.task = "Flo Eigen";
+    parameters.generic.model = "XXZ Random Simple Shift Flo";
 
-    parameters.generic.size = 6; // System size
-    parameters.generic.num_realizations = 100; // Number of realizations
-    parameters.generic.threads_N = 4; // Number of threads in openmp
+    parameters.generic.size = 10; // System size
+    parameters.generic.num_realizations = 1; // Number of realizations
+    parameters.generic.threads_N = 1; // Number of threads in openmp
     parameters.generic.evec = false; // Whether compute eigenvectors, so far only called in
     // level statistics calculation
     parameters.generic.erase = true; // Whether erase matrix after diagonization
     parameters.generic.debug = false; // Whether output debug information
     parameters.generic.iso_keep = true; // Whether isolated part is kept
-    parameters.generic.version = 1; // Version of the output
-    parameters.generic.time = false; // Whether the program is timed
+    parameters.generic.version = 5; // Version of the output
+    parameters.generic.time = true; // Whether the program is timed
 
     parameters.output.width = 30; // Width for spacing in output files
     parameters.output.filename_output = true; // Whether print out file names
